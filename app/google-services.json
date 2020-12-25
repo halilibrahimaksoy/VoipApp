@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "862379781353",
+    "project_id": "voipapp-dbc05",
+    "storage_bucket": "voipapp-dbc05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:862379781353:android:610dcaecb1f4f9cddd1478",
+        "android_client_info": {
+          "package_name": "com.haksoy.voipapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "862379781353-usehpm9hbn50ir4f07quhfnoi3p39bsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuOO0WvP1Df09XLK4wR_v3m0IMLzSydZ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "862379781353-usehpm9hbn50ir4f07quhfnoi3p39bsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
