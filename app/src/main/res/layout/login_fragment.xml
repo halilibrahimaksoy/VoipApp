@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:orientation="vertical"
-        tools:context=".ui.login.LoginActivity">
+        tools:context=".ui.auth.login.LoginFragment">
 
         <ImageView
             android:layout_width="match_parent"
@@ -21,7 +21,7 @@
             android:src="@mipmap/ic_launcher" />
 
         <EditText
-            android:id="@+id/txtUserName"
+            android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -29,11 +29,23 @@
             android:layout_marginRight="20dp"
             android:maxLines="1"
             android:background="@color/colorPrimary"
-            android:hint="USERNAME"
+            android:hint="Email"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
-
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:maxLines="1"
+            android:background="@color/colorPrimary"
+            android:hint="Password"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
@@ -41,6 +53,15 @@
             android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
             android:text="Login"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="Register"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>
