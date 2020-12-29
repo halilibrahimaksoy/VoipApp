@@ -71,6 +71,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
 
     testImplementation 'junit:junit:4.13'

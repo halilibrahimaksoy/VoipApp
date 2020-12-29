@@ -27,12 +27,13 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:maxLines="1"
             android:background="@color/colorPrimary"
             android:hint="Email"
+            android:maxLines="1"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
+
         <EditText
             android:id="@+id/txtPassword"
             android:layout_width="match_parent"
@@ -40,12 +41,14 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            android:maxLines="1"
             android:background="@color/colorPrimary"
             android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLines="1"
             android:padding="10dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
+
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
@@ -55,13 +58,15 @@
             android:text="Login"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
+
         <Button
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
             android:text="Register"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>

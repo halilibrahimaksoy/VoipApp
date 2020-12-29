@@ -1,19 +1,25 @@
 package com.haksoy.voipapp.ui.auth.login
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.LoginFragmentBinding
+import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
+import com.haksoy.voipapp.utlis.Resource
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: LoginFragmentBinding
-    private lateinit var viewModel: LoginViewModel
+    private lateinit var viewModel: AuthenticationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,13 +30,64 @@ class LoginFragment : Fragment() {
         binding.btnRegister.setOnClickListener(View.OnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         })
+        binding.btnLogin.setOnClickListener(View.OnClickListener {
+            if (validateForm()) {
+                viewModel.signIn(
+                    binding.txtEmail.text.toString(),
+                    binding.txtPassword.text.toString()
+                )
+                    .observe(viewLifecycleOwner,
+                        Observer {
+                            if (it.status == Resource.Status.SUCCESS) {
+                            } else if (it.status == Resource.Status.ERROR) {
+                                it.data?.let { it1 -> handleError(it1) }
+                            }
+                        })
+            }
+        })
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
+    private fun validateForm(): Boolean {
+        var valid = true
+
+        val email = binding.txtEmail.text.toString()
+        if (TextUtils.isEmpty(email)) {
+            binding.txtEmail.error = "Required."
+            valid = false
+        } else {
+            binding.txtEmail.error = null
+        }
+
+        val password = binding.txtPassword.text.toString()
+        if (TextUtils.isEmpty(password)) {
+            binding.txtPassword.error = "Required."
+            valid = false
+        } else {
+            binding.txtPassword.error = null
+        }
+        return valid
+    }
+
+    private fun handleError(exception: Exception) {
+        val errorMessage: String
+        when (exception::class.java) {
+            FirebaseAuthInvalidCredentialsException::class.java -> {
+                errorMessage =
+                    getString(R.string.FirebaseAuthInvalidCredentialsException)
+            }
+            else -> {
+                errorMessage = exception.localizedMessage
+            }
+        }
+
+
+        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+    }
 }

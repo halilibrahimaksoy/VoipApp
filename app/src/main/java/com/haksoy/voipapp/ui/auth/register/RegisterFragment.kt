@@ -5,13 +5,17 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.RegisterFragmentBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
 import com.haksoy.voipapp.utlis.Resource
-import kotlinx.android.synthetic.main.register_fragment.*
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: RegisterFragmentBinding
@@ -39,8 +43,7 @@ class RegisterFragment : Fragment() {
                 if (it.status == Resource.Status.SUCCESS) {
                     singIn()
                 } else if (it.status == Resource.Status.ERROR) {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT)
-                        .show()
+                    it.data?.let { it1 -> handleError(it1) }
                 }
 
             })
@@ -53,8 +56,7 @@ class RegisterFragment : Fragment() {
         ).observe(viewLifecycleOwner,
             Observer {
                 if (it.status == Resource.Status.ERROR) {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT)
-                        .show()
+                    it.data?.let { it1 -> handleError(it1) }
                 }
             })
     }
@@ -82,15 +84,15 @@ class RegisterFragment : Fragment() {
         } else {
             binding.txtPassword.error = null
         }
-        val fullName = binding.txtPassword2.text.toString()
-        if (TextUtils.isEmpty(fullName)) {
+        val password2 = binding.txtPassword2.text.toString()
+        if (TextUtils.isEmpty(password2)) {
             binding.txtPassword2.error = "Required."
             valid = false
         } else {
             binding.txtPassword2.error = null
         }
 
-        if (!txtPassword.equals(txtPassword2)) {
+        if (!password.equals(password2)) {
             binding.txtPassword.error = "Should be same."
             binding.txtPassword2.error = "Should be same."
             Toast.makeText(activity, "Passwords doesn't match", Toast.LENGTH_SHORT).show()
@@ -98,5 +100,37 @@ class RegisterFragment : Fragment() {
 
 
         return valid
+    }
+
+    private fun handleError(exception: Exception) {
+        val errorMessage: String
+        when (exception::class.java) {
+            FirebaseAuthWeakPasswordException::class.java -> {
+                errorMessage =
+                    getString(R.string.FirebaseAuthWeakPasswordException)
+                showError(binding.txtPassword, binding.txtPassword2)
+            }
+            FirebaseAuthInvalidCredentialsException::class.java -> {
+                errorMessage =
+                    getString(R.string.FirebaseAuthInvalidCredentialsException)
+                showError(binding.txtEmail)
+            }            FirebaseAuthUserCollisionException::class.java -> {
+                errorMessage =
+                    getString(R.string.FirebaseAuthUserCollisionException)
+                showError(binding.txtEmail)
+            }
+            else -> {
+                errorMessage = exception.localizedMessage
+            }
+        }
+
+
+        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showError(vararg editText: EditText) {
+        for (item in editText) {
+            item.error = "Required."
+        }
     }
 }
