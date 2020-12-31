@@ -104,6 +104,7 @@ class RegisterFragment : Fragment() {
             binding.txtPassword.error = "Should be same."
             binding.txtPassword2.error = "Should be same."
             Toast.makeText(activity, "Passwords doesn't match", Toast.LENGTH_SHORT).show()
+            valid = false
         }
 
 

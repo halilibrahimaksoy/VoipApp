@@ -50,7 +50,6 @@ class UserProfileFragment : Fragment(), View.OnClickListener {
         })
 
 
-        binding.txtEmail.text = activeEmail
         binding.btnCancel.setOnClickListener(this)
         binding.btnEdit.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
@@ -76,6 +75,8 @@ class UserProfileFragment : Fragment(), View.OnClickListener {
             it.let {
                 if (it.picture != null)
                     showProfileImage(it.picture!!)
+                if (it.email != null)
+                    binding.txtEmail.text = it.email
                 binding.txtFullName.text = it.name
                 binding.txtInfo.text = it.info
 
@@ -84,7 +85,8 @@ class UserProfileFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        viewModel.fetchUserDate(activeUID)
+        binding.txtEmail.text = viewModel.getEmail()
+        viewModel.fetchUserDate(viewModel.getUid())
     }
 
     private fun pickImage() {
@@ -108,8 +110,7 @@ class UserProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun updateUserProfile() {
-        viewModel.updateUserProfile(
-            activeUID, activeEmail, newImageUri,
+        viewModel.updateUserProfile( newImageUri,
             binding.txtFullName2.text.toString(),
             binding.txtInfo2.text.toString()
         ).observe(viewLifecycleOwner, Observer {

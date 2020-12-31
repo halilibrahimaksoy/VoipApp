@@ -1,5 +1,6 @@
 package com.haksoy.voipapp.ui.auth.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.LoginFragmentBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
+import com.haksoy.voipapp.ui.main.MainActivity
 import com.haksoy.voipapp.utlis.Resource
 
 class LoginFragment : Fragment() {
@@ -43,31 +45,13 @@ class LoginFragment : Fragment() {
                     .observe(viewLifecycleOwner,
                         Observer {
                             if (it.status == Resource.Status.SUCCESS) {
-                                //todo should be farward to mainactivity
-                                findNavController().navigate(
-                                    R.id.action_loginFragment_to_userProfileFragment,
-                                    bundleOf("isResistration" to true)
-                                )
+                                startActivity(Intent(activity, MainActivity::class.java))
                             } else if (it.status == Resource.Status.ERROR) {
                                 it.data?.let { it1 -> handleError(it1) }
                             }
                         })
             }
         })
-
-        val auth: FirebaseAuth = Firebase.auth
-
-        if (auth.currentUser != null) {
-            findNavController().navigate(
-                R.id.action_loginFragment_to_userProfileFragment,
-                bundleOf(
-                    "isResistration" to true,
-                    "activeUID" to auth.currentUser!!.uid,
-                    "activeEmail" to auth.currentUser!!.email
-                )
-            )
-        }
-
         return binding.root
     }
 

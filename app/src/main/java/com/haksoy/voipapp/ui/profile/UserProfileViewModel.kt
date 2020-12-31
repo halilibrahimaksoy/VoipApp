@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -14,8 +15,16 @@ import com.haksoy.voipapp.utlis.Resource
 class UserProfileViewModel : ViewModel() {
     val cloudFirestoreDB = Firebase.firestore
     val storageFirebase = Firebase.storage
-
+    val auth = Firebase.auth
     val currentUser = MutableLiveData<User>()
+
+    fun getUid(): String {
+        return auth.currentUser!!.uid
+    }
+
+    fun getEmail(): String {
+        return auth.currentUser!!.email.toString()
+    }
 
     fun fetchUserDate(uid: String) {
         val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
@@ -31,18 +40,16 @@ class UserProfileViewModel : ViewModel() {
     }
 
     fun updateUserProfile(
-        uid: String,
-        email: String,
-        newImageUri: Uri?=null,
+        newImageUri: Uri? = null,
         name: String,
         info: String
     ): MutableLiveData<Resource<Exception>> {
         var result = MutableLiveData<Resource<Exception>>()
 
         if (newImageUri != null) {
-            uploadProfileImage(uid, newImageUri.toString()).observeForever(Observer {
+            uploadProfileImage(getUid(), newImageUri.toString()).observeForever(Observer {
                 if (it.status == Resource.Status.SUCCESS) {
-                    updateUser(uid, email, name, info, it.data).observeForever(Observer {
+                    updateUser(getUid(), getEmail(), name, info, it.data).observeForever(Observer {
                         if (it.status == Resource.Status.SUCCESS) {
                             result.value = Resource.success(null)
                         } else if (it.status == Resource.Status.ERROR) {
@@ -54,7 +61,7 @@ class UserProfileViewModel : ViewModel() {
                 }
             })
         } else {
-            updateUser(uid, email, name, info).observeForever(Observer {
+            updateUser(getUid(), getEmail(), name, info).observeForever(Observer {
                 if (it.status == Resource.Status.SUCCESS) {
                     result.value = Resource.success(null)
                 } else if (it.status == Resource.Status.ERROR) {

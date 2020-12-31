@@ -6,4 +6,8 @@
     <string name="FirebaseAuthWeakPasswordException">Password should be at least 6 characters</string>
     <string name="FirebaseAuthInvalidCredentialsException">The password is invalid or the user does not have a password.</string>
     <string name="FirebaseAuthUserCollisionException">The email address is already in use by another account.</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="title_activity_maps">Map</string>
 </resources>
