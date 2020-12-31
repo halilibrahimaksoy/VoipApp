@@ -22,6 +22,10 @@
         tools:layout="@layout/fragment_user_details" />
 
 
-
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.haksoy.voipapp.ui.profile.UserProfileFragment"
+        android:label="user_profile_fragment"
+        tools:layout="@layout/user_profile_fragment" />
 
 </navigation>

@@ -13,11 +13,24 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
             app:popUpTo="@id/loginFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.haksoy.voipapp.ui.auth.register.RegisterFragment"
         android:label="register_fragment"
-        tools:layout="@layout/register_fragment" />
+        tools:layout="@layout/register_fragment">
+        <action
+            android:id="@+id/action_registerFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.haksoy.voipapp.ui.profile.UserProfileFragment"
+        android:label="user_profile_fragment"
+        tools:layout="@layout/user_profile_fragment" />
 </navigation>

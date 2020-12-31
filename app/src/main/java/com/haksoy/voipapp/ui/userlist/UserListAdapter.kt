@@ -50,12 +50,12 @@ class UserViewHolder(
 
     fun bind(item: User) {
         this.user = item
-        itemBinding.name.text = item.name.first
-        itemBinding.speciesAndStatus.text = item.email
-        Glide.with(itemBinding.root)
-            .load(item.picture.thumbnail)
-            .transform(CircleCrop())
-            .into(itemBinding.image)
+        itemBinding.name.text = item.name
+//        itemBinding.speciesAndStatus.text = item.email
+//        Glide.with(itemBinding.root)
+//            .load(item.picture.thumbnail)
+//            .transform(CircleCrop())
+//            .into(itemBinding.image)
     }
 
     override fun onClick(v: View?) {

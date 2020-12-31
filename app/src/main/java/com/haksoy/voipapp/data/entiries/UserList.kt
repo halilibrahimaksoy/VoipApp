@@ -12,6 +12,5 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 data class UserList (
 
-	val results : List<User>,
-	val info : Info
+	val results : List<User>
 )

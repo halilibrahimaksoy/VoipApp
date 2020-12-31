@@ -6,11 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.LoginFragmentBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
@@ -39,12 +43,31 @@ class LoginFragment : Fragment() {
                     .observe(viewLifecycleOwner,
                         Observer {
                             if (it.status == Resource.Status.SUCCESS) {
+                                //todo should be farward to mainactivity
+                                findNavController().navigate(
+                                    R.id.action_loginFragment_to_userProfileFragment,
+                                    bundleOf("isResistration" to true)
+                                )
                             } else if (it.status == Resource.Status.ERROR) {
                                 it.data?.let { it1 -> handleError(it1) }
                             }
                         })
             }
         })
+
+        val auth: FirebaseAuth = Firebase.auth
+
+        if (auth.currentUser != null) {
+            findNavController().navigate(
+                R.id.action_loginFragment_to_userProfileFragment,
+                bundleOf(
+                    "isResistration" to true,
+                    "activeUID" to auth.currentUser!!.uid,
+                    "activeEmail" to auth.currentUser!!.email
+                )
+            )
+        }
+
         return binding.root
     }
 

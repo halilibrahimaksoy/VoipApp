@@ -25,12 +25,12 @@ class UserDetailsFragment : Fragment() {
         binding = FragmentUserDetailsBinding.inflate(inflater, container, false)
 
 
-        Glide.with(binding.root).load(user.picture.large).transform(CircleCrop())
-            .into(binding.userImage)
-        binding.tvFullName.text = user.name.first + user.name.last
-        binding.tvEmail.text = user.email
-        binding.tvMobile.text = user.phone
-        binding.tvCell.text = user.cell
+//        Glide.with(binding.root).load(user.picture).transform(CircleCrop())
+//            .into(binding.userImage)
+        binding.tvFullName.text = user.name
+//        binding.tvEmail.text = user.email
+//        binding.tvMobile.text = user.phone
+//        binding.tvCell.text = user.cell
 
         return binding.root
     }

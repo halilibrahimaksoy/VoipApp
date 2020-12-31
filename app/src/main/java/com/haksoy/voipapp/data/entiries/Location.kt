@@ -11,12 +11,6 @@ For support, please feel free to contact me at https://www.linkedin.com/in/syeda
 
 
 data class Location (
-
-	val street : Street,
-	val city : String,
-	val state : String,
-	val country : String,
-	val postcode : Int,
-	val coordinates : Coordinates,
-	val timezone : Timezone
+	val latitude : Double,
+	val longitude : Double
 )

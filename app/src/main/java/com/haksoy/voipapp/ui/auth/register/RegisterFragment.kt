@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
@@ -55,7 +57,13 @@ class RegisterFragment : Fragment() {
             binding.txtPassword.text.toString()
         ).observe(viewLifecycleOwner,
             Observer {
-                if (it.status == Resource.Status.ERROR) {
+                if (it.status == Resource.Status.SUCCESS) {
+
+                    findNavController().navigate(
+                        R.id.action_registerFragment_to_userProfileFragment,
+                        bundleOf("isResistration" to true)
+                    )
+                } else if (it.status == Resource.Status.ERROR) {
                     it.data?.let { it1 -> handleError(it1) }
                 }
             })
@@ -114,7 +122,8 @@ class RegisterFragment : Fragment() {
                 errorMessage =
                     getString(R.string.FirebaseAuthInvalidCredentialsException)
                 showError(binding.txtEmail)
-            }            FirebaseAuthUserCollisionException::class.java -> {
+            }
+            FirebaseAuthUserCollisionException::class.java -> {
                 errorMessage =
                     getString(R.string.FirebaseAuthUserCollisionException)
                 showError(binding.txtEmail)

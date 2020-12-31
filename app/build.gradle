@@ -65,14 +65,20 @@ dependencies {
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:26.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-
-
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
+    //ImagePıcker
+    implementation 'com.github.Drjacky:ImagePicker:1.7.10'
+    implementation 'com.github.florent37:inline-activity-result-kotlin:1.0.4'
+
+    //StickySwitch
+    implementation 'com.github.GwonHyeok:StickySwitch:0.0.16'
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
