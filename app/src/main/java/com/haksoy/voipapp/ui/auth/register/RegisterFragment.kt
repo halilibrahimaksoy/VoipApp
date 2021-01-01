@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.RegisterFragmentBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
+import com.haksoy.voipapp.ui.profile.UserProfileFragment
 import com.haksoy.voipapp.utlis.Resource
 
 class RegisterFragment : Fragment() {
@@ -61,7 +62,7 @@ class RegisterFragment : Fragment() {
 
                     findNavController().navigate(
                         R.id.action_registerFragment_to_userProfileFragment,
-                        bundleOf("isResistration" to true)
+                        bundleOf("isResistration" to true,"status" to UserProfileFragment.Status.REGISTRATION)
                     )
                 } else if (it.status == Resource.Status.ERROR) {
                     it.data?.let { it1 -> handleError(it1) }

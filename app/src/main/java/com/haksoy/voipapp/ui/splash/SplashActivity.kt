@@ -18,19 +18,10 @@ class SplashActivity : AppCompatActivity() {
 
         val auth: FirebaseAuth = Firebase.auth
         val intent: Intent
-        if (auth.currentUser != null) {
-            intent = Intent(this, MainActivity::class.java)
-
-//            findNavController().navigate(
-//                R.id.action_loginFragment_to_userProfileFragment,
-//                bundleOf(
-//                    "isResistration" to true,
-//                    "activeUID" to auth.currentUser!!.uid,
-//                    "activeEmail" to auth.currentUser!!.email
-//                )
-//            )
+        intent = if (auth.currentUser != null) {
+            Intent(this, MainActivity::class.java)
         } else {
-            intent = Intent(this, AuthenticationActivity::class.java)
+            Intent(this, AuthenticationActivity::class.java)
         }
         startActivity(intent)
     }

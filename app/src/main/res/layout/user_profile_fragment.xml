@@ -20,15 +20,14 @@
             <RelativeLayout
                 android:id="@+id/rltvEditOn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     android:src="@mipmap/ic_cancel" />
 
                 <ImageView
@@ -36,15 +35,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     android:src="@mipmap/ic_save" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rltvEditOff"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible">
+                android:layout_height="wrap_content">
 
 
                 <ImageView
@@ -52,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_margin="10dp"
+                    android:layout_margin="5dp"
                     android:src="@mipmap/ic_edit" />
             </RelativeLayout>
 
@@ -63,11 +61,8 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@id/toolbar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp" />
+            android:src="@mipmap/ic_photo"
+            android:layout_centerHorizontal="true" />
 
 
         <TextView
@@ -76,7 +71,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/imageView"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="30dp"
             android:background="@color/colorAccent"
             android:padding="10dp"
@@ -90,9 +84,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/txtEmail"
             android:layout_centerHorizontal="true"
-            android:layout_margin="30dp"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:orientation="vertical">
 
 
             <EditText
@@ -129,7 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/txtEmail"
             android:layout_centerHorizontal="true"
-            android:layout_margin="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:orientation="vertical">
 
             <TextView
