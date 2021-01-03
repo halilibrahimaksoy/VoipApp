@@ -1,7 +1,19 @@
 package com.haksoy.voipapp.ui.chat
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.haksoy.voipapp.location.LocationRepository
+import java.util.concurrent.Executors
 
-class ChatViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+class ChatViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val locationRepository = LocationRepository.getInstance(
+        application.applicationContext,
+        Executors.newSingleThreadExecutor()
+    )
+
+
+    fun startLocationUpdates() = locationRepository.startLocationUpdates()
+
+    fun stopLocationUpdates() = locationRepository.stopLocationUpdates()
 }

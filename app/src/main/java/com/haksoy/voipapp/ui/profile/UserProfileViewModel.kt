@@ -9,6 +9,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.haksoy.voipapp.data.FirebaseDao
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 
@@ -18,15 +19,16 @@ class UserProfileViewModel : ViewModel() {
     val auth = Firebase.auth
     val currentUser = MutableLiveData<User>()
 
+    val firebaseDao = FirebaseDao()
     fun getUid(): String {
-        return auth.currentUser!!.uid
+        return firebaseDao.getUid()
     }
 
     fun getEmail(): String {
-        return auth.currentUser!!.email.toString()
+        return firebaseDao.getEmail()
     }
 
-    fun fetchUserDate(uid: String) {
+    fun fetchUserDate(uid: String) {//todo : All of firebase using will move to firebasedao
         val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
         docRef.addSnapshotListener { snapshot, error ->
             if (error != null) {

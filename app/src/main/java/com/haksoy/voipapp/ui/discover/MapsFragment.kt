@@ -12,6 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.haksoy.voipapp.R
+import com.haksoy.voipapp.utlis.hasPermission
 
 class MapsFragment : Fragment() {
 
@@ -26,7 +27,6 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity?.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         return inflater.inflate(R.layout.fragment_maps, container, false)
     }
 

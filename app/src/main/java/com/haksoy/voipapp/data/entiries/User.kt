@@ -1,3 +1,4 @@
+import com.haksoy.voipapp.data.entiries.Location
 import java.io.Serializable
 
 data class User(
@@ -7,6 +8,6 @@ data class User(
     var info: String? = null,
     var picture: String? = null,
     var gender: String? = null,
-    var location: Location? = null,
+    var location: Location = Location(),
     var nat: String? = null
 ) : Serializable
