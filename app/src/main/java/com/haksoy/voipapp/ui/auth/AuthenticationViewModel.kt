@@ -8,7 +8,7 @@ import com.haksoy.voipapp.utlis.Resource
 
 class AuthenticationViewModel : ViewModel() {
     val resultModel = MutableLiveData<Resource<Exception>>()
-    val userDao = FirebaseDao()
+    val userDao = FirebaseDao.getInstance()
 
     fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
         userDao.createAccount(email, password).observeForever {

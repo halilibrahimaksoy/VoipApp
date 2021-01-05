@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -22,7 +23,9 @@ import com.haksoy.voipapp.utlis.Resource
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: RegisterFragmentBinding
-    private lateinit var viewModel: AuthenticationViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,11 +71,6 @@ class RegisterFragment : Fragment() {
                     it.data?.let { it1 -> handleError(it1) }
                 }
             })
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = AuthenticationViewModel()
     }
 
     private fun validateForm(): Boolean {

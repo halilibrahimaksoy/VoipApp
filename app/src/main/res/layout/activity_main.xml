@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.main.MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
+    <com.haksoy.voipapp.utlis.SwipeLockedViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

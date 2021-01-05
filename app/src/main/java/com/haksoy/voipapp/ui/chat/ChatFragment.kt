@@ -26,7 +26,7 @@ class ChatFragment : Fragment() {
     ): View? {
 
         if (!activity?.hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)!!)
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),0)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 0)
         return inflater.inflate(R.layout.chat_fragment, container, false)
     }
 

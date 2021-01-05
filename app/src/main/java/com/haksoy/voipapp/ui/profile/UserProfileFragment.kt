@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.github.drjacky.imagepicker.ImagePicker
@@ -37,7 +37,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     }
 
     private lateinit var binding: UserProfileFragmentBinding
-    private lateinit var viewModel: UserProfileViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
+    }
     private var editMode: Boolean = false
     private var newImageUri: Uri? = null
     private lateinit var activeUID: String
@@ -80,8 +82,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
-
         viewModel.currentUser.observe(viewLifecycleOwner, Observer {
             it.let {
                 if (it.picture != null)
@@ -145,6 +145,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 if (it.status == Resource.Status.SUCCESS) {
                     editMode = false
                     setEditMode()
+                    viewModel.fetchUserDate(viewModel.getUid())
                 } else if (it.status == Resource.Status.ERROR) {
                     Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
                 }

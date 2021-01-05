@@ -2,10 +2,8 @@ package com.haksoy.voipapp.location
 
 import android.content.Context
 import androidx.annotation.MainThread
-import androidx.lifecycle.LiveData
 import com.haksoy.voipapp.data.FirebaseDao
 import com.haksoy.voipapp.data.entiries.Location
-import java.util.*
 import java.util.concurrent.ExecutorService
 
 private const val TAG = "LocationRepository"
@@ -15,7 +13,7 @@ private const val TAG = "LocationRepository"
  * checking location update status).
  */
 class LocationRepository private constructor(
-    private val myLocationDao: FirebaseDao,
+    private val firebaseDao: FirebaseDao,
     private val myLocationManager: LocationManager,
     private val executor: ExecutorService
 ) {
@@ -23,9 +21,9 @@ class LocationRepository private constructor(
     /**
      * Adds list of locations to the database.
      */
-    fun addLocation(myLocationEntities:Location) {
+    fun addLocation(myLocationEntities: Location) {
         executor.execute {
-            myLocationDao.addLocation(myLocationEntities)
+            firebaseDao.addLocation(myLocationEntities)
         }
     }
 
@@ -42,14 +40,16 @@ class LocationRepository private constructor(
     fun stopLocationUpdates() = myLocationManager.stopLocationUpdates()
 
     companion object {
-        @Volatile private var INSTANCE: LocationRepository? = null
+        @Volatile
+        private var INSTANCE: LocationRepository? = null
 
         fun getInstance(context: Context, executor: ExecutorService): LocationRepository {
             return INSTANCE ?: synchronized(this) {
                 INSTANCE ?: LocationRepository(
                     FirebaseDao.getInstance(),
                     LocationManager.getInstance(context),
-                    executor)
+                    executor
+                )
                     .also { INSTANCE = it }
             }
         }

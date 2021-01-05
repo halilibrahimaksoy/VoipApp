@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
             )
         binding.viewPager.adapter = sectionsPagerAdapter
+        binding.viewPager.offscreenPageLimit=3
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 

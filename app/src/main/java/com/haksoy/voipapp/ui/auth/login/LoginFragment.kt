@@ -7,15 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.LoginFragmentBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
@@ -25,7 +21,9 @@ import com.haksoy.voipapp.utlis.Resource
 class LoginFragment : Fragment() {
 
     private lateinit var binding: LoginFragmentBinding
-    private lateinit var viewModel: AuthenticationViewModel
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,12 +51,6 @@ class LoginFragment : Fragment() {
             }
         })
         return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
     private fun validateForm(): Boolean {
