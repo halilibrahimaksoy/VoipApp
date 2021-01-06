@@ -23,11 +23,6 @@ class LocationManager private constructor(private val context: Context) {
 
     private val _receivingLocationUpdates: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
-    /**
-     * Status of location updates, i.e., whether the app is actively subscribed to location changes.
-     */
-    val receivingLocationUpdates: LiveData<Boolean>
-        get() = _receivingLocationUpdates
 
     // The Fused Location Provider provides access to location APIs.
     private val fusedLocationClient: FusedLocationProviderClient =

@@ -70,7 +70,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_PROCESS_UPDATES =
-            "com.google.android.gms.location.sample.locationupdatesbackgroundkotlin.action." +
+            "com.haksoy.voipapp.location.LocationUpdatesBroadcastReceiver" +
                     "PROCESS_UPDATES"
     }
 }

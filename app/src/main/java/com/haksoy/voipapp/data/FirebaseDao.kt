@@ -179,8 +179,8 @@ class FirebaseDao {
     fun getNearlyUsers(location: Location): List<User> {
 
         var user: User
-        val users:  MutableList<User> = mutableListOf()
-        for (i in 1..10) {
+        val users: MutableList<User> = mutableListOf()
+        for (i in 1..20) {
             user = User(
                 UUID.randomUUID().toString(),
                 "email_$",
@@ -190,8 +190,8 @@ class FirebaseDao {
                 null,
                 Location(
                     UUID.randomUUID().toString(),
-                    location.latitude + Random.nextDouble(Constants.nerlyLimit),
-                    location.longitude + Random.nextDouble(Constants.nerlyLimit),
+                    location.latitude - Constants.nerlyLimit/2 + Random.nextDouble(Constants.nerlyLimit),
+                    location.longitude - Constants.nerlyLimit/2 + Random.nextDouble(Constants.nerlyLimit),
                     true,
                     Date()
                 )

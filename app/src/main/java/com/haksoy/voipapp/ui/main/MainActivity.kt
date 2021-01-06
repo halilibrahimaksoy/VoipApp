@@ -1,9 +1,7 @@
 package com.haksoy.voipapp.ui.main
 
-import android.Manifest
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.ActivityMainBinding
 
@@ -27,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager
             )
         binding.viewPager.adapter = sectionsPagerAdapter
-        binding.viewPager.offscreenPageLimit=3
+        binding.viewPager.offscreenPageLimit = 3
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
