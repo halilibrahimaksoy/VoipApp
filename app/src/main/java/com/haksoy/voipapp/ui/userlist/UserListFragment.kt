@@ -3,7 +3,6 @@ package com.haksoy.voipapp.ui.userlist
 import User
 import android.content.Context
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +14,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.voipapp.databinding.FragmentUserListBinding
 import com.haksoy.voipapp.utlis.Constants
-import com.haksoy.voipapp.utlis.Constants.SelectedUserUid
 import org.parceler.Parcels
 
 
@@ -82,7 +80,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     fun getPositionFromUid(uid: String): Int {
         for (i in 0..userList.size) {
             if (userList[i].uid == uid)
-                return i
+                return Int.MAX_VALUE/2+i
         }
         return -1
     }

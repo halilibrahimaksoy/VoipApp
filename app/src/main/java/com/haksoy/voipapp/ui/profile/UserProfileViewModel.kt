@@ -3,10 +3,10 @@ package com.haksoy.voipapp.ui.profile
 import User
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import com.haksoy.voipapp.data.FirebaseDao
 import com.haksoy.voipapp.utlis.Resource
+import com.haksoy.voipapp.utlis.observeOnce
 
 class UserProfileViewModel : ViewModel() {
     val currentUser = MutableLiveData<User>()
@@ -21,13 +21,13 @@ class UserProfileViewModel : ViewModel() {
     }
 
     fun fetchUserDate(uid: String) {
-        firebaseDao.fetchUserDate(uid).observeForever(Observer {
+        firebaseDao.fetchUserDate(uid).observeOnce {
             if (it.status == Resource.Status.SUCCESS) {
                 currentUser.postValue(it.data)
             } else if (it.status == Resource.Status.ERROR) {
 
             }
-        })
+        }
     }
 
     fun updateUserProfile(

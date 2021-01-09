@@ -11,6 +11,7 @@ import com.google.firebase.storage.ktx.storage
 import com.haksoy.voipapp.data.entiries.Location
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
+import com.haksoy.voipapp.utlis.observeOnce
 import java.util.*
 import kotlin.random.Random
 
@@ -91,7 +92,7 @@ class FirebaseDao {
         var result = MutableLiveData<Resource<Exception>>()
 
         if (newImageUri != null) {
-            uploadProfileImage(getCurrentUserUid(), newImageUri.toString()).observeForever {
+            uploadProfileImage(getCurrentUserUid(), newImageUri.toString()).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     updateUser(
                         getCurrentUserUid(),
@@ -99,7 +100,7 @@ class FirebaseDao {
                         name,
                         info,
                         it.data
-                    ).observeForever { it1 ->
+                    ).observeOnce { it1 ->
                         if (it1.status == Resource.Status.SUCCESS) {
                             result.value = Resource.success(null)
                         } else if (it1.status == Resource.Status.ERROR) {
@@ -111,7 +112,7 @@ class FirebaseDao {
                 }
             }
         } else {
-            updateUser(getCurrentUserUid(), getCurrentUserEmail(), name, info).observeForever {
+            updateUser(getCurrentUserUid(), getCurrentUserEmail(), name, info).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     result.value = Resource.success(null)
                 } else if (it.status == Resource.Status.ERROR) {

@@ -5,13 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.haksoy.voipapp.data.FirebaseDao
 import com.haksoy.voipapp.utlis.Resource
+import com.haksoy.voipapp.utlis.observeOnce
 
 class AuthenticationViewModel : ViewModel() {
     val resultModel = MutableLiveData<Resource<Exception>>()
     val userDao = FirebaseDao.getInstance()
 
     fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
-        userDao.createAccount(email, password).observeForever {
+        userDao.createAccount(email, password).observeOnce {
             resultModel.postValue(it)
         }
 
@@ -20,7 +21,7 @@ class AuthenticationViewModel : ViewModel() {
 
     fun signIn(email: String, password: String): LiveData<Resource<Exception>> {
 
-        userDao.signIn(email, password).observeForever {
+        userDao.signIn(email, password).observeOnce {
             resultModel.postValue(it)
         }
 
