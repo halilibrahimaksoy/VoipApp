@@ -7,7 +7,7 @@ import com.haksoy.voipapp.data.FirebaseDao
 
 class MapsViewModel : ViewModel() {
 
-    val firebaseDao = FirebaseDao.getInstance()
+    private val firebaseDao = FirebaseDao.getInstance()
 
     val nearlyUsers = MutableLiveData<List<User>>()
 

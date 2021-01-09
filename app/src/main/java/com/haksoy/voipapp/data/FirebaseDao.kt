@@ -183,9 +183,9 @@ class FirebaseDao {
         for (i in 1..20) {
             user = User(
                 UUID.randomUUID().toString(),
-                "email_$",
+                "email_$i",
                 "Name_$i",
-                null,
+                "user info user info user info user info user info user info user info user info ",
                 Constants.randomImageUrl,
                 null,
                 Location(

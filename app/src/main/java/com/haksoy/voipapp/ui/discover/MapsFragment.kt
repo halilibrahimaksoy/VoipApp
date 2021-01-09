@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -25,11 +26,16 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.haksoy.voipapp.R
+import com.haksoy.voipapp.databinding.FragmentMapsBinding
+import com.haksoy.voipapp.ui.userlist.UserListFragment
+import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.hasPermission
 
 private const val TAG = "MapsFragment"
 
 class MapsFragment : Fragment() {
+    private lateinit var userListFragment: UserListFragment
+    private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(MapsViewModel::class.java)
@@ -40,7 +46,8 @@ class MapsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_maps, container, false)
+        binding = FragmentMapsBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,6 +67,17 @@ class MapsFragment : Fragment() {
                 ), REQUEST_LOCATION_PERMISSIONS_REQUEST_CODE
             )
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            dismissUserList()
+        }
+    }
+
+    private fun dismissUserList() {
+        val userListFragmentInstance =
+            childFragmentManager.findFragmentByTag(Constants.UserListFragmentTag)
+        if (userListFragmentInstance != null && userListFragmentInstance.isVisible)
+            childFragmentManager.beginTransaction().remove(userListFragmentInstance).commit()
     }
 
     @SuppressLint("MissingPermission")
@@ -71,7 +89,6 @@ class MapsFragment : Fragment() {
             it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
 
             viewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
-                //                Toast.makeText(activity, "Updating nearby users", Toast.LENGTH_SHORT).show()
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)
@@ -86,14 +103,16 @@ class MapsFragment : Fragment() {
                                 resource: Bitmap,
                                 transition: Transition<in Bitmap?>?
                             ) {
-                                it.addMarker(getMarkerOptions(user))
-                                    .setIcon(BitmapDescriptorFactory.fromBitmap(resource))
+                                it.addMarker(getMarkerOptions(user)).apply {
+                                    tag = user.uid
+                                }.setIcon(BitmapDescriptorFactory.fromBitmap(resource))
                             }
 
                             override fun onLoadFailed(errorDrawable: Drawable?) {
                                 super.onLoadFailed(errorDrawable)
-                                it.addMarker(getMarkerOptions(user))
-                                    .setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_profile))
+                                it.addMarker(getMarkerOptions(user)).apply {
+                                    tag = user.uid
+                                }.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_profile))
                             }
 
                             override fun onLoadCleared(placeholder: Drawable?) {
@@ -103,8 +122,21 @@ class MapsFragment : Fragment() {
                         })
 
                 }
+
             })
+
+            it.setOnMarkerClickListener {
+                showUserList(it.tag.toString())
+                true
+            }
         }
+    }
+
+    private fun showUserList(selectedUserUid: String) {
+        userListFragment = UserListFragment.newInstance(viewModel.nearlyUsers.value!!,selectedUserUid)
+        childFragmentManager.beginTransaction()
+            .add(R.id.map_user_list_fragment, userListFragment, Constants.UserListFragmentTag)
+            .commit()
     }
 
 

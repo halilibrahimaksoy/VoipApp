@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.haksoy.voipapp.databinding.UserItemBinding
 
 class UserListAdapter(private val listener: UserItemListener) :
@@ -30,10 +29,10 @@ class UserListAdapter(private val listener: UserItemListener) :
         return UserViewHolder(binding, listener)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = Int.MAX_VALUE
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
-        holder.bind(items[position])
+        holder.bind(items[position % items.size])
 }
 
 class UserViewHolder(
@@ -50,12 +49,14 @@ class UserViewHolder(
 
     fun bind(item: User) {
         this.user = item
-        itemBinding.name.text = item.name
-//        itemBinding.speciesAndStatus.text = item.email
-//        Glide.with(itemBinding.root)
-//            .load(item.picture.thumbnail)
-//            .transform(CircleCrop())
-//            .into(itemBinding.image)
+        itemBinding.txtFullName.text = item.name
+        itemBinding.txtEmail.text = item.email
+        itemBinding.txtInfo.text = item.info
+        Glide.with(itemBinding.root /* context */)
+            .load(item.picture)
+            .circleCrop()
+            .into(itemBinding.imageView)
+
     }
 
     override fun onClick(v: View?) {

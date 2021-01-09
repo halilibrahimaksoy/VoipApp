@@ -1,64 +1,94 @@
 package com.haksoy.voipapp.ui.userlist
 
 import User
+import android.content.Context
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.haksoy.voipapp.R
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.voipapp.databinding.FragmentUserListBinding
+import com.haksoy.voipapp.utlis.Constants
+import com.haksoy.voipapp.utlis.Constants.SelectedUserUid
+import org.parceler.Parcels
+
 
 class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
+
+    companion object {
+        @JvmStatic
+        fun newInstance(userList: List<User>,selectedUserUid:String): UserListFragment {
+            return UserListFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable(Constants.NearlyUserList, Parcels.wrap(userList))
+                    putString(Constants.SelectedUserUid,selectedUserUid)
+                }
+            }
+        }
+    }
+
     private lateinit var binding: FragmentUserListBinding
-    private lateinit var viewModel: UserListViewModel
     private lateinit var adapter: UserListAdapter
+    private lateinit var userList: List<User>
+    private lateinit var selectedUserUid: String
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("UserListFragment", "onCreateView")
         binding = FragmentUserListBinding.inflate(inflater, container, false)
-Log.d("UserListFragment","onCreateView")
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("UserListFragment","onViewCreated")
-
-        setupRecyclerView()
-        setupViewModel()
-
+        setupViewPager()
     }
 
-    private fun setupRecyclerView() {
+    private fun setupViewPager() {
         adapter = UserListAdapter(this)
-        binding.usrsRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.usrsRv.adapter = adapter
+        adapter.setItems(userList as ArrayList<User>)
+        binding.userViewPager.adapter = adapter
+        binding.userViewPager.clipToPadding = false
+        binding.userViewPager.clipChildren = false
+        binding.userViewPager.offscreenPageLimit = 3
+        binding.userViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        val compositeTransformer = CompositePageTransformer()
+        compositeTransformer.addTransformer(MarginPageTransformer(40))
+        compositeTransformer.addTransformer(ViewPager2.PageTransformer { page, position ->
+            val r = 1 - Math.abs(position)
+            page.scaleY = 0.75f + r * 0.25f
+            page.scaleX = 0.75f + r * 0.25f
+        })
+        binding.userViewPager.setPageTransformer(compositeTransformer)
+
+
+        binding.userViewPager.setCurrentItem(getPositionFromUid(selectedUserUid))
     }
 
-    private fun setupViewModel() {
-        viewModel = UserListViewModel()
-        viewModel.mUsers.observe(viewLifecycleOwner, Observer<List<User>>{
-            adapter.setItems(ArrayList(it))
-        })
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        userList = Parcels.unwrap<List<User>>(arguments?.getParcelable(Constants.NearlyUserList))
+        selectedUserUid = arguments?.getString(Constants.SelectedUserUid).toString()
     }
+
+    fun getPositionFromUid(uid: String): Int {
+        for (i in 0..userList.size) {
+            if (userList[i].uid == uid)
+                return i
+        }
+        return -1
+    }
+
 
     override fun onClickedUser(user: User) {
-        findNavController().navigate(
-            R.id.action_userListFragment_to_userDetailsFragment, bundleOf("selectedUser" to user)
-        )
-    }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("UserListFragment","onResume")
-        viewModel.loadUsers()
     }
 }

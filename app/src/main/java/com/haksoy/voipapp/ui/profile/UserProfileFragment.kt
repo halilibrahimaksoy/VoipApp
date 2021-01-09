@@ -112,7 +112,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 if (resultCode == Activity.RESULT_OK) {
                     //Image Uri will not be null for RESULT_OK
                     newImageUri = data?.data!!
-                    binding.imageView.setImageURI(newImageUri)
+//                    binding.imageView.setImageURI(newImageUri)
+                    showProfileImage(newImageUri.toString())
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
                         .show()
@@ -156,7 +157,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun showProfileImage(currentImageReferance: String) {
         Glide.with(binding.root /* context */)
             .load(currentImageReferance)
-            .transform(RoundedCorners(40))
+            .circleCrop()
             .into(binding.imageView)
 
     }
@@ -214,6 +215,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             R.id.btnCancel -> {
                 editMode = false
                 setEditMode()
+                viewModel.fetchUserDate(viewModel.getUid())
             }
         }
     }

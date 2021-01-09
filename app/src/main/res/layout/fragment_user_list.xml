@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
     tools:context=".ui.userlist.UserListFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/usrs_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/userViewPager"
+        android:layout_width="wrap_content"
+        android:padding="80dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:layout_centerInParent="true" />
 
-</FrameLayout>
+</RelativeLayout>
