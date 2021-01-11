@@ -59,6 +59,23 @@ class FirebaseDao {
         return result
     }
 
+    fun createNewUser(
+        uid: String,
+        email: String
+    ): MutableLiveData<Resource<Exception>> {
+        val newUser = User(uid, email)
+        var result = MutableLiveData<Resource<Exception>>()
+        cloudFirestoreDB.collection(Constants.User).document(newUser.uid!!).set(newUser)
+            .addOnSuccessListener {
+                result.value = Resource.success(null)
+            }
+            .addOnFailureListener {
+                result.value = Resource.error(it.localizedMessage, it)
+            }
+
+        return result
+    }
+
     fun getCurrentUserUid(): String {
         return auth.currentUser!!.uid
     }
@@ -69,7 +86,7 @@ class FirebaseDao {
 
     fun addLocation(location: Location) {
         cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
-            .update(Constants.Location, location)
+            .update(Constants.location, location)
     }
 
     fun fetchUserDate(uid: String): LiveData<Resource<User>> {
@@ -112,7 +129,12 @@ class FirebaseDao {
                 }
             }
         } else {
-            updateUser(getCurrentUserUid(), getCurrentUserEmail(), name, info).observeOnce {
+            updateUser(
+                getCurrentUserUid(),
+                getCurrentUserEmail(),
+                name,
+                info
+            ).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     result.value = Resource.success(null)
                 } else if (it.status == Resource.Status.ERROR) {
@@ -151,7 +173,7 @@ class FirebaseDao {
         val updateRef = storageFirebase.reference.child(Constants.User_Profile_Image).child(uid)
         val uploadTask = updateRef.putFile(Uri.parse(imageUri))
 
-        val urlTask = uploadTask.continueWithTask { task ->
+        uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {
                 task.exception?.let {
                     result.value = Resource.error(it.localizedMessage)
@@ -172,7 +194,8 @@ class FirebaseDao {
         val location = MutableLiveData<Location>()
         val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
             .addSnapshotListener { snapshot, error ->
-                location.value = snapshot?.toObject(User::class.java)!!.location
+                if(snapshot!=null && snapshot.data!=null)
+                location.value = snapshot.toObject(User::class.java)!!.location
             }
         return location
     }
@@ -191,8 +214,8 @@ class FirebaseDao {
                 null,
                 Location(
                     UUID.randomUUID().toString(),
-                    location.latitude - Constants.nerlyLimit/2 + Random.nextDouble(Constants.nerlyLimit),
-                    location.longitude - Constants.nerlyLimit/2 + Random.nextDouble(Constants.nerlyLimit),
+                    location.latitude - Constants.nerlyLimit / 2 + Random.nextDouble(Constants.nerlyLimit),
+                    location.longitude - Constants.nerlyLimit / 2 + Random.nextDouble(Constants.nerlyLimit),
                     true,
                     Date()
                 )

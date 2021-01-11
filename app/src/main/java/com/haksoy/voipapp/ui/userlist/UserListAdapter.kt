@@ -53,7 +53,7 @@ class UserViewHolder(
         itemBinding.txtEmail.text = item.email
         itemBinding.txtInfo.text = item.info
         Glide.with(itemBinding.root /* context */)
-            .load(item.picture)
+            .load(item.profileImage)
             .circleCrop()
             .into(itemBinding.imageView)
 

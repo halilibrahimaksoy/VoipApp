@@ -8,7 +8,7 @@ data class User(
     var email: String? = null,
     var name: String? = null,
     var info: String? = null,
-    var picture: String? = null,
+    var profileImage: String? = null,
     var gender: String? = null,
     var location: Location = Location(),
     var nat: String? = null

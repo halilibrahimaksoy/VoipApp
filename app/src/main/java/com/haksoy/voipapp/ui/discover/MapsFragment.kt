@@ -94,7 +94,7 @@ class MapsFragment : Fragment() {
                     Glide.with(activity?.applicationContext!!)
                         .asBitmap()
                         .circleCrop()
-                        .load(user.picture)
+                        .load(user.profileImage)
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .apply(RequestOptions().override(100, 100))

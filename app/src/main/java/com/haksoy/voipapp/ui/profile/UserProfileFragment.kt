@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.UserProfileFragmentBinding
@@ -83,9 +82,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-            it.let {
-                if (it.picture != null)
-                    showProfileImage(it.picture!!)
+            it?.let {
+                if (it.profileImage != null)
+                    showProfileImage(it.profileImage!!)
                 if (it.email != null)
                     binding.txtEmail.text = it.email
                 binding.txtFullName.text = it.name
