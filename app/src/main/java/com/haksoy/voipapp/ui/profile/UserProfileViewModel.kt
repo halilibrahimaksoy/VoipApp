@@ -30,12 +30,8 @@ class UserProfileViewModel : ViewModel() {
         }
     }
 
-    fun updateUserProfile(
-        newImageUri: Uri? = null,
-        name: String,
-        info: String
-    ): MutableLiveData<Resource<Exception>> {
-        return firebaseDao.updateUserProfile(newImageUri, name, info)
+    fun updateUserProfile(user: User): MutableLiveData<Resource<Exception>> {
+        return firebaseDao.updateUserProfile(user)
     }
 
 

@@ -21,4 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="?attr/colorPrimary" />
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/userProfileFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

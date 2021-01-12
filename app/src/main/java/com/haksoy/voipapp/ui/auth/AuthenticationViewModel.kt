@@ -8,11 +8,12 @@ import com.haksoy.voipapp.utlis.Resource
 import com.haksoy.voipapp.utlis.observeOnce
 
 class AuthenticationViewModel : ViewModel() {
-    val resultModel = MutableLiveData<Resource<Exception>>()
-    val userDao = FirebaseDao.getInstance()
+    val firebaseDao = FirebaseDao.getInstance()
 
     fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
-        userDao.createAccount(email, password).observeOnce {
+        val resultModel = MutableLiveData<Resource<Exception>>()
+
+        firebaseDao.createAccount(email, password).observeOnce {
             resultModel.postValue(it)
         }
 
@@ -20,12 +21,14 @@ class AuthenticationViewModel : ViewModel() {
     }
 
     fun signIn(email: String, password: String): LiveData<Resource<Exception>> {
+        val resultModel = MutableLiveData<Resource<Exception>>()
 
-        userDao.signIn(email, password).observeOnce {
+        firebaseDao.signIn(email, password).observeOnce {
             resultModel.postValue(it)
         }
 
         return resultModel
     }
+
 
 }

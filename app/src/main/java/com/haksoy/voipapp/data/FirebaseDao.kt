@@ -59,23 +59,6 @@ class FirebaseDao {
         return result
     }
 
-    fun createNewUser(
-        uid: String,
-        email: String
-    ): MutableLiveData<Resource<Exception>> {
-        val newUser = User(uid, email)
-        var result = MutableLiveData<Resource<Exception>>()
-        cloudFirestoreDB.collection(Constants.User).document(newUser.uid!!).set(newUser)
-            .addOnSuccessListener {
-                result.value = Resource.success(null)
-            }
-            .addOnFailureListener {
-                result.value = Resource.error(it.localizedMessage, it)
-            }
-
-        return result
-    }
-
     fun getCurrentUserUid(): String {
         return auth.currentUser!!.uid
     }
@@ -101,22 +84,16 @@ class FirebaseDao {
         return result
     }
 
-    fun updateUserProfile(
-        newImageUri: Uri? = null,
-        name: String,
-        info: String
-    ): MutableLiveData<Resource<Exception>> {
+    fun updateUserProfile(user: User): MutableLiveData<Resource<Exception>> {
         var result = MutableLiveData<Resource<Exception>>()
-
-        if (newImageUri != null) {
-            uploadProfileImage(getCurrentUserUid(), newImageUri.toString()).observeOnce {
+        if (!user.profileImage.toString()
+                .contains(Constants.firebaseStoregeURL, false)
+        ) {// for understanding to is image changed ?
+            uploadProfileImage(getCurrentUserUid(), user.profileImage.toString()).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
+                    user.profileImage = it.data
                     updateUser(
-                        getCurrentUserUid(),
-                        getCurrentUserEmail(),
-                        name,
-                        info,
-                        it.data
+                        user
                     ).observeOnce { it1 ->
                         if (it1.status == Resource.Status.SUCCESS) {
                             result.value = Resource.success(null)
@@ -130,10 +107,7 @@ class FirebaseDao {
             }
         } else {
             updateUser(
-                getCurrentUserUid(),
-                getCurrentUserEmail(),
-                name,
-                info
+                user
             ).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     result.value = Resource.success(null)
@@ -146,15 +120,10 @@ class FirebaseDao {
     }
 
     private fun updateUser(
-        uid: String,
-        email: String,
-        name: String,
-        info: String,
-        imageUri: String? = null
+        user: User
     ): MutableLiveData<Resource<Exception>> {
-        val newUser = User(uid, email, name, info, imageUri)
         var result = MutableLiveData<Resource<Exception>>()
-        cloudFirestoreDB.collection(Constants.User).document(newUser.uid!!).set(newUser)
+        cloudFirestoreDB.collection(Constants.User).document(user.uid!!).set(user)
             .addOnSuccessListener {
                 result.value = Resource.success(null)
             }
@@ -194,8 +163,8 @@ class FirebaseDao {
         val location = MutableLiveData<Location>()
         val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
             .addSnapshotListener { snapshot, error ->
-                if(snapshot!=null && snapshot.data!=null)
-                location.value = snapshot.toObject(User::class.java)!!.location
+                if (snapshot != null && snapshot.data != null)
+                    location.value = snapshot.toObject(User::class.java)!!.location
             }
         return location
     }
@@ -223,5 +192,21 @@ class FirebaseDao {
             users.add(user)
         }
         return users
+    }
+
+    fun isUserDataExist(uid: String): MutableLiveData<Resource<Boolean>> {
+        var result = MutableLiveData<Resource<Boolean>>()
+        cloudFirestoreDB.collection(Constants.User).document(uid)
+            .get().addOnCompleteListener {
+                if (it.isSuccessful) {
+                    if (it.result.toObject(User::class.java) != null) {
+                        result.value = Resource.success(true)
+                    } else {
+                        result.value = Resource.success(false)
+                    }
+                } else
+                    result.value = Resource.error(it.exception!!.localizedMessage)
+            }
+        return result
     }
 }

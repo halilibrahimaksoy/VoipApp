@@ -1,6 +1,8 @@
 package com.haksoy.voipapp.ui.profile
 
+import User
 import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
@@ -17,15 +19,16 @@ import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.UserProfileFragmentBinding
+import com.haksoy.voipapp.ui.main.MainActivity
+import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 
 
 class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     companion object {
-
         fun newInstance(status: Status) = UserProfileFragment().apply {
-            arguments = bundleOf("status" to status)
+            arguments = bundleOf(Constants.UserProfileFragmentReason to status)
         }
     }
 
@@ -36,13 +39,12 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     }
 
     private lateinit var binding: UserProfileFragmentBinding
+    private lateinit var _user: User
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
     }
     private var editMode: Boolean = false
     private var newImageUri: Uri? = null
-    private lateinit var activeUID: String
-    private lateinit var activeEmail: String
     private lateinit var reasonStatus: Status
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,11 +73,10 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.get("isResistration")?.let { editMode = it as Boolean }
-        arguments?.get("activeUID")?.let { activeUID = it as String }
-        arguments?.get("activeEmail")?.let { activeEmail = it as String }
-        arguments?.get("status")?.let { reasonStatus = it as Status }
+        arguments?.get(Constants.UserProfileFragmentReason)?.let { reasonStatus = it as Status }
 
+        if (reasonStatus == Status.REGISTRATION)
+            editMode = true
         setHasOptionsMenu(true)
     }
 
@@ -92,10 +93,12 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
                 binding.txtFullName2.setText(it.name)
                 binding.txtInfo2.setText(it.info)
+                _user = it
             }
         })
 
         binding.txtEmail.text = viewModel.getEmail()
+        _user = User(viewModel.getUid(), viewModel.getEmail())
         viewModel.fetchUserDate(viewModel.getUid())
     }
 
@@ -109,10 +112,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             ) //Final image resolution will be less than 1080 x 1080(Optional)
             .start { resultCode, data ->
                 if (resultCode == Activity.RESULT_OK) {
-                    //Image Uri will not be null for RESULT_OK
                     newImageUri = data?.data!!
-//                    binding.imageView.setImageURI(newImageUri)
                     showProfileImage(newImageUri.toString())
+                    _user.profileImage = newImageUri.toString()
                 } else if (resultCode == ImagePicker.RESULT_ERROR) {
                     Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
                         .show()
@@ -137,15 +139,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private fun updateUserProfile() {
         if (validateForm()) {
-            viewModel.updateUserProfile(
-                newImageUri,
-                binding.txtFullName2.text.toString(),
-                binding.txtInfo2.text.toString()
-            ).observe(viewLifecycleOwner, Observer {
+            viewModel.updateUserProfile(_user).observe(viewLifecycleOwner, Observer {
                 if (it.status == Resource.Status.SUCCESS) {
-                    editMode = false
-                    setEditMode()
-                    viewModel.fetchUserDate(viewModel.getUid())
+                    updateUserProfileCompleted()
                 } else if (it.status == Resource.Status.ERROR) {
                     Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
                 }
@@ -169,7 +165,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             binding.imageView.isClickable = true
             binding.lnrEdit.visibility = View.VISIBLE
             binding.lnrShow.visibility = View.GONE
-            fillEditFileds()
+            fillEditFields()
         } else {
             binding.rltvEditOn.visibility = View.GONE
             binding.rltvEditOff.visibility = View.VISIBLE
@@ -197,7 +193,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun fillEditFileds() {
+    private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
     }
@@ -209,13 +205,28 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 setEditMode()
             }
             R.id.btnSave -> {
+                setNewUserData()
                 updateUserProfile()
             }
             R.id.btnCancel -> {
-                editMode = false
-                setEditMode()
-                viewModel.fetchUserDate(viewModel.getUid())
+                updateUserProfileCompleted()
             }
         }
+    }
+
+    private fun updateUserProfileCompleted() {
+        editMode = false
+        setEditMode()
+        viewModel.fetchUserDate(viewModel.getUid())
+
+        if (reasonStatus == Status.REGISTRATION) {
+            activity?.startActivity(Intent(context, MainActivity::class.java))
+            activity?.finish()
+        }
+    }
+
+    private fun setNewUserData() {
+        _user.name = binding.txtFullName2.text.toString()
+        _user.info = binding.txtInfo2.text.toString()
     }
 }
