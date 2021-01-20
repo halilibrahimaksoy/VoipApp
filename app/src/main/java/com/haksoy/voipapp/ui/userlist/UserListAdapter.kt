@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.haksoy.voipapp.databinding.UserItemBinding
 
 class UserListAdapter(private val listener: UserItemListener) :
@@ -31,8 +32,11 @@ class UserListAdapter(private val listener: UserItemListener) :
 
     override fun getItemCount(): Int = Int.MAX_VALUE
 
-    override fun onBindViewHolder(holder: UserViewHolder, position: Int) =
-        holder.bind(items[position % items.size])
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
+        if (items.size > 0) {
+            holder.bind(items[position % items.size])
+        }
+    }
 }
 
 class UserViewHolder(
@@ -54,6 +58,8 @@ class UserViewHolder(
         itemBinding.txtInfo.text = item.info
         Glide.with(itemBinding.root /* context */)
             .load(item.profileImage)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .circleCrop()
             .into(itemBinding.imageView)
 

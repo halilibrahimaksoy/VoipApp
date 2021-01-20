@@ -12,8 +12,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -28,19 +28,25 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentMapsBinding
 import com.haksoy.voipapp.ui.userlist.UserListFragment
-import com.haksoy.voipapp.utlis.Constants
+import com.haksoy.voipapp.ui.userlist.UserListViewModel
 import com.haksoy.voipapp.utlis.hasPermission
 
 private const val TAG = "MapsFragment"
 
 class MapsFragment : Fragment() {
-    private lateinit var userListFragment: UserListFragment
-    private lateinit var binding: FragmentMapsBinding
-    lateinit var mapFragment: SupportMapFragment
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(MapsViewModel::class.java)
+
+    companion object {
+        private const val REQUEST_LOCATION_PERMISSIONS_REQUEST_CODE = 34
+
+        @JvmStatic
+        fun newInstance(): MapsFragment {
+            return MapsFragment()
+        }
     }
 
+    private lateinit var binding: FragmentMapsBinding
+    lateinit var mapFragment: SupportMapFragment
+    private val userListViewModel: UserListViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -67,28 +73,17 @@ class MapsFragment : Fragment() {
                 ), REQUEST_LOCATION_PERMISSIONS_REQUEST_CODE
             )
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback {
-            dismissUserList()
-        }
     }
 
-    private fun dismissUserList() {
-        val userListFragmentInstance =
-            childFragmentManager.findFragmentByTag(Constants.UserListFragmentTag)
-        if (userListFragmentInstance != null && userListFragmentInstance.isVisible)
-            childFragmentManager.beginTransaction().remove(userListFragmentInstance).commit()
-    }
 
     @SuppressLint("MissingPermission")
     private fun updateMap() {
-        viewModel.fetchNearlyUsers()
-        mapFragment.getMapAsync {
+        userListViewModel.fetchNearlyUsers()
+        mapFragment.getMapAsync { it ->
             it.isMyLocationEnabled = true
-            val height = activity?.windowManager?.defaultDisplay?.height
-            it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
-
-            viewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
+//            val height = activity?.windowManager?.defaultDisplay?.height
+//            it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
+            userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)
@@ -125,20 +120,16 @@ class MapsFragment : Fragment() {
 
             })
 
-            it.setOnMarkerClickListener {
-                showUserList(it.tag.toString())
+            it.setOnMarkerClickListener {marker ->
+                showUserList(marker.tag.toString())
                 true
             }
         }
     }
 
     private fun showUserList(selectedUserUid: String) {
-        userListFragment = UserListFragment.newInstance(viewModel.nearlyUsers.value!!,selectedUserUid)
-        childFragmentManager.beginTransaction()
-            .add(R.id.map_user_list_fragment, userListFragment, Constants.UserListFragmentTag)
-            .commit()
+        userListViewModel.selectedUserUid.postValue(selectedUserUid)
     }
-
 
     private fun getMarkerOptions(user: User): MarkerOptions? {
         return MarkerOptions().position(
@@ -169,12 +160,4 @@ class MapsFragment : Fragment() {
 
     }
 
-    companion object {
-        private const val REQUEST_LOCATION_PERMISSIONS_REQUEST_CODE = 34
-
-        @JvmStatic
-        fun newInstance(): MapsFragment {
-            return MapsFragment()
-        }
-    }
 }

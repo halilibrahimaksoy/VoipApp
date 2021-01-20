@@ -9,14 +9,6 @@ import com.haksoy.voipapp.utlis.observeOnce
 
 class MapsViewModel : ViewModel() {
 
-    private val firebaseDao = FirebaseDao.getInstance()
 
-    val nearlyUsers = MutableLiveData<List<User>>()
-
-    fun fetchNearlyUsers() {
-        firebaseDao.getLocation(firebaseDao.getCurrentUserUid()).observeForever {
-            nearlyUsers.postValue(firebaseDao.getNearlyUsers(it))
-        }
-    }
 
 }

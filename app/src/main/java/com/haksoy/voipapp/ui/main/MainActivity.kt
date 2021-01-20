@@ -1,11 +1,16 @@
 package com.haksoy.voipapp.ui.main
 
+import User
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.ActivityMainBinding
 import com.haksoy.voipapp.ui.profile.UserProfileFragment
+import com.haksoy.voipapp.ui.userlist.UserListFragment
+import com.haksoy.voipapp.ui.userlist.UserListViewModel
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 import com.haksoy.voipapp.utlis.observeOnce
@@ -16,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
     }
+    private val userListViewModel: UserListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        viewModel.isUserDataExist().observeOnce {
+        viewModel.isUserDataExist.observeOnce {
             if (it.status == Resource.Status.SUCCESS) {
                 if (!it.data!!) {
                     showUserUpdateFragment()
@@ -32,6 +38,13 @@ class MainActivity : AppCompatActivity() {
                     prepareUi()
             }
         }
+
+        userListViewModel.selectedUserUid.observe(this, Observer {
+            showUserList()
+        })
+        userListViewModel.selectedUser.observe(this, Observer {
+            showUserDetailFragment(it)
+        })
     }
 
     private fun prepareUi() {
@@ -45,6 +58,28 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .add(R.id.userProfileFragment, userProfileFragment, Constants.UserProfileFragmentTag)
             .commit()
+    }
+
+    private fun showUserDetailFragment(user: User) {
+        val userProfileFragment =
+            UserProfileFragment.newInstance(UserProfileFragment.Status.OTHER_USER, user)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.userProfileFragment, userProfileFragment, Constants.UserProfileFragmentTag)
+            .addToBackStack(Constants.UserProfileFragmentTag)
+            .commit()
+    }
+
+    private fun showUserList() {
+        val fragment = supportFragmentManager.findFragmentByTag(Constants.UserListFragmentTag)
+        if (fragment == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(
+                    R.id.userProfileFragment,
+                    UserListFragment.newInstance(),
+                    Constants.UserListFragmentTag
+                ).addToBackStack(Constants.UserListFragmentTag)
+                .commit()
+        }
     }
 
     private fun setViewPager() {
@@ -64,4 +99,5 @@ class MainActivity : AppCompatActivity() {
         binding.tabs.getTabAt(2)!!.icon = getDrawable(R.mipmap.ic_person)
 
     }
+
 }

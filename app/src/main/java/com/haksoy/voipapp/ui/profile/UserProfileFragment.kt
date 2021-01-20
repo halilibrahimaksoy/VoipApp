@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -27,8 +28,11 @@ import com.haksoy.voipapp.utlis.Resource
 class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     companion object {
-        fun newInstance(status: Status) = UserProfileFragment().apply {
-            arguments = bundleOf(Constants.UserProfileFragmentReason to status)
+        fun newInstance(status: Status, selectedUser: User? = null) = UserProfileFragment().apply {
+            arguments = bundleOf(
+                Constants.UserProfileFragmentReason to status,
+                Constants.UserProfileFragmentSelectedUser to selectedUser
+            )
         }
     }
 
@@ -40,6 +44,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private lateinit var binding: UserProfileFragmentBinding
     private lateinit var _user: User
+    private lateinit var selectedUser: User
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
     }
@@ -74,32 +79,43 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.get(Constants.UserProfileFragmentReason)?.let { reasonStatus = it as Status }
+        arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let { selectedUser = it as User }
 
         if (reasonStatus == Status.REGISTRATION)
             editMode = true
+
+
         setHasOptionsMenu(true)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                if (it.profileImage != null)
-                    showProfileImage(it.profileImage!!)
-                if (it.email != null)
-                    binding.txtEmail.text = it.email
-                binding.txtFullName.text = it.name
-                binding.txtInfo.text = it.info
+        if (reasonStatus == Status.AUTH_USER || reasonStatus == Status.REGISTRATION) {
+            viewModel.currentUser.observe(viewLifecycleOwner, Observer {
+                it?.let {
+                    fillUserData(it)
+                    _user = it
+                }
+            })
+            binding.txtEmail.text = viewModel.getEmail()
+            _user = User(viewModel.getUid(), viewModel.getEmail())
+            viewModel.fetchUserDate(viewModel.getUid())
+        } else if (reasonStatus == Status.OTHER_USER) {
+            fillUserData(selectedUser)
+        }
 
-                binding.txtFullName2.setText(it.name)
-                binding.txtInfo2.setText(it.info)
-                _user = it
-            }
-        })
+    }
 
-        binding.txtEmail.text = viewModel.getEmail()
-        _user = User(viewModel.getUid(), viewModel.getEmail())
-        viewModel.fetchUserDate(viewModel.getUid())
+    private fun fillUserData(user: User) {
+        if (user.profileImage != null)
+            showProfileImage(user.profileImage!!)
+        if (reasonStatus != Status.OTHER_USER && user.email != null)
+            binding.txtEmail.text = user.email
+        binding.txtFullName.text = user.name
+        binding.txtInfo.text = user.info
+
+        binding.txtFullName2.setText(user.name)
+        binding.txtInfo2.setText(user.info)
     }
 
     private fun pickImage() {
