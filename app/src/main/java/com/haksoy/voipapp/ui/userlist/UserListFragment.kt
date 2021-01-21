@@ -13,16 +13,18 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.voipapp.databinding.FragmentUserListBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+private const val TAG = "UserListFragment"
 
 class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
-
     private lateinit var binding: FragmentUserListBinding
     private var adapter = UserListAdapter(this)
     private val userListViewModel: UserListViewModel by activityViewModels()
+    private var currentItem: Int? = null
 
     companion object {
-        @JvmStatic
         fun newInstance(): UserListFragment {
             return UserListFragment()
         }
@@ -35,20 +37,19 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     ): View? {
         Log.d("UserListFragment", "onCreateView")
         binding = FragmentUserListBinding.inflate(inflater, container, false)
-
+        setupViewPager()
+        fillList()
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupViewPager()
-        fillList()
-    }
-
     private fun fillList() {
-        adapter.setItems(userListViewModel.nearlyUsers.value as ArrayList<User>)
-        binding.userViewPager.currentItem = userListViewModel.getPositionFromUid()
+        GlobalScope.launch {
+
+            adapter.setItems(userListViewModel.nearlyUsers.value as ArrayList<User>)
+            binding.userViewPager.currentItem =
+                currentItem ?: userListViewModel.getPositionFromUid()
+        }
     }
 
     private fun setupViewPager() {
@@ -68,6 +69,12 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     }
 
     override fun onClickedUser(user: User) {
+        Log.i(TAG, "userListViewModel  :  selectedUser posted new value")
         userListViewModel.selectedUser.postValue(user)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentItem = binding.userViewPager.currentItem
     }
 }

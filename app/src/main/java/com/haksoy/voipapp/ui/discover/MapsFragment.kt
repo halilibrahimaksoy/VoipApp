@@ -14,8 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentMapsBinding
-import com.haksoy.voipapp.ui.userlist.UserListFragment
 import com.haksoy.voipapp.ui.userlist.UserListViewModel
 import com.haksoy.voipapp.utlis.hasPermission
 
@@ -38,7 +37,6 @@ class MapsFragment : Fragment() {
     companion object {
         private const val REQUEST_LOCATION_PERMISSIONS_REQUEST_CODE = 34
 
-        @JvmStatic
         fun newInstance(): MapsFragment {
             return MapsFragment()
         }
@@ -47,6 +45,7 @@ class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
     private val userListViewModel: UserListViewModel by activityViewModels()
+    private val mapsViewModel: MapsViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -83,7 +82,9 @@ class MapsFragment : Fragment() {
             it.isMyLocationEnabled = true
 //            val height = activity?.windowManager?.defaultDisplay?.height
 //            it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
+
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
+                Log.i(TAG,"userListViewModel  :  nearlyUsers observed")
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)
@@ -113,21 +114,21 @@ class MapsFragment : Fragment() {
                             override fun onLoadCleared(placeholder: Drawable?) {
                                 TODO("Not yet implemented")
                             }
-
                         })
-
                 }
-
             })
-
-            it.setOnMarkerClickListener {marker ->
+            it.setOnMarkerClickListener { marker ->
+//                Log.i(TAG,"userListViewModel  :  nearlyUsers removed")
+//                userListViewModel.nearlyUsers.removeObserver(observer)
                 showUserList(marker.tag.toString())
                 true
             }
         }
+
     }
 
     private fun showUserList(selectedUserUid: String) {
+        Log.i(TAG, "userListViewModel  :  selectedUserUid added new value")
         userListViewModel.selectedUserUid.postValue(selectedUserUid)
     }
 
@@ -159,5 +160,4 @@ class MapsFragment : Fragment() {
         }
 
     }
-
 }

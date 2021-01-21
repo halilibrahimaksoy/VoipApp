@@ -2,6 +2,7 @@ package com.haksoy.voipapp.ui.main
 
 import User
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -14,6 +15,8 @@ import com.haksoy.voipapp.ui.userlist.UserListViewModel
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 import com.haksoy.voipapp.utlis.observeOnce
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,9 +43,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         userListViewModel.selectedUserUid.observe(this, Observer {
+            Log.i(TAG, "userListViewModel  :  selectedUserUid observed")
+
             showUserList()
         })
         userListViewModel.selectedUser.observe(this, Observer {
+            Log.i(TAG, "userListViewModel  :  selectedUser observed")
+
             showUserDetailFragment(it)
         })
     }
@@ -64,22 +71,30 @@ class MainActivity : AppCompatActivity() {
         val userProfileFragment =
             UserProfileFragment.newInstance(UserProfileFragment.Status.OTHER_USER, user)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.userProfileFragment, userProfileFragment, Constants.UserProfileFragmentTag)
+            .replace(
+                R.id.usersFragment,
+                userProfileFragment,
+                Constants.UserProfileFragmentTag
+            )
             .addToBackStack(Constants.UserProfileFragmentTag)
             .commit()
+        setClickable(true)
     }
 
     private fun showUserList() {
-        val fragment = supportFragmentManager.findFragmentByTag(Constants.UserListFragmentTag)
-        if (fragment == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.userProfileFragment,
-                    UserListFragment.newInstance(),
-                    Constants.UserListFragmentTag
-                ).addToBackStack(Constants.UserListFragmentTag)
-                .commit()
-        }
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.usersFragment,
+                UserListFragment.newInstance(),
+                Constants.UserListFragmentTag
+            ).addToBackStack(Constants.UserListFragmentTag)
+            .commit()
+        setClickable(true)
+    }
+
+    private fun setClickable(status: Boolean) {
+        binding.usersFragment.isClickable = status
+        binding.usersFragment.isFocusable = status
     }
 
     private fun setViewPager() {
@@ -100,4 +115,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if (supportFragmentManager.backStackEntryCount == 0)
+            setClickable(false)
+    }
 }

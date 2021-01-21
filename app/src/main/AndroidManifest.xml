@@ -19,7 +19,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.splash.SplashActivity">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,15 +35,16 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.AuthenticationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
 
         </activity>
 
-        <receiver
-            android:name=".location.LocationUpdatesBroadcastReceiver"/>
+        <receiver android:name=".location.LocationUpdatesBroadcastReceiver" />
     </application>
 
 </manifest>

@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:background="?attr/colorPrimary" />
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/userProfileFragment"
+        android:id="@+id/usersFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
