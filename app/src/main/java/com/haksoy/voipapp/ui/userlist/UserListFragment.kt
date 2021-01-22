@@ -13,8 +13,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.voipapp.databinding.FragmentUserListBinding
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.haksoy.voipapp.utlis.observeOnce
 
 private const val TAG = "UserListFragment"
 
@@ -44,12 +43,9 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     }
 
     private fun fillList() {
-        GlobalScope.launch {
-
-            adapter.setItems(userListViewModel.nearlyUsers.value as ArrayList<User>)
-            binding.userViewPager.currentItem =
-                currentItem ?: userListViewModel.getPositionFromUid()
-        }
+        adapter.setItems(userListViewModel.selectedUserList.value as ArrayList<User>)
+        binding.userViewPager.currentItem =
+            currentItem ?: userListViewModel.getPositionFromUid()
     }
 
     private fun setupViewPager() {

@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         val userProfileFragment =
             UserProfileFragment.newInstance(UserProfileFragment.Status.REGISTRATION)
         supportFragmentManager.beginTransaction()
-            .add(R.id.userProfileFragment, userProfileFragment, Constants.UserProfileFragmentTag)
+            .add(R.id.usersFragment, userProfileFragment, Constants.UserProfileFragmentTag)
             .commit()
     }
 

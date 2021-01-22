@@ -118,8 +118,6 @@ class MapsFragment : Fragment() {
                 }
             })
             it.setOnMarkerClickListener { marker ->
-//                Log.i(TAG,"userListViewModel  :  nearlyUsers removed")
-//                userListViewModel.nearlyUsers.removeObserver(observer)
                 showUserList(marker.tag.toString())
                 true
             }
@@ -128,6 +126,8 @@ class MapsFragment : Fragment() {
     }
 
     private fun showUserList(selectedUserUid: String) {
+        Log.i(TAG, "userListViewModel  :  selectedUserList added new value")
+        userListViewModel.selectedUserList.postValue(userListViewModel.nearlyUsers.value)
         Log.i(TAG, "userListViewModel  :  selectedUserUid added new value")
         userListViewModel.selectedUserUid.postValue(selectedUserUid)
     }

@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -62,15 +61,15 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         }
         (activity as AppCompatActivity).supportActionBar?.title = ""
 
+        optimizeMenuForStatus()
         setEditMode()
-        binding.imageView.setOnClickListener(View.OnClickListener {
-            if (editMode)
-                pickImage()
-        })
 
+        binding.imageView.setOnClickListener(this)
         binding.btnCancel.setOnClickListener(this)
         binding.btnEdit.setOnClickListener(this)
         binding.btnSave.setOnClickListener(this)
+        binding.btnBack.setOnClickListener(this)
+        binding.btnSend.setOnClickListener(this)
 
         return binding.root
     }
@@ -174,17 +173,19 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     }
 
     private fun setEditMode() {
-        optimizeMenuForStatus()
         if (editMode) {
-            binding.rltvEditOn.visibility = View.VISIBLE
-            binding.rltvEditOff.visibility = View.GONE
+            if (reasonStatus == Status.AUTH_USER)
+                binding.btnCancel.visibility = View.VISIBLE
+            binding.btnSave.visibility = View.VISIBLE
+            binding.btnEdit.visibility = View.GONE
             binding.imageView.isClickable = true
             binding.lnrEdit.visibility = View.VISIBLE
             binding.lnrShow.visibility = View.GONE
             fillEditFields()
         } else {
-            binding.rltvEditOn.visibility = View.GONE
-            binding.rltvEditOff.visibility = View.VISIBLE
+            binding.btnSave.visibility = View.GONE
+            binding.btnCancel.visibility = View.GONE
+            binding.btnEdit.visibility = View.VISIBLE
             binding.imageView.isClickable = false
             binding.lnrEdit.visibility = View.GONE
             binding.lnrShow.visibility = View.VISIBLE
@@ -195,16 +196,16 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         when (reasonStatus) {
             Status.REGISTRATION -> {
                 binding.btnCancel.visibility = View.GONE
+                binding.rltvEdit.visibility = View.VISIBLE
+                binding.rltvPresent.visibility = View.GONE
             }
             Status.OTHER_USER -> {
-                binding.btnEdit.visibility = View.GONE
-                binding.btnSave.visibility = View.GONE
-                binding.btnCancel.visibility = View.GONE
+                binding.rltvEdit.visibility = View.GONE
+                binding.rltvPresent.visibility = View.VISIBLE
             }
             Status.AUTH_USER -> {
-                binding.btnEdit.visibility = View.VISIBLE
-                binding.btnSave.visibility = View.VISIBLE
-                binding.btnCancel.visibility = View.VISIBLE
+                binding.rltvEdit.visibility = View.VISIBLE
+                binding.rltvPresent.visibility = View.GONE
             }
         }
     }
@@ -226,6 +227,13 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             }
             R.id.btnCancel -> {
                 updateUserProfileCompleted()
+            }
+            R.id.btnBack -> {
+                activity?.onBackPressed()
+            }
+            R.id.imageView -> {
+                if (editMode)
+                    pickImage()
             }
         }
     }

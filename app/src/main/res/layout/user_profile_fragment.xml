@@ -18,9 +18,10 @@
             android:background="@android:color/transparent">
 
             <RelativeLayout
-                android:id="@+id/rltvEditOn"
+                android:id="@+id/rltvEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/btnCancel"
@@ -37,13 +38,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:src="@mipmap/ic_save" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rltvEditOff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
 
                 <ImageView
                     android:id="@+id/btnEdit"
@@ -54,6 +48,29 @@
                     android:src="@mipmap/ic_edit" />
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/rltvPresent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_margin="5dp"
+                    android:src="@mipmap/ic_back" />
+
+                <ImageView
+                    android:id="@+id/btnSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"
+                    android:src="@mipmap/ic_send" />
+            </RelativeLayout>
+
         </androidx.appcompat.widget.Toolbar>
 
         <ImageView
@@ -61,8 +78,8 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@id/toolbar"
-            android:src="@mipmap/ic_photo"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_photo" />
 
 
         <TextView
