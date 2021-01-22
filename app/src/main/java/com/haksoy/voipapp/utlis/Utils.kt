@@ -1,9 +1,13 @@
 package com.haksoy.voipapp.utlis
 
 import android.Manifest
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -57,4 +61,37 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: (T) ->
             removeObserver(this)
         }
     })
+}
+
+fun Context.startInstagram(username:String) {
+    val i = Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/$username"))
+    i.setPackage("com.instagram.android")
+
+    try {
+        startActivity(i)
+    } catch (e: ActivityNotFoundException) {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://instagram.com/$username")
+            )
+        )
+    }
+}
+ fun Context.startTwitter(username: String){
+    try {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("twitter://user?screen_name=$username")
+            )
+        )
+    } catch (e: Exception) {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://twitter.com/$username")
+            )
+        )
+    }
 }

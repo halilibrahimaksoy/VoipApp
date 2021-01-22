@@ -22,6 +22,9 @@ import com.haksoy.voipapp.databinding.FragmentUserProfileBinding
 import com.haksoy.voipapp.ui.main.MainActivity
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
+import com.haksoy.voipapp.utlis.startInstagram
+import com.haksoy.voipapp.utlis.startTwitter
+import kotlinx.android.synthetic.main.fragment_user_profile.*
 
 
 class UserProfileFragment() : Fragment(), View.OnClickListener {
@@ -70,6 +73,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         binding.btnSave.setOnClickListener(this)
         binding.btnBack.setOnClickListener(this)
         binding.btnSend.setOnClickListener(this)
+        binding.txtInstagram.setOnClickListener(this)
+        binding.txtTwitter.setOnClickListener(this)
 
         return binding.root
     }
@@ -90,15 +95,16 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (reasonStatus == Status.AUTH_USER || reasonStatus == Status.REGISTRATION) {
+
+            binding.txtEmail.text = viewModel.getEmail()
+            _user = User(viewModel.getUid(), viewModel.getEmail())
+            viewModel.fetchUserDate(viewModel.getUid())
             viewModel.currentUser.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     fillUserData(it)
                     _user = it
                 }
             })
-            binding.txtEmail.text = viewModel.getEmail()
-            _user = User(viewModel.getUid(), viewModel.getEmail())
-            viewModel.fetchUserDate(viewModel.getUid())
         } else if (reasonStatus == Status.OTHER_USER) {
             fillUserData(selectedUser)
         }
@@ -112,9 +118,15 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             binding.txtEmail.text = user.email
         binding.txtFullName.text = user.name
         binding.txtInfo.text = user.info
+        if (!user.socialMedia.instagram.isNullOrEmpty())
+            binding.txtInstagram.text = user.socialMedia.instagram
+        else
+            binding.txtInstagram.visibility = View.GONE
 
-        binding.txtFullName2.setText(user.name)
-        binding.txtInfo2.setText(user.info)
+        if (!user.socialMedia.twitter.isNullOrEmpty())
+            binding.txtTwitter.text = user.socialMedia.twitter
+        else
+            binding.txtTwitter.visibility = View.GONE
     }
 
     private fun pickImage() {
@@ -213,6 +225,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
+        binding.txtInstagram2.setText(binding.txtInstagram.text)
+        binding.txtTwitter2.setText(binding.txtTwitter.text)
     }
 
     override fun onClick(v: View) {
@@ -235,8 +249,15 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 if (editMode)
                     pickImage()
             }
+            R.id.txtInstagram -> {
+                activity?.startInstagram(txtInstagram.text.toString())
+            }
+            R.id.txtTwitter -> {
+                activity?.startTwitter(txtTwitter.text.toString())
+            }
         }
     }
+
 
     private fun updateUserProfileCompleted() {
         editMode = false
@@ -252,5 +273,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun setNewUserData() {
         _user.name = binding.txtFullName2.text.toString()
         _user.info = binding.txtInfo2.text.toString()
+        _user.socialMedia.instagram = binding.txtInstagram2.text.toString()
+        _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,8 +21,7 @@
             <RelativeLayout
                 android:id="@+id/rltvEdit"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/btnCancel"
@@ -103,7 +103,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
 
             <EditText
@@ -128,10 +129,29 @@
                 android:gravity="start"
                 android:hint="Abouth me .."
                 android:inputType="text"
-                android:minHeight="200dp"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/txtInstagram2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/holo_orange_light"
+                android:drawableStart="@mipmap/ic_instagram"
+                android:padding="5dp"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/txtTwitter2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/holo_orange_light"
+                android:drawableStart="@mipmap/ic_twitter"
+                android:padding="5dp"
+                android:singleLine="true" />
         </LinearLayout>
 
         <LinearLayout
@@ -142,7 +162,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/txtFullName"
@@ -160,10 +181,38 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="start"
-                android:minHeight="200dp"
                 android:padding="10dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtInstagram"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:drawableStartCompat="@mipmap/ic_instagram" />
+
+                <TextView
+                    android:id="@+id/txtTwitter"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:gravity="center_vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    app:drawableStartCompat="@mipmap/ic_twitter" />
+            </LinearLayout>
+
         </LinearLayout>
     </RelativeLayout>
 

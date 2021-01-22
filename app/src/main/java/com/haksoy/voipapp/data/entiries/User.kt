@@ -1,4 +1,5 @@
 import com.haksoy.voipapp.data.entiries.Location
+import com.haksoy.voipapp.data.entiries.SocialMedia
 import org.parceler.Parcel
 import java.io.Serializable
 
@@ -11,5 +12,6 @@ data class User(
     var profileImage: String? = null,
     var gender: String? = null,
     var location: Location = Location(),
-    var nat: String? = null
+    var nat: String? = null,
+    var socialMedia: SocialMedia = SocialMedia()
 ) : Serializable
