@@ -16,14 +16,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.haksoy.voipapp.R
-import com.haksoy.voipapp.databinding.RegisterFragmentBinding
+import com.haksoy.voipapp.databinding.FragmentRegisterBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
 import com.haksoy.voipapp.ui.profile.UserProfileFragment
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 
 class RegisterFragment : Fragment() {
-    private lateinit var binding: RegisterFragmentBinding
+    private lateinit var binding: FragmentRegisterBinding
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
     }
@@ -31,7 +31,7 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = RegisterFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.btnRegister.setOnClickListener(View.OnClickListener {
             if (validateForm()) {

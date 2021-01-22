@@ -13,14 +13,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.haksoy.voipapp.R
-import com.haksoy.voipapp.databinding.LoginFragmentBinding
+import com.haksoy.voipapp.databinding.FragmentLoginBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
 import com.haksoy.voipapp.ui.main.MainActivity
 import com.haksoy.voipapp.utlis.Resource
 
 class LoginFragment : Fragment() {
 
-    private lateinit var binding: LoginFragmentBinding
+    private lateinit var binding: FragmentLoginBinding
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
     }
@@ -29,7 +29,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = LoginFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         binding.btnRegister.setOnClickListener(View.OnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)

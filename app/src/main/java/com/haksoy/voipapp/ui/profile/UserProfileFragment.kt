@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.voipapp.R
-import com.haksoy.voipapp.databinding.UserProfileFragmentBinding
+import com.haksoy.voipapp.databinding.FragmentUserProfileBinding
 import com.haksoy.voipapp.ui.main.MainActivity
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
@@ -41,7 +41,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         OTHER_USER
     }
 
-    private lateinit var binding: UserProfileFragmentBinding
+    private lateinit var binding: FragmentUserProfileBinding
     private lateinit var _user: User
     private lateinit var selectedUser: User
     private val viewModel by lazy {
@@ -54,7 +54,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = UserProfileFragmentBinding.inflate(layoutInflater, container, false)
+        binding = FragmentUserProfileBinding.inflate(layoutInflater, container, false)
 
         if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
