@@ -84,7 +84,7 @@ class MapsFragment : Fragment() {
 //            it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
 
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
-                Log.i(TAG,"userListViewModel  :  nearlyUsers observed")
+                Log.i(TAG, "userListViewModel  :  nearlyUsers observed")
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)

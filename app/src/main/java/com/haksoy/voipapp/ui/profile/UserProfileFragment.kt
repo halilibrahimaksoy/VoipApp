@@ -20,11 +20,7 @@ import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentUserProfileBinding
 import com.haksoy.voipapp.ui.main.MainActivity
-import com.haksoy.voipapp.utlis.Constants
-import com.haksoy.voipapp.utlis.Resource
-import com.haksoy.voipapp.utlis.startInstagram
-import com.haksoy.voipapp.utlis.startTwitter
-import kotlinx.android.synthetic.main.fragment_user_profile.*
+import com.haksoy.voipapp.utlis.*
 
 
 class UserProfileFragment() : Fragment(), View.OnClickListener {
@@ -46,7 +42,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private lateinit var binding: FragmentUserProfileBinding
     private lateinit var _user: User
-    private lateinit var selectedUser: User
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
     }
@@ -73,8 +68,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         binding.btnSave.setOnClickListener(this)
         binding.btnBack.setOnClickListener(this)
         binding.btnSend.setOnClickListener(this)
-        binding.txtInstagram.setOnClickListener(this)
-        binding.txtTwitter.setOnClickListener(this)
+        binding.imgInstagram.setOnClickListener(this)
+        binding.imgFacebook.setOnClickListener(this)
+        binding.imgTwitter.setOnClickListener(this)
 
         return binding.root
     }
@@ -83,7 +79,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.get(Constants.UserProfileFragmentReason)?.let { reasonStatus = it as Status }
-        arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let { selectedUser = it as User }
+        arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let { _user = it as User }
 
         if (reasonStatus == Status.REGISTRATION)
             editMode = true
@@ -106,7 +102,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 }
             })
         } else if (reasonStatus == Status.OTHER_USER) {
-            fillUserData(selectedUser)
+            fillUserData(_user)
         }
 
     }
@@ -119,14 +115,13 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         binding.txtFullName.text = user.name
         binding.txtInfo.text = user.info
         if (!user.socialMedia.instagram.isNullOrEmpty())
-            binding.txtInstagram.text = user.socialMedia.instagram
-        else
-            binding.txtInstagram.visibility = View.GONE
+            binding.imgInstagram.visibility = View.VISIBLE
+
+        if (!user.socialMedia.facebook.isNullOrEmpty())
+            binding.imgFacebook.visibility = View.VISIBLE
 
         if (!user.socialMedia.twitter.isNullOrEmpty())
-            binding.txtTwitter.text = user.socialMedia.twitter
-        else
-            binding.txtTwitter.visibility = View.GONE
+            binding.imgTwitter.visibility = View.VISIBLE
     }
 
     private fun pickImage() {
@@ -225,8 +220,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
-        binding.txtInstagram2.setText(binding.txtInstagram.text)
-        binding.txtTwitter2.setText(binding.txtTwitter.text)
+        binding.txtInstagram2.setText(_user.socialMedia.instagram)
+        binding.txtFacebook2.setText(_user.socialMedia.facebook)
+        binding.txtTwitter2.setText(_user.socialMedia.twitter)
     }
 
     override fun onClick(v: View) {
@@ -249,11 +245,14 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 if (editMode)
                     pickImage()
             }
-            R.id.txtInstagram -> {
-                activity?.startInstagram(txtInstagram.text.toString())
+            R.id.imgInstagram -> {
+                _user.socialMedia.instagram?.let { activity?.startInstagram(it) }
             }
-            R.id.txtTwitter -> {
-                activity?.startTwitter(txtTwitter.text.toString())
+            R.id.imgTwitter -> {
+                _user.socialMedia.twitter?.let { activity?.startTwitter(it) }
+            }
+            R.id.imgFacebook -> {
+                _user.socialMedia.facebook?.let { activity?.startFacebook(it) }
             }
         }
     }
@@ -275,5 +274,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.info = binding.txtInfo2.text.toString()
         _user.socialMedia.instagram = binding.txtInstagram2.text.toString()
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
+        _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
     }
 }

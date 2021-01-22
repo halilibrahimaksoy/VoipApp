@@ -6,5 +6,6 @@ import java.io.Serializable
 @Parcel
 data class SocialMedia(
     var instagram: String? = null,
+    var facebook: String? = null,
     var twitter: String? = null
 ) : Serializable

@@ -7,10 +7,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+
 
 /**
  * Helper functions to simplify permission checks/requests.
@@ -19,7 +19,8 @@ fun Context.hasPermission(permission: String): Boolean {
 
     // Background permissions didn't exit prior to Q, so it's approved by default.
     if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION &&
-        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
+    ) {
         return true
     }
 
@@ -63,7 +64,7 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: (T) ->
     })
 }
 
-fun Context.startInstagram(username:String) {
+fun Context.startInstagram(username: String) {
     val i = Intent(Intent.ACTION_VIEW, Uri.parse("http://instagram.com/_u/$username"))
     i.setPackage("com.instagram.android")
 
@@ -78,7 +79,8 @@ fun Context.startInstagram(username:String) {
         )
     }
 }
- fun Context.startTwitter(username: String){
+
+fun Context.startTwitter(username: String) {
     try {
         startActivity(
             Intent(
@@ -94,4 +96,28 @@ fun Context.startInstagram(username:String) {
             )
         )
     }
+}
+
+fun Context.startFacebook(username: String) {
+    var facebookUrl: String = ""
+    val FACEBOOK_URL = "https://www.facebook.com/$username"
+    try {
+        val versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode
+        if (versionCode >= 3002850) { //newer versions of fb app
+            facebookUrl = "fb://facewebmodal/f?href=$FACEBOOK_URL"
+        } else { //older versions of fb app
+            facebookUrl = "fb://page/$username"
+        }
+
+        val facebookIntent = Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl))
+        startActivity(facebookIntent)
+    } catch (e: java.lang.Exception) {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.facebook.com/$username")
+            )
+        )
+    }
+
 }
