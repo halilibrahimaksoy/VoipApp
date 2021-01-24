@@ -13,7 +13,6 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.voipapp.databinding.FragmentUserListBinding
-import com.haksoy.voipapp.utlis.observeOnce
 
 private const val TAG = "UserListFragment"
 
@@ -55,7 +54,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
         binding.userViewPager.offscreenPageLimit = 3
         binding.userViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         val compositeTransformer = CompositePageTransformer()
-        compositeTransformer.addTransformer(MarginPageTransformer(40))
+        compositeTransformer.addTransformer(MarginPageTransformer(20))
         compositeTransformer.addTransformer(ViewPager2.PageTransformer { page, position ->
             val r = 1 - Math.abs(position)
             page.scaleY = 0.75f + r * 0.25f

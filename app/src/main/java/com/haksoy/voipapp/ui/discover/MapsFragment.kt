@@ -45,7 +45,6 @@ class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
     private val userListViewModel: UserListViewModel by activityViewModels()
-    private val mapsViewModel: MapsViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +62,7 @@ class MapsFragment : Fragment() {
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )!!
         ) {
+            userListViewModel.fetchNearlyUsers()
             updateMap()
         } else {
             requestPermissions(
@@ -77,7 +77,6 @@ class MapsFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun updateMap() {
-        userListViewModel.fetchNearlyUsers()
         mapFragment.getMapAsync { it ->
             it.isMyLocationEnabled = true
 //            val height = activity?.windowManager?.defaultDisplay?.height

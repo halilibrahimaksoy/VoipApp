@@ -20,9 +20,6 @@ class UserListViewModel : ViewModel() {
         for (i in selectedUserList.value!!.indices) {
             if (selectedUserList.value!![i].uid == selectedUserUid.value)
                 return Int.MAX_VALUE / 2 + i
-
-            if (i == 19)
-                return -1
         }
         return -1
     }

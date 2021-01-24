@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -144,6 +143,16 @@
                 android:singleLine="true" />
 
             <EditText
+                android:id="@+id/txtFacebook2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/holo_orange_light"
+                android:drawableStart="@mipmap/ic_facebook"
+                android:padding="5dp"
+                android:singleLine="true" />
+
+            <EditText
                 android:id="@+id/txtTwitter2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -188,29 +197,32 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="right"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/txtInstagram"
-                    android:layout_weight="1"
+                <ImageView
+                    android:id="@+id/imgInstagram"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    app:drawableStartCompat="@mipmap/ic_instagram" />
+                    android:layout_margin="5dp"
+                    android:src="@mipmap/ic_instagram"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/txtTwitter"
-                    android:layout_weight="1"
+                <ImageView
+                    android:id="@+id/imgFacebook"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:gravity="center_vertical"
-                    android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    app:drawableStartCompat="@mipmap/ic_twitter" />
+                    android:layout_margin="5dp"
+                    android:src="@mipmap/ic_facebook"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/imgTwitter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:src="@mipmap/ic_twitter"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>
