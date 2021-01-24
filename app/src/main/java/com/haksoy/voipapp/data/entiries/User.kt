@@ -1,9 +1,7 @@
 import com.haksoy.voipapp.data.entiries.Location
 import com.haksoy.voipapp.data.entiries.SocialMedia
-import org.parceler.Parcel
 import java.io.Serializable
 
-@Parcel
 data class User(
     var uid: String? = null,
     var email: String? = null,

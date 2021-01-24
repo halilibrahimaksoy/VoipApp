@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -79,8 +78,8 @@ class MapsFragment : Fragment() {
         mapFragment.getMapAsync { it ->
 
 
-            it.isMyLocationEnabled=true
-            it.uiSettings.isMyLocationButtonEnabled=false
+            it.isMyLocationEnabled = true
+            it.uiSettings.isMyLocationButtonEnabled = false
             binding.myLocation.setOnClickListener { view ->
                 it.myLocation?.let { location ->
                     it.animateCamera(
@@ -104,8 +103,6 @@ class MapsFragment : Fragment() {
                         .asBitmap()
                         .circleCrop()
                         .load(user.profileImage)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
                         .apply(RequestOptions().override(100, 100))
                         .into(object : CustomTarget<Bitmap?>() {
                             override fun onResourceReady(

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.haksoy.voipapp.databinding.UserItemBinding
 
 class UserListAdapter(private val listener: UserItemListener) :
@@ -58,8 +57,6 @@ class UserViewHolder(
         itemBinding.txtInfo.text = item.info
         Glide.with(itemBinding.root /* context */)
             .load(item.profileImage)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
             .circleCrop()
             .into(itemBinding.imageView)
 
