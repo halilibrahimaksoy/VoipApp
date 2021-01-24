@@ -12,13 +12,13 @@ class UserListViewModel : ViewModel() {
     private val firebaseDao = FirebaseDao.getInstance()
 
     val nearlyUsers = MutableLiveData<List<User>>()
-    val selectedUserList = MutableLiveData<List<User>>()
+    var selectedUserList = ArrayList<User>()
     val selectedUserUid = MutableLiveData<String>()
     val selectedUser = MutableLiveData<User>()
 
     fun getPositionFromUid(): Int {
-        for (i in selectedUserList.value!!.indices) {
-            if (selectedUserList.value!![i].uid == selectedUserUid.value)
+        for (i in selectedUserList.indices) {
+            if (selectedUserList[i].uid == selectedUserUid.value)
                 return Int.MAX_VALUE / 2 + i
         }
         return -1

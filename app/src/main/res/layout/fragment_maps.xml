@@ -11,9 +11,14 @@
         android:layout_height="match_parent"
         tools:context=".ui.discover.MapsFragment" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map_user_list_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true" />
+    <ImageView
+        android:id="@+id/myLocation"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="30dp"
+        android:background="#DDDDDDDD"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@android:drawable/ic_menu_mylocation" />
+
 </RelativeLayout>

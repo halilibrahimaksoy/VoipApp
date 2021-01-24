@@ -42,7 +42,7 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     }
 
     private fun fillList() {
-        adapter.setItems(userListViewModel.selectedUserList.value as ArrayList<User>)
+        adapter.setItems(userListViewModel.selectedUserList)
         binding.userViewPager.currentItem =
             currentItem ?: userListViewModel.getPositionFromUid()
     }

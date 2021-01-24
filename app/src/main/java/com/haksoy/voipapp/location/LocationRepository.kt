@@ -1,6 +1,7 @@
 package com.haksoy.voipapp.location
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.MainThread
 import com.haksoy.voipapp.data.FirebaseDao
 import com.haksoy.voipapp.data.entiries.Location
@@ -22,6 +23,7 @@ class LocationRepository private constructor(
      * Adds list of locations to the database.
      */
     fun addLocation(myLocationEntities: Location) {
+        Log.i(TAG, "addLocation  :  new location added")
         executor.execute {
             firebaseDao.addLocation(myLocationEntities)
         }

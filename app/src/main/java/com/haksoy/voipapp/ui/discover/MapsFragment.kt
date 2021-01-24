@@ -7,20 +7,19 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.os.StrictMode
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -78,9 +77,24 @@ class MapsFragment : Fragment() {
     @SuppressLint("MissingPermission")
     private fun updateMap() {
         mapFragment.getMapAsync { it ->
-            it.isMyLocationEnabled = true
-//            val height = activity?.windowManager?.defaultDisplay?.height
-//            it.setPadding(0, height?.times(0.8)?.toInt()!!, 0, 0)
+
+
+            it.isMyLocationEnabled=true
+            it.uiSettings.isMyLocationButtonEnabled=false
+            binding.myLocation.setOnClickListener { view ->
+                it.myLocation?.let { location ->
+                    it.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                location.latitude,
+                                location.longitude
+                            ), 15f
+                        )
+                    )
+
+                }
+            }
+
 
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
                 Log.i(TAG, "userListViewModel  :  nearlyUsers observed")
@@ -116,6 +130,8 @@ class MapsFragment : Fragment() {
                         })
                 }
             })
+
+
             it.setOnMarkerClickListener { marker ->
                 showUserList(marker.tag.toString())
                 true
@@ -126,7 +142,7 @@ class MapsFragment : Fragment() {
 
     private fun showUserList(selectedUserUid: String) {
         Log.i(TAG, "userListViewModel  :  selectedUserList added new value")
-        userListViewModel.selectedUserList.postValue(userListViewModel.nearlyUsers.value)
+        userListViewModel.selectedUserList = userListViewModel.nearlyUsers.value as ArrayList<User>
         Log.i(TAG, "userListViewModel  :  selectedUserUid added new value")
         userListViewModel.selectedUserUid.postValue(selectedUserUid)
     }
@@ -138,13 +154,6 @@ class MapsFragment : Fragment() {
                 user.location.longitude
             )
         ).title(user.name)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val policy =
-            StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-        super.onCreate(savedInstanceState)
     }
 
     override fun onRequestPermissionsResult(
