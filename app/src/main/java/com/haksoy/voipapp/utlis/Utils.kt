@@ -7,9 +7,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 
 
 /**
@@ -121,3 +123,32 @@ fun Context.startFacebook(username: String) {
     }
 
 }
+
+fun Fragment.requestPermissionWithRationale(
+    permission: String,
+    requestCode: Int,
+    snackbar: Snackbar
+) {
+    val provideRationale = shouldShowRequestPermissionRationale(permission)
+
+    if (provideRationale) {
+        snackbar.show()
+    } else {
+        requestPermissions(arrayOf(permission), requestCode)
+    }
+}
+
+fun Fragment.requestPermissionsWithRationale(
+    permissions: Array<String>,
+    requestCode: Int,
+    snackbar: Array<Snackbar>
+) {
+    if (shouldShowRequestPermissionRationale(permissions[0])) {
+        snackbar[0].show()
+    } else if (shouldShowRequestPermissionRationale(permissions[1])) {
+        snackbar[1].show()
+    } else {
+        requestPermissions(permissions, requestCode)
+    }
+}
+

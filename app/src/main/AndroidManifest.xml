@@ -40,7 +40,6 @@
 
         <activity
             android:name=".ui.main.MainActivity"
-            android:label="@string/title_activity_main"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.auth.AuthenticationActivity"

@@ -6,8 +6,14 @@
     <string name="FirebaseAuthWeakPasswordException">Password should be at least 6 characters</string>
     <string name="FirebaseAuthInvalidCredentialsException">The password is invalid or the user does not have a password.</string>
     <string name="FirebaseAuthUserCollisionException">The email address is already in use by another account.</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+
+    <string name="fine_location_permission_rationale">The fine location permission is needed for core functionality.</string>
+    <string name="fine_location_permission_dialog">The fine location permission is needed for core functionality.</string>
+    <string name="fine_permission_denied_explanation">Fine location permission was denied, but is needed for core functionality.</string>
+
+    <string name="background_location_permission_rationale">The background location permission is needed for enhanced functionality.</string>
+    <string name="background_location_permission_dialog">The fine location permission is needed for core functionality.</string>
+    <string name="background_permission_denied_explanation">Background location permission was denied but needed for enhanced functionality.</string>
 </resources>
