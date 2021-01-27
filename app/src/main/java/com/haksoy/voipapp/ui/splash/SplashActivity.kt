@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.ui.auth.AuthenticationActivity
 import com.haksoy.voipapp.ui.main.MainActivity
+import com.haksoy.voipapp.ui.settings.SettingsActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

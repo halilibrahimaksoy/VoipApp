@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="@string/enable_back_location_header">
+
+        <SwitchPreferenceCompat
+            app:key="@string/enable_background_location_key"
+            app:summaryOff="@string/enable_back_location_summary_off"
+            app:summaryOn="@string/enable_back_location_summary_on"
+            app:title="@string/enable_back_location_title" />
+    </PreferenceCategory>
+</PreferenceScreen>

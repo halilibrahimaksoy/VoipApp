@@ -19,6 +19,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="firebase_performance_logcat_enabled"
@@ -44,9 +48,7 @@
         <activity
             android:name=".ui.auth.AuthenticationActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".location.LocationUpdatesBroadcastReceiver" />
     </application>

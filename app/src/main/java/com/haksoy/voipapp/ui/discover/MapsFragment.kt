@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
@@ -28,17 +29,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentMapsBinding
 import com.haksoy.voipapp.ui.userlist.UserListViewModel
-import com.haksoy.voipapp.utlis.hasPermission
-import com.haksoy.voipapp.utlis.requestPermissionWithRationale
-import com.haksoy.voipapp.utlis.requestPermissionsWithRationale
+import com.haksoy.voipapp.utlis.*
 
 private const val TAG = "MapsFragment"
 
 class MapsFragment : Fragment() {
 
     companion object {
-        private const val REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 34
-        private const val REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE = 56
 
         fun newInstance(): MapsFragment {
             return MapsFragment()
@@ -48,6 +45,10 @@ class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
     private val userListViewModel: UserListViewModel by activityViewModels()
+    private val viewModel by lazy {
+        ViewModelProviders.of(this).get(MapsViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -81,7 +82,7 @@ class MapsFragment : Fragment() {
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_BACKGROUND_LOCATION
                     ),
-                    REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
+                    Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
                     arrayOf(
                         fineLocationRationalSnackbar,
                         backgroundRationalSnackbar
@@ -95,7 +96,8 @@ class MapsFragment : Fragment() {
         if (!activity?.hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)!!)
             requestPermissionWithRationale(
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE, backgroundRationalSnackbar
+                Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE,
+                backgroundRationalSnackbar
             )
     }
 
@@ -111,7 +113,7 @@ class MapsFragment : Fragment() {
                         Manifest.permission.ACCESS_FINE_LOCATION,
                         Manifest.permission.ACCESS_BACKGROUND_LOCATION
                     ),
-                    REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
+                    Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
                 )
             }
     }
@@ -125,7 +127,7 @@ class MapsFragment : Fragment() {
             .setAction(R.string.ok) {
                 requestPermissions(
                     arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                    REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE
+                    Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE
                 )
             }
     }
@@ -216,9 +218,16 @@ class MapsFragment : Fragment() {
         grantResults: IntArray
     ) {
         Log.d(TAG, "onRequestPermissionResult")
-        if (requestCode == REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
+        if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.startLocationUpdates()
                 prepareUi()
+            }
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                context?.putPreferencesBoolean(
+                    getString(R.string.enable_background_location_key),
+                    true
+                )
             }
         }
     }
@@ -229,5 +238,20 @@ class MapsFragment : Fragment() {
         getBackgroundPermission()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.startLocationUpdates()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!context?.getPreferencesBoolean(
+                getString(R.string.enable_background_location_key),
+                false
+            )!!
+        ) {
+            viewModel.stopLocationUpdates()
+        }
+    }
 
 }

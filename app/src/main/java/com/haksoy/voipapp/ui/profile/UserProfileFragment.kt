@@ -20,6 +20,7 @@ import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentUserProfileBinding
 import com.haksoy.voipapp.ui.main.MainActivity
+import com.haksoy.voipapp.ui.settings.SettingsActivity
 import com.haksoy.voipapp.utlis.*
 
 
@@ -68,6 +69,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         binding.btnSave.setOnClickListener(this)
         binding.btnBack.setOnClickListener(this)
         binding.btnSend.setOnClickListener(this)
+        binding.btnSettings.setOnClickListener(this)
         binding.imgInstagram.setOnClickListener(this)
         binding.imgFacebook.setOnClickListener(this)
         binding.imgTwitter.setOnClickListener(this)
@@ -85,7 +87,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             editMode = true
 
 
-        setHasOptionsMenu(true)
+//        setHasOptionsMenu(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -185,6 +187,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
                 binding.btnCancel.visibility = View.VISIBLE
             binding.btnSave.visibility = View.VISIBLE
             binding.btnEdit.visibility = View.GONE
+            binding.btnSettings.visibility = View.GONE
             binding.imageView.isClickable = true
             binding.lnrEdit.visibility = View.VISIBLE
             binding.lnrShow.visibility = View.GONE
@@ -193,6 +196,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             binding.btnSave.visibility = View.GONE
             binding.btnCancel.visibility = View.GONE
             binding.btnEdit.visibility = View.VISIBLE
+            binding.btnSettings.visibility = View.VISIBLE
             binding.imageView.isClickable = false
             binding.lnrEdit.visibility = View.GONE
             binding.lnrShow.visibility = View.VISIBLE
@@ -240,6 +244,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             }
             R.id.btnBack -> {
                 activity?.onBackPressed()
+            }
+            R.id.btnSettings -> {
+                activity?.startActivity(Intent(context, SettingsActivity::class.java))
             }
             R.id.imageView -> {
                 if (editMode)

@@ -16,6 +16,10 @@ object Constants {
     val SelectedUserUid = "SelectedUserUid"
 
 
+
+     const val REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 34
+     const val REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE = 56
+
     //User Fileds
     val User = "USER"
     val uid = "uid"

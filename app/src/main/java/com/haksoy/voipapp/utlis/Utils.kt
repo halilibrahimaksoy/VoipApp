@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -28,6 +29,19 @@ fun Context.hasPermission(permission: String): Boolean {
 
     return ActivityCompat.checkSelfPermission(this, permission) ==
             PackageManager.PERMISSION_GRANTED
+}
+
+fun Context.putPreferencesBoolean(key: String, value: Boolean) {
+    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+    with(preferences.edit()) {
+        putBoolean(key, true)
+        commit()
+    }
+}
+
+fun Context.getPreferencesBoolean(key: String, defaultValue: Boolean): Boolean {
+    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+    return preferences.getBoolean(key, defaultValue)
 }
 
 fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {

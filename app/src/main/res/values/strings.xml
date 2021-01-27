@@ -16,4 +16,27 @@
     <string name="background_location_permission_rationale">The background location permission is needed for enhanced functionality.</string>
     <string name="background_location_permission_dialog">The fine location permission is needed for core functionality.</string>
     <string name="background_permission_denied_explanation">Background location permission was denied but needed for enhanced functionality.</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="enable_back_location_header">Visibility When Background</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Preference Keys -->
+    <string name="enable_background_location_key">enable_background_location_key</string>
+
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+
+    <string name="enable_back_location_title">Active in the background</string>
+    <string name="enable_back_location_summary_on">Other users can see you while the application is in the background</string>
+    <string name="enable_back_location_summary_off">Other users cannot see you while the application is in the background</string>
+
+    <string name="logout">Logout</string>
 </resources>

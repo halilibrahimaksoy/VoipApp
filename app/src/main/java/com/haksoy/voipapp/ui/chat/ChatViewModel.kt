@@ -7,13 +7,4 @@ import java.util.concurrent.Executors
 
 class ChatViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val locationRepository = LocationRepository.getInstance(
-        application.applicationContext,
-        Executors.newSingleThreadExecutor()
-    )
-
-
-    fun startLocationUpdates() = locationRepository.startLocationUpdates()
-
-    fun stopLocationUpdates() = locationRepository.stopLocationUpdates()
 }

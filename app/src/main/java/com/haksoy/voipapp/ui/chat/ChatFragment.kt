@@ -25,14 +25,4 @@ class ChatFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.startLocationUpdates()
-    }
-
-    override fun onStop() {
-        super.onStop()
-//        viewModel.stopLocationUpdates()
-    }
-
 }
