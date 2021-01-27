@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
-            android:text="Register"
+            android:text="@string/register"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 

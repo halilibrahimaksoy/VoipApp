@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
@@ -68,7 +68,7 @@
             android:layout_marginRight="20dp"
             android:gravity="end"
             android:textStyle="bold"
-            android:text="Register"
+            android:text="@string/register"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="18sp" />
     </LinearLayout>

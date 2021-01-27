@@ -25,7 +25,6 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:singleLine="true"
-        android:text="haksoy@netas.com.tr"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 
@@ -47,7 +46,6 @@
             android:maxWidth="200dp"
             android:padding="10dp"
             android:singleLine="true"
-            android:text="Halil İbrahim AKSOY"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
 
@@ -59,7 +57,6 @@
             android:gravity="start"
             android:maxWidth="200dp"
             android:padding="10dp"
-            android:text="Yazılım Mühendisi Antakya/Hatay"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
     </LinearLayout>

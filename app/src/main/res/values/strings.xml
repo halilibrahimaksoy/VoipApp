@@ -39,4 +39,6 @@
     <string name="enable_back_location_summary_off">Other users cannot see you while the application is in the background</string>
 
     <string name="logout">Logout</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
 </resources>
