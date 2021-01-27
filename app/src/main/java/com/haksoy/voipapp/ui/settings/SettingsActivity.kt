@@ -1,11 +1,13 @@
 package com.haksoy.voipapp.ui.settings
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -13,6 +15,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.SettingsActivityBinding
+import com.haksoy.voipapp.ui.splash.SplashActivity
 import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.hasPermission
 import com.haksoy.voipapp.utlis.putPreferencesBoolean
@@ -23,6 +26,7 @@ private const val TAG = "SettingsActivity"
 class SettingsActivity : AppCompatActivity() {
 
     lateinit var binding: SettingsActivityBinding
+    private val viewModel: SettingsViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SettingsActivityBinding.inflate(layoutInflater)
@@ -35,6 +39,12 @@ class SettingsActivity : AppCompatActivity() {
         }
         supportActionBar?.setTitle(R.string.title_activity_settings)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.btnLogout.setOnClickListener {
+            viewModel.signOut()
+            finish()
+            startActivity(Intent(this, SplashActivity::class.java))
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
