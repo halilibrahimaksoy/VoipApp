@@ -45,6 +45,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_margin="5dp"
                     android:src="@mipmap/ic_edit" />
+
                 <ImageView
                     android:id="@+id/btnSettings"
                     android:layout_width="wrap_content"
@@ -110,7 +111,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
 
             <EditText
@@ -126,18 +127,21 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
 
+
             <EditText
                 android:id="@+id/txtInfo2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@android:color/holo_orange_light"
-                android:gravity="start"
+                android:gravity="top|start"
                 android:hint="Abouth me .."
-                android:inputType="text"
-                android:padding="10dp"
+                android:inputType="textMultiLine"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:maxLines="10"
+                android:maxLength="200"
+                android:minLines="6"
+                android:padding="10dp" />
 
             <EditText
                 android:id="@+id/txtInstagram2"
