@@ -18,7 +18,7 @@ android {
         enabled = true
     }
     defaultConfig {
-        applicationId "com.haksoy.voipapp"
+        applicationId "com.haksoy.soip"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1

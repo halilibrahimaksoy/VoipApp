@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "862379781353",
-    "project_id": "voipapp-dbc05",
-    "storage_bucket": "voipapp-dbc05.appspot.com"
+    "project_number": "961884505537",
+    "project_id": "soip-95fce",
+    "storage_bucket": "soip-95fce.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:862379781353:android:610dcaecb1f4f9cddd1478",
+        "mobilesdk_app_id": "1:961884505537:android:02d40459b0bb30dcad1b40",
         "android_client_info": {
-          "package_name": "com.haksoy.voipapp"
+          "package_name": "com.haksoy.soip"
         }
       },
       "oauth_client": [
         {
-          "client_id": "862379781353-usehpm9hbn50ir4f07quhfnoi3p39bsu.apps.googleusercontent.com",
+          "client_id": "961884505537-c6evci3b9mip1kara1adjjdlt6ej6lbt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDuOO0WvP1Df09XLK4wR_v3m0IMLzSydZ4"
+          "current_key": "AIzaSyD2xLAUyqs5iskgj5FVdhPTgrSM7HDqvLg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "862379781353-usehpm9hbn50ir4f07quhfnoi3p39bsu.apps.googleusercontent.com",
+              "client_id": "961884505537-c6evci3b9mip1kara1adjjdlt6ej6lbt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -70,7 +70,7 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_PROCESS_UPDATES =
-            "com.haksoy.voipapp.location.LocationUpdatesBroadcastReceiver" +
+            "com.haksoy.soip.location.LocationUpdatesBroadcastReceiver" +
                     "PROCESS_UPDATES"
     }
 }
