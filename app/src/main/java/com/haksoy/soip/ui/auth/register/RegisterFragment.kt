@@ -27,6 +27,7 @@ class RegisterFragment : Fragment() {
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,31 +80,45 @@ class RegisterFragment : Fragment() {
 
         val email = binding.txtEmail.text.toString()
         if (TextUtils.isEmpty(email) || !Constants.EMAIL_ADDRESS_PATTERN.matcher(email).matches()) {
-            binding.txtEmail.error = "Required."
+            binding.txtEmail.error = getString(R.string.required)
             valid = false
         } else {
             binding.txtEmail.error = null
         }
 
         val password = binding.txtPassword.text.toString()
-        if (TextUtils.isEmpty(password)) {
-            binding.txtPassword.error = "Required."
-            valid = false
-        } else {
-            binding.txtPassword.error = null
+        when {
+            TextUtils.isEmpty(password) -> {
+                binding.txtPassword.error = getString(R.string.required)
+                valid = false
+            }
+            password.count() < Constants.MIN_PASSWORD_CHARACTER_COUNT -> {
+                binding.txtPassword.error = getString(R.string.should_be_min_6)
+                valid = false
+            }
+            else -> {
+                binding.txtPassword.error = null
+            }
         }
         val password2 = binding.txtPassword2.text.toString()
-        if (TextUtils.isEmpty(password2)) {
-            binding.txtPassword2.error = "Required."
-            valid = false
-        } else {
-            binding.txtPassword2.error = null
+        when {
+            TextUtils.isEmpty(password2) -> {
+                binding.txtPassword2.error = getString(R.string.required)
+                valid = false
+            }
+            password.count() < Constants.MIN_PASSWORD_CHARACTER_COUNT -> {
+                binding.txtPassword.error = getString(R.string.should_be_min_6)
+                valid = false
+            }
+            else -> {
+                binding.txtPassword2.error = null
+            }
         }
 
-        if (!password.equals(password2)) {
-            binding.txtPassword.error = "Should be same."
-            binding.txtPassword2.error = "Should be same."
-            Toast.makeText(activity, "Passwords doesn't match", Toast.LENGTH_SHORT).show()
+        if (password != password2) {
+            binding.txtPassword.error = getString(R.string.should_be_same)
+            binding.txtPassword2.error = getString(R.string.should_be_same)
+            Toast.makeText(activity, getString(R.string.deosnt_match), Toast.LENGTH_SHORT).show()
             valid = false
         }
 
@@ -140,7 +155,7 @@ class RegisterFragment : Fragment() {
 
     private fun showError(vararg editText: EditText) {
         for (item in editText) {
-            item.error = "Required."
+            item.error = getString(R.string.required)
         }
     }
 }

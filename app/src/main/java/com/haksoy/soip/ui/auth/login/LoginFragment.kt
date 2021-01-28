@@ -72,7 +72,7 @@ class LoginFragment : Fragment() {
 
         val email = binding.txtEmail.text.toString()
         if (TextUtils.isEmpty(email) || !Constants.EMAIL_ADDRESS_PATTERN.matcher(email).matches()) {
-            binding.txtEmail.error = "Required."
+            binding.txtEmail.error = getString(R.string.required)
             valid = false
         } else {
             binding.txtEmail.error = null
@@ -88,11 +88,18 @@ class LoginFragment : Fragment() {
     private fun validatePassword(): Boolean {
         var valid = true
         val password = binding.txtPassword.text.toString()
-        if (TextUtils.isEmpty(password)) {
-            binding.txtPassword.error = "Required."
-            valid = false
-        } else {
-            binding.txtPassword.error = null
+        when {
+            TextUtils.isEmpty(password) -> {
+                binding.txtPassword.error = getString(R.string.required)
+                valid = false
+            }
+            password.count() < Constants.MIN_PASSWORD_CHARACTER_COUNT -> {
+                binding.txtPassword.error = getString(R.string.should_be_min_6)
+                valid = false
+            }
+            else -> {
+                binding.txtPassword.error = null
+            }
         }
         return valid
     }
