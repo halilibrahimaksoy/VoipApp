@@ -46,6 +46,7 @@ class LoginFragment : Fragment() {
                         Observer {
                             if (it.status == Resource.Status.SUCCESS) {
                                 startActivity(Intent(activity, MainActivity::class.java))
+                                activity?.finish()
                             } else if (it.status == Resource.Status.ERROR) {
                                 it.data?.let { it1 -> handleError(it1) }
                             }

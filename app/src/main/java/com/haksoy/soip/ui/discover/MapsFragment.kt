@@ -249,30 +249,28 @@ class MapsFragment : Fragment() {
                 startActivity(intent)
             }
         if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
-            when {
-                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
-                    viewModel.startLocationUpdates()
-                    prepareUi()
-                }
-                grantResults[1] == PackageManager.PERMISSION_GRANTED -> {
-                    context?.putPreferencesBoolean(
-                        getString(R.string.enable_background_location_key),
-                        true
-                    )
-                }
-                else ->
-                    settingsSnackbar.show()
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                viewModel.startLocationUpdates()
+                prepareUi()
+            } else {
+                settingsSnackbar.show()
             }
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                context?.putPreferencesBoolean(
+                    getString(R.string.enable_background_location_key),
+                    true
+                )
+            }
+
         } else if (requestCode == Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE) {
-            when {
-                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+            when (PackageManager.PERMISSION_GRANTED) {
+                grantResults[0] -> {
                     context?.putPreferencesBoolean(
                         getString(R.string.enable_background_location_key),
                         true
                     )
                 }
-                else ->
-                    settingsSnackbar.show()
+                else -> settingsSnackbar.show()
             }
         }
     }
