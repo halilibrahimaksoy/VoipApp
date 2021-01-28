@@ -6,7 +6,7 @@
     app:startDestination="@id/loginFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.haksoy.voipapp.ui.auth.login.LoginFragment"
+        android:name="com.haksoy.soip.ui.auth.login.LoginFragment"
         android:label="login_fragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.haksoy.voipapp.ui.auth.register.RegisterFragment"
+        android:name="com.haksoy.soip.ui.auth.register.RegisterFragment"
         android:label="register_fragment"
         tools:layout="@layout/fragment_register">
         <action
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.haksoy.voipapp.ui.profile.UserProfileFragment"
+        android:name="com.haksoy.soip.ui.profile.UserProfileFragment"
         android:label="user_profile_fragment"
         tools:layout="@layout/fragment_user_profile" />
 </navigation>
