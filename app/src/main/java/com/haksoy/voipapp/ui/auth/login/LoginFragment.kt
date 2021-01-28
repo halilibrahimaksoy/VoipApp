@@ -1,5 +1,6 @@
 package com.haksoy.voipapp.ui.auth.login
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -16,6 +17,7 @@ import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentLoginBinding
 import com.haksoy.voipapp.ui.auth.AuthenticationViewModel
 import com.haksoy.voipapp.ui.main.MainActivity
+import com.haksoy.voipapp.utlis.Constants
 import com.haksoy.voipapp.utlis.Resource
 
 class LoginFragment : Fragment() {
@@ -35,7 +37,7 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         })
         binding.btnLogin.setOnClickListener(View.OnClickListener {
-            if (validateForm()) {
+            if (validateEmail() && validatePassword()) {
                 viewModel.signIn(
                     binding.txtEmail.text.toString(),
                     binding.txtPassword.text.toString()
@@ -50,20 +52,41 @@ class LoginFragment : Fragment() {
                         })
             }
         })
+        binding.btnForgetPassword.setOnClickListener {
+            if (validateEmail())
+                viewModel.forgetPassword(binding.txtEmail.text.toString())
+                    .observe(viewLifecycleOwner,
+                        Observer {
+                            if (it.status == Resource.Status.SUCCESS) {
+                                showAlertForgetPassword(binding.txtEmail.text.toString())
+                            } else if (it.status == Resource.Status.ERROR) {
+                                it.data?.let { it1 -> handleError(it1) }
+                            }
+                        })
+        }
         return binding.root
     }
 
-    private fun validateForm(): Boolean {
+    private fun validateEmail(): Boolean {
         var valid = true
 
         val email = binding.txtEmail.text.toString()
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email) || !Constants.EMAIL_ADDRESS_PATTERN.matcher(email).matches()) {
             binding.txtEmail.error = "Required."
             valid = false
         } else {
             binding.txtEmail.error = null
         }
+        return valid
+    }
 
+    private fun showAlertForgetPassword(email: String) {
+        AlertDialog.Builder(context).setTitle(getString(R.string.app_name))
+            .setMessage(getString(R.string.forget_password_message, email)).show()
+    }
+
+    private fun validatePassword(): Boolean {
+        var valid = true
         val password = binding.txtPassword.text.toString()
         if (TextUtils.isEmpty(password)) {
             binding.txtPassword.error = "Required."
@@ -87,6 +110,6 @@ class LoginFragment : Fragment() {
         }
 
 
-        Toast.makeText(activity, errorMessage, Toast.LENGTH_SHORT).show()
+        Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show()
     }
 }

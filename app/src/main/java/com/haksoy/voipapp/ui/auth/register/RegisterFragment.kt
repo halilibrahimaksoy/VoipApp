@@ -78,7 +78,7 @@ class RegisterFragment : Fragment() {
         var valid = true
 
         val email = binding.txtEmail.text.toString()
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(email) || !Constants.EMAIL_ADDRESS_PATTERN.matcher(email).matches()) {
             binding.txtEmail.error = "Required."
             valid = false
         } else {

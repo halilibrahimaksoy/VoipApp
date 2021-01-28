@@ -11,23 +11,15 @@ class AuthenticationViewModel : ViewModel() {
     val firebaseDao = FirebaseDao.getInstance()
 
     fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
-        val resultModel = MutableLiveData<Resource<Exception>>()
-
-        firebaseDao.createAccount(email, password).observeOnce {
-            resultModel.postValue(it)
-        }
-
-        return resultModel
+        return firebaseDao.createAccount(email, password)
     }
 
     fun signIn(email: String, password: String): LiveData<Resource<Exception>> {
-        val resultModel = MutableLiveData<Resource<Exception>>()
+        return  firebaseDao.signIn(email, password)
+    }
 
-        firebaseDao.signIn(email, password).observeOnce {
-            resultModel.postValue(it)
-        }
-
-        return resultModel
+    fun forgetPassword(email: String): LiveData<Resource<Exception>> {
+        return firebaseDao.forgetPassword(email)
     }
 
 

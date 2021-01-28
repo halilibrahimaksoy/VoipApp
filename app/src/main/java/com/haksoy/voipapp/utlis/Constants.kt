@@ -1,5 +1,7 @@
 package com.haksoy.voipapp.utlis
 
+import java.util.regex.Pattern
+
 object Constants {
     val User_Profile_Image = "USER_PROFILE_IMAGE"
     val nerlyLimit: Double = 0.1
@@ -31,4 +33,13 @@ object Constants {
     val location = "location"
     val nat = "nat"
 
+    val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile(
+        "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                "\\@" +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                "(" +
+                "\\." +
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                ")+"
+    )
 }

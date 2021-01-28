@@ -60,8 +60,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         }
         (activity as AppCompatActivity).supportActionBar?.title = ""
 
-        optimizeMenuForStatus()
-        setEditMode()
 
         binding.imageView.setOnClickListener(this)
         binding.btnCancel.setOnClickListener(this)
@@ -86,8 +84,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         if (reasonStatus == Status.REGISTRATION)
             editMode = true
 
-
-//        setHasOptionsMenu(false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -107,6 +103,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             fillUserData(_user)
         }
 
+        optimizeMenuForStatus()
+        setEditMode()
     }
 
     private fun fillUserData(user: User) {
@@ -224,9 +222,12 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
-        binding.txtInstagram2.setText(_user.socialMedia.instagram)
-        binding.txtFacebook2.setText(_user.socialMedia.facebook)
-        binding.txtTwitter2.setText(_user.socialMedia.twitter)
+        _user?.let {
+            binding.txtInstagram2.setText(it.socialMedia.instagram)
+            binding.txtFacebook2.setText(it.socialMedia.facebook)
+            binding.txtTwitter2.setText(it.socialMedia.twitter)
+        }
+
     }
 
     override fun onClick(v: View) {
