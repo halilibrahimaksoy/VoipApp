@@ -4,10 +4,13 @@ import User
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import com.haksoy.voipapp.BuildConfig
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.FragmentMapsBinding
 import com.haksoy.voipapp.ui.userlist.UserListViewModel
@@ -217,17 +221,58 @@ class MapsFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+
         Log.d(TAG, "onRequestPermissionResult")
-        if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                viewModel.startLocationUpdates()
-                prepareUi()
+        val permissionDeniedExplanation =
+            if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
+                R.string.fine_permission_denied_explanation
+            } else {
+                R.string.background_permission_denied_explanation
             }
-            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                context?.putPreferencesBoolean(
-                    getString(R.string.enable_background_location_key),
-                    true
+
+        val settingsSnackbar = Snackbar.make(
+            binding.root,
+            permissionDeniedExplanation,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.settings) {
+                // Build intent that displays the App settings screen.
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri = Uri.fromParts(
+                    "package",
+                    BuildConfig.APPLICATION_ID,
+                    null
                 )
+                intent.data = uri
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+            }
+        if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
+            when {
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+                    viewModel.startLocationUpdates()
+                    prepareUi()
+                }
+                grantResults[1] == PackageManager.PERMISSION_GRANTED -> {
+                    context?.putPreferencesBoolean(
+                        getString(R.string.enable_background_location_key),
+                        true
+                    )
+                }
+                else ->
+                    settingsSnackbar.show()
+            }
+        } else if (requestCode == Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE) {
+            when {
+                grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+                    context?.putPreferencesBoolean(
+                        getString(R.string.enable_background_location_key),
+                        true
+                    )
+                }
+                else ->
+                    settingsSnackbar.show()
             }
         }
     }

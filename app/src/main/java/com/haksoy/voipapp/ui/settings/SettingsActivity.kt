@@ -3,7 +3,9 @@ package com.haksoy.voipapp.ui.settings
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +15,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.snackbar.Snackbar
+import com.haksoy.voipapp.BuildConfig
 import com.haksoy.voipapp.R
 import com.haksoy.voipapp.databinding.SettingsActivityBinding
 import com.haksoy.voipapp.ui.splash.SplashActivity
@@ -104,11 +107,33 @@ class SettingsActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         Log.d(TAG, "onRequestPermissionResult")
-        if (permissions[0] == android.Manifest.permission.ACCESS_BACKGROUND_LOCATION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            putPreferencesBoolean(getString(R.string.enable_background_location_key), true)
-            (this.supportFragmentManager.fragments[0] as SettingsFragment).let {
-                it.preferenceScreen.removeAll()
-                it.addPreferencesFromResource(R.xml.root_preferences)
+        if (permissions[0] == android.Manifest.permission.ACCESS_BACKGROUND_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                putPreferencesBoolean(getString(R.string.enable_background_location_key), true)
+                (this.supportFragmentManager.fragments[0] as SettingsFragment).let {
+                    it.preferenceScreen.removeAll()
+                    it.addPreferencesFromResource(R.xml.root_preferences)
+                }
+            } else {
+                Snackbar.make(
+                    binding.root,
+                    getString(R.string.background_permission_denied_explanation),
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction(R.string.settings) {
+                        // Build intent that displays the App settings screen.
+                        val intent = Intent()
+                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        val uri = Uri.fromParts(
+                            "package",
+                            BuildConfig.APPLICATION_ID,
+                            null
+                        )
+                        intent.data = uri
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                    }
+                    .show()
             }
         }
     }
