@@ -150,13 +150,14 @@ class MapsFragment : Fragment() {
                             LatLng(
                                 location.latitude,
                                 location.longitude
-                            ), 15f
+                            ), 14f
                         )
                     )
 
                 }
             }
 
+            it.setMaxZoomPreference(14f)
 
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
                 Log.i(TAG, "userListViewModel  :  nearlyUsers observed")

@@ -1,85 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical"
-    tools:context=".ui.auth.login.LoginFragment">
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/launcher"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:context=".ui.auth.login.LoginFragment">
 
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/launcher"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorPrimary"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/launcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher" />
 
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtEmail"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorPrimary"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmailInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/launcher"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary">
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtPassword"
-        android:layout_margin="20dp"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/login"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/email"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/btnForgetPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnLogin"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:gravity="end"
-        android:text="@string/forget_password"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtEmailInput"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary"
+            app:passwordToggleEnabled="true">
 
-    <TextView
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="20dp"
-        android:gravity="end"
-        android:text="@string/register"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-</RelativeLayout>
+            <EditText
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="@string/password"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtPasswordInput"
+            android:layout_margin="20dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/login"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/btnForgetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnLogin"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:gravity="start"
+            android:text="@string/forget_password"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:text="@string/register"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</ScrollView>

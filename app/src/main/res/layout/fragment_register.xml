@@ -1,79 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="#f3f3f3"
-    android:orientation="vertical"
-    tools:context=".ui.auth.register.RegisterFragment">
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/launcher"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:gravity="center"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        tools:context=".ui.auth.register.RegisterFragment">
 
-    <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/launcher"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorPrimary"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/launcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:src="@mipmap/ic_launcher" />
 
-    <EditText
-        android:id="@+id/txtPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtEmail"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorPrimary"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:maxLines="1"
-        android:padding="10dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtEmailInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/launcher"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary">
+
+            <EditText
+                android:id="@+id/txtEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:autofillHints="@string/email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPasswordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtEmailInput"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/txtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:autofillHints="@string/password"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-    <EditText
-        android:id="@+id/txtPassword2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtPassword"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/colorPrimary"
-        android:hint="Password (Again)"
-        android:inputType="textPassword"
-        android:padding="10dp"
-        android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtPasswordInput2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtPasswordInput"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/colorPrimary"
+            app:passwordToggleEnabled="true">
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtPassword2"
-        android:layout_margin="20dp"
-        android:background="@color/colorPrimaryDark"
-        android:text="@string/register"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
+            <EditText
+                android:id="@+id/txtPassword2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:autofillHints="@string/password"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtPasswordInput2"
+            android:layout_margin="20dp"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/register"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+</ScrollView>
