@@ -24,7 +24,7 @@ import com.haksoy.soip.utlis.hasPermission
 import com.haksoy.soip.utlis.putPreferencesBoolean
 import com.haksoy.soip.utlis.requestPermissionWithRationale
 
-private const val TAG = "SettingsActivity"
+private const val TAG = "SoIP:SettingsActivity"
 
 class SettingsActivity : AppCompatActivity() {
 

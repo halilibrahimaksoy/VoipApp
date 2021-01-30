@@ -10,7 +10,7 @@ import com.haksoy.soip.data.entiries.Location
 import java.util.*
 import java.util.concurrent.Executors
 
-private const val TAG = "LUBroadcastReceiver"
+private const val TAG = "SoIP:LUBroadcastReceiver"
 
 /**
  * Receiver for handling location updates.

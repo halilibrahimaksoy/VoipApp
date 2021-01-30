@@ -14,7 +14,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.soip.databinding.FragmentUserListBinding
 
-private const val TAG = "UserListFragment"
+private const val TAG = "SoIP:UserListFragment"
 
 class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     private lateinit var binding: FragmentUserListBinding

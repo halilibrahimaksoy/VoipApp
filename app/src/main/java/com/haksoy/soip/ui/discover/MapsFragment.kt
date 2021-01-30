@@ -35,7 +35,7 @@ import com.haksoy.soip.databinding.FragmentMapsBinding
 import com.haksoy.soip.ui.userlist.UserListViewModel
 import com.haksoy.soip.utlis.*
 
-private const val TAG = "MapsFragment"
+private const val TAG = "SoIP:MapsFragment"
 
 class MapsFragment : Fragment() {
 
@@ -54,9 +54,9 @@ class MapsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapsBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -76,82 +76,82 @@ class MapsFragment : Fragment() {
 
     private fun getPermissionRequest() {
         AlertDialog.Builder(activity)
-            .setIcon(R.mipmap.ic_launcher_round)
-            .setTitle(R.string.app_name)
-            .setMessage(R.string.fine_location_permission_dialog)
-            .setCancelable(false)
-            .setPositiveButton(R.string.ok) { _, _ ->
-                requestPermissionsWithRationale(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    ),
-                    Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
-                    arrayOf(
-                        fineLocationRationalSnackbar,
-                        backgroundRationalSnackbar
+                .setIcon(R.mipmap.ic_launcher_round)
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.fine_location_permission_dialog)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    requestPermissionsWithRationale(
+                            arrayOf(
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                            ),
+                            Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE,
+                            arrayOf(
+                                    fineLocationRationalSnackbar,
+                                    backgroundRationalSnackbar
+                            )
                     )
-                )
-            }.show()
+                }.show()
 
     }
 
     private fun getBackgroundPermission() {
         if (!activity?.hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)!!)
             requestPermissionWithRationale(
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE,
-                backgroundRationalSnackbar
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE,
+                    backgroundRationalSnackbar
             )
     }
 
     private val fineLocationRationalSnackbar by lazy {
         Snackbar.make(
-            binding.root,
-            R.string.fine_location_permission_rationale,
-            Snackbar.LENGTH_LONG
+                binding.root,
+                R.string.fine_location_permission_rationale,
+                Snackbar.LENGTH_LONG
         )
-            .setAction(R.string.ok) {
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                    ),
-                    Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
-                )
-            }
+                .setAction(R.string.ok) {
+                    requestPermissions(
+                            arrayOf(
+                                    Manifest.permission.ACCESS_FINE_LOCATION,
+                                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                            ),
+                            Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE
+                    )
+                }
     }
 
     private val backgroundRationalSnackbar by lazy {
         Snackbar.make(
-            binding.root,
-            R.string.background_location_permission_rationale,
-            Snackbar.LENGTH_LONG
+                binding.root,
+                R.string.background_location_permission_rationale,
+                Snackbar.LENGTH_LONG
         )
-            .setAction(R.string.ok) {
-                requestPermissions(
-                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                    Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE
-                )
-            }
+                .setAction(R.string.ok) {
+                    requestPermissions(
+                            arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                            Constants.REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE
+                    )
+                }
     }
 
     @SuppressLint("MissingPermission")
     private fun updateMap() {
+        context?.let { it1 -> ProgressHelper.getInstance().showLoading(it1) }
         mapFragment.getMapAsync { it ->
-
-
+            ProgressHelper.getInstance().hideLoading()
             it.isMyLocationEnabled = true
             it.uiSettings.isMyLocationButtonEnabled = false
             binding.myLocation.setOnClickListener { view ->
                 it.myLocation?.let { location ->
                     it.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                location.latitude,
-                                location.longitude
-                            ), 14f
-                        )
+                            CameraUpdateFactory.newLatLngZoom(
+                                    LatLng(
+                                            location.latitude,
+                                            location.longitude
+                                    ), 14f
+                            )
                     )
 
                 }
@@ -161,35 +161,38 @@ class MapsFragment : Fragment() {
 
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
                 Log.i(TAG, "userListViewModel  :  nearlyUsers observed")
+                context?.let { it1 -> ProgressHelper.getInstance().showLoading(it1) }
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)
-                        .asBitmap()
-                        .circleCrop()
-                        .load(user.profileImage)
-                        .apply(RequestOptions().override(100, 100))
-                        .into(object : CustomTarget<Bitmap?>() {
-                            override fun onResourceReady(
-                                resource: Bitmap,
-                                transition: Transition<in Bitmap?>?
-                            ) {
-                                it.addMarker(getMarkerOptions(user)).apply {
-                                    tag = user.uid
-                                }.setIcon(BitmapDescriptorFactory.fromBitmap(resource))
-                            }
+                            .asBitmap()
+                            .circleCrop()
+                            .load(user.profileImage)
+                            .apply(RequestOptions().override(100, 100))
+                            .into(object : CustomTarget<Bitmap?>() {
+                                override fun onResourceReady(
+                                        resource: Bitmap,
+                                        transition: Transition<in Bitmap?>?
+                                ) {
+                                    it.addMarker(getMarkerOptions(user)).apply {
+                                        tag = user.uid
+                                    }.setIcon(BitmapDescriptorFactory.fromBitmap(resource))
+                                }
 
-                            override fun onLoadFailed(errorDrawable: Drawable?) {
-                                super.onLoadFailed(errorDrawable)
-                                it.addMarker(getMarkerOptions(user)).apply {
-                                    tag = user.uid
-                                }.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_profile))
-                            }
+                                override fun onLoadFailed(errorDrawable: Drawable?) {
+                                    super.onLoadFailed(errorDrawable)
+                                    it.addMarker(getMarkerOptions(user)).apply {
+                                        tag = user.uid
+                                    }.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_profile))
+                                }
 
-                            override fun onLoadCleared(placeholder: Drawable?) {
-                                TODO("Not yet implemented")
-                            }
-                        })
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                    TODO("Not yet implemented")
+                                }
+                            })
                 }
+                ProgressHelper.getInstance().hideLoading()
+                Log.i(TAG, "userListViewModel  :  nearlyUsers added to maps")
             })
 
 
@@ -210,45 +213,45 @@ class MapsFragment : Fragment() {
 
     private fun getMarkerOptions(user: User): MarkerOptions? {
         return MarkerOptions().position(
-            LatLng(
-                user.location.latitude,
-                user.location.longitude
-            )
+                LatLng(
+                        user.location.latitude,
+                        user.location.longitude
+                )
         ).title(user.name)
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
 
         Log.d(TAG, "onRequestPermissionResult")
         val permissionDeniedExplanation =
-            if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
-                R.string.fine_permission_denied_explanation
-            } else {
-                R.string.background_permission_denied_explanation
-            }
+                if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
+                    R.string.fine_permission_denied_explanation
+                } else {
+                    R.string.background_permission_denied_explanation
+                }
 
         val settingsSnackbar = Snackbar.make(
-            binding.root,
-            permissionDeniedExplanation,
-            Snackbar.LENGTH_LONG
+                binding.root,
+                permissionDeniedExplanation,
+                Snackbar.LENGTH_LONG
         )
-            .setAction(R.string.settings) {
-                // Build intent that displays the App settings screen.
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts(
-                    "package",
-                    BuildConfig.APPLICATION_ID,
-                    null
-                )
-                intent.data = uri
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                startActivity(intent)
-            }
+                .setAction(R.string.settings) {
+                    // Build intent that displays the App settings screen.
+                    val intent = Intent()
+                    intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    val uri = Uri.fromParts(
+                            "package",
+                            BuildConfig.APPLICATION_ID,
+                            null
+                    )
+                    intent.data = uri
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(intent)
+                }
         if (requestCode == Constants.REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 viewModel.startLocationUpdates()
@@ -258,8 +261,8 @@ class MapsFragment : Fragment() {
             }
             if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 context?.putPreferencesBoolean(
-                    getString(R.string.enable_background_location_key),
-                    true
+                        getString(R.string.enable_background_location_key),
+                        true
                 )
             }
 
@@ -267,8 +270,8 @@ class MapsFragment : Fragment() {
             when (PackageManager.PERMISSION_GRANTED) {
                 grantResults[0] -> {
                     context?.putPreferencesBoolean(
-                        getString(R.string.enable_background_location_key),
-                        true
+                            getString(R.string.enable_background_location_key),
+                            true
                     )
                 }
                 else -> settingsSnackbar.show()
@@ -290,9 +293,9 @@ class MapsFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         if (!context?.getPreferencesBoolean(
-                getString(R.string.enable_background_location_key),
-                false
-            )!!
+                        getString(R.string.enable_background_location_key),
+                        false
+                )!!
         ) {
             viewModel.stopLocationUpdates()
         }

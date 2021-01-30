@@ -19,6 +19,7 @@ import com.haksoy.soip.ui.auth.AuthenticationViewModel
 import com.haksoy.soip.ui.main.MainActivity
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
+import com.haksoy.soip.utlis.observeWithProgress
 
 class LoginFragment : Fragment() {
 
@@ -38,32 +39,36 @@ class LoginFragment : Fragment() {
         })
         binding.btnLogin.setOnClickListener(View.OnClickListener {
             if (validateEmail() && validatePassword()) {
-                viewModel.signIn(
-                    binding.txtEmail.text.toString(),
-                    binding.txtPassword.text.toString()
-                )
-                    .observe(viewLifecycleOwner,
-                        Observer {
-                            if (it.status == Resource.Status.SUCCESS) {
-                                startActivity(Intent(activity, MainActivity::class.java))
-                                activity?.finish()
-                            } else if (it.status == Resource.Status.ERROR) {
-                                it.data?.let { it1 -> handleError(it1) }
-                            }
-                        })
+                context?.let { it1 ->
+                    viewModel.signIn(
+                            binding.txtEmail.text.toString(),
+                            binding.txtPassword.text.toString()
+                    )
+                            .observeWithProgress(it1,viewLifecycleOwner,
+                                Observer {
+                                    if (it.status == Resource.Status.SUCCESS) {
+                                        startActivity(Intent(activity, MainActivity::class.java))
+                                        activity?.finish()
+                                    } else if (it.status == Resource.Status.ERROR) {
+                                        it.data?.let { it1 -> handleError(it1) }
+                                    }
+                                })
+                }
             }
         })
         binding.btnForgetPassword.setOnClickListener {
             if (validateEmail())
-                viewModel.forgetPassword(binding.txtEmail.text.toString())
-                    .observe(viewLifecycleOwner,
-                        Observer {
-                            if (it.status == Resource.Status.SUCCESS) {
-                                showAlertForgetPassword(binding.txtEmail.text.toString())
-                            } else if (it.status == Resource.Status.ERROR) {
-                                it.data?.let { it1 -> handleError(it1) }
-                            }
-                        })
+                context?.let { it1 ->
+                    viewModel.forgetPassword(binding.txtEmail.text.toString())
+                            .observeWithProgress(it1,viewLifecycleOwner,
+                                Observer {
+                                    if (it.status == Resource.Status.SUCCESS) {
+                                        showAlertForgetPassword(binding.txtEmail.text.toString())
+                                    } else if (it.status == Resource.Status.ERROR) {
+                                        it.data?.let { it1 -> handleError(it1) }
+                                    }
+                                })
+                }
         }
         return binding.root
     }

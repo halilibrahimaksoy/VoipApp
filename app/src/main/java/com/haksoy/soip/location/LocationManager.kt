@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationServices
 import com.haksoy.soip.utlis.hasPermission
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "LocationManager"
+private const val TAG = "SoIP:LocationManager"
 
 /**
  * Manages all location related tasks for the app.

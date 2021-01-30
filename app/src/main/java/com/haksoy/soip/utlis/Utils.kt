@@ -22,7 +22,7 @@ fun Context.hasPermission(permission: String): Boolean {
 
     // Background permissions didn't exit prior to Q, so it's approved by default.
     if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION &&
-        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
+            android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
     ) {
         return true
     }
@@ -52,29 +52,12 @@ fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
         }
     })
 }
-
-fun <T> LiveData<T>.observeOnce(observer: Observer<T>) {
-    observeForever(object : Observer<T> {
-        override fun onChanged(t: T?) {
-            observer.onChanged(t)
-            removeObserver(this)
-        }
-    })
-}
-
-fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+fun <T> LiveData<T>.observeWithProgress(context: Context,lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    ProgressHelper.getInstance().showLoading(context)
     observe(lifecycleOwner, object : Observer<T> {
         override fun onChanged(t: T?) {
+            ProgressHelper.getInstance().hideLoading()
             observer.onChanged(t)
-            removeObserver(this)
-        }
-    })
-}
-
-fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: (T) -> Unit) {
-    observe(lifecycleOwner, object : Observer<T> {
-        override fun onChanged(value: T) {
-            observer(value)
             removeObserver(this)
         }
     })
@@ -88,10 +71,10 @@ fun Context.startInstagram(username: String) {
         startActivity(i)
     } catch (e: ActivityNotFoundException) {
         startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("http://instagram.com/$username")
-            )
+                Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://instagram.com/$username")
+                )
         )
     }
 }
@@ -99,17 +82,17 @@ fun Context.startInstagram(username: String) {
 fun Context.startTwitter(username: String) {
     try {
         startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("twitter://user?screen_name=$username")
-            )
+                Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("twitter://user?screen_name=$username")
+                )
         )
     } catch (e: Exception) {
         startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://twitter.com/$username")
-            )
+                Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://twitter.com/$username")
+                )
         )
     }
 }
@@ -129,19 +112,19 @@ fun Context.startFacebook(username: String) {
         startActivity(facebookIntent)
     } catch (e: java.lang.Exception) {
         startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("https://www.facebook.com/$username")
-            )
+                Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://www.facebook.com/$username")
+                )
         )
     }
 
 }
 
 fun Fragment.requestPermissionWithRationale(
-    permission: String,
-    requestCode: Int,
-    snackbar: Snackbar
+        permission: String,
+        requestCode: Int,
+        snackbar: Snackbar
 ) {
     val provideRationale = shouldShowRequestPermissionRationale(permission)
 
@@ -153,9 +136,9 @@ fun Fragment.requestPermissionWithRationale(
 }
 
 fun Fragment.requestPermissionsWithRationale(
-    permissions: Array<String>,
-    requestCode: Int,
-    snackbar: Array<Snackbar>
+        permissions: Array<String>,
+        requestCode: Int,
+        snackbar: Array<Snackbar>
 ) {
     if (shouldShowRequestPermissionRationale(permissions[0])) {
         snackbar[0].show()

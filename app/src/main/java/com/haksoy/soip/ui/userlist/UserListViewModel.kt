@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.haksoy.soip.data.FirebaseDao
 
-private const val TAG = "UserListViewModel"
+private const val TAG = "SoIP:UserListViewModel"
 class UserListViewModel : ViewModel() {
 
     private val firebaseDao = FirebaseDao.getInstance()

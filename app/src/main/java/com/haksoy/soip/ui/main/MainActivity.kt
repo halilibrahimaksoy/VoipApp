@@ -16,7 +16,7 @@ import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
 
-private const val TAG = "MainActivity"
+private const val TAG = "SoIP:MainActivity"
 
 class MainActivity : AppCompatActivity() {
 

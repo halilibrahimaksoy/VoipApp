@@ -21,6 +21,7 @@ import com.haksoy.soip.ui.auth.AuthenticationViewModel
 import com.haksoy.soip.ui.profile.UserProfileFragment
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
+import com.haksoy.soip.utlis.observeWithProgress
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
@@ -43,36 +44,40 @@ class RegisterFragment : Fragment() {
     }
 
     private fun createAccount() {
-        viewModel.createAccount(
-            binding.txtEmail.text.toString(),
-            binding.txtPassword.text.toString()
-        ).observe(viewLifecycleOwner,
-            Observer {
-                if (it.status == Resource.Status.SUCCESS) {
-                    singIn()
-                } else if (it.status == Resource.Status.ERROR) {
-                    it.data?.let { it1 -> handleError(it1) }
-                }
+        context?.let {
+            viewModel.createAccount(
+                    binding.txtEmail.text.toString(),
+                    binding.txtPassword.text.toString()
+        ).observeWithProgress(it,viewLifecycleOwner,
+                    Observer {
+                        if (it.status == Resource.Status.SUCCESS) {
+                            singIn()
+                        } else if (it.status == Resource.Status.ERROR) {
+                            it.data?.let { it1 -> handleError(it1) }
+                        }
 
-            })
+                    })
+        }
     }
 
     private fun singIn() {
-        viewModel.signIn(
-            binding.txtEmail.text.toString(),
-            binding.txtPassword.text.toString()
-        ).observe(viewLifecycleOwner,
-            Observer {
-                if (it.status == Resource.Status.SUCCESS) {
+        context?.let {
+            viewModel.signIn(
+                    binding.txtEmail.text.toString(),
+                    binding.txtPassword.text.toString()
+        ).observeWithProgress(it,viewLifecycleOwner,
+                    Observer {
+                        if (it.status == Resource.Status.SUCCESS) {
 
-                    findNavController().navigate(
-                        R.id.action_registerFragment_to_userProfileFragment,
-                        bundleOf(Constants.UserProfileFragmentReason to UserProfileFragment.Status.REGISTRATION)
-                    )
-                } else if (it.status == Resource.Status.ERROR) {
-                    it.data?.let { it1 -> handleError(it1) }
-                }
-            })
+                            findNavController().navigate(
+                                    R.id.action_registerFragment_to_userProfileFragment,
+                                    bundleOf(Constants.UserProfileFragmentReason to UserProfileFragment.Status.REGISTRATION)
+                            )
+                        } else if (it.status == Resource.Status.ERROR) {
+                            it.data?.let { it1 -> handleError(it1) }
+                        }
+                    })
+        }
     }
 
     private fun validateForm(): Boolean {

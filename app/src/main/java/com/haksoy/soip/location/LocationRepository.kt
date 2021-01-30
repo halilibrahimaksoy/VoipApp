@@ -7,7 +7,7 @@ import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.entiries.Location
 import java.util.concurrent.ExecutorService
 
-private const val TAG = "LocationRepository"
+private const val TAG = "SoIP:LocationRepository"
 
 /**
  * Access point for database (MyLocation data) and location APIs (start/stop location updates and

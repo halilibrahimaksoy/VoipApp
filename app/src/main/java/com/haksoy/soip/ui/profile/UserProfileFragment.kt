@@ -161,13 +161,15 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private fun updateUserProfile() {
         if (validateForm()) {
-            viewModel.updateUserProfile(_user).observe(viewLifecycleOwner, Observer {
-                if (it.status == Resource.Status.SUCCESS) {
-                    updateUserProfileCompleted()
-                } else if (it.status == Resource.Status.ERROR) {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
-                }
-            })
+            context?.let {
+                viewModel.updateUserProfile(_user).observeWithProgress(it,viewLifecycleOwner, Observer {
+                    if (it.status == Resource.Status.SUCCESS) {
+                        updateUserProfileCompleted()
+                    } else if (it.status == Resource.Status.ERROR) {
+                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
     }
 
