@@ -5,8 +5,11 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.haksoy.soip.data.FirebaseDao
+import com.haksoy.soip.utlis.Resource
+import com.haksoy.soip.utlis.observeOnce
 
 private const val TAG = "SoIP:UserListViewModel"
+
 class UserListViewModel : ViewModel() {
 
     private val firebaseDao = FirebaseDao.getInstance()
@@ -19,15 +22,21 @@ class UserListViewModel : ViewModel() {
     fun getPositionFromUid(): Int {
         for (i in selectedUserList.indices) {
             if (selectedUserList[i].uid == selectedUserUid.value)
-                return Int.MAX_VALUE / 2 + i
+                return  selectedUserList.size*((Int.MAX_VALUE/selectedUserList.size)/2)+i
         }
         return -1
     }
 
     fun fetchNearlyUsers() {
         firebaseDao.getLocation(firebaseDao.getCurrentUserUid()).observeForever {
-            Log.i(TAG,"userListViewModel  :  nearlyUsers posted new value")
-            nearlyUsers.postValue(firebaseDao.getNearlyUsers(it))
+            Log.i(TAG, "userListViewModel  :  nearlyUsers posted new value")
+            firebaseDao.getNearlyUsers(it).observeOnce {
+                if (it.status == Resource.Status.SUCCESS) {
+                    nearlyUsers.postValue(it.data)
+                } else if (it.status == Resource.Status.ERROR) {
+
+                }
+            }
         }
     }
 }
