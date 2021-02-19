@@ -1,6 +1,7 @@
 package com.haksoy.soip.utlis
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -44,6 +45,25 @@ fun Context.getPreferencesBoolean(key: String, defaultValue: Boolean): Boolean {
     return preferences.getBoolean(key, defaultValue)
 }
 
+// Note: This function's implementation is only for debugging purposes. If you are going to do
+// this in a production app, you should instead track the state of all your activities in a
+// process via android.app.Application.ActivityLifecycleCallbacks's
+// unregisterActivityLifecycleCallbacks(). For more information, check out the link:
+// https://developer.android.com/reference/android/app/Application.html#unregisterActivityLifecycleCallbacks(android.app.Application.ActivityLifecycleCallbacks
+fun Context.isAppInForeground(): Boolean {
+    val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val appProcesses = activityManager.runningAppProcesses ?: return false
+
+    appProcesses.forEach { appProcess ->
+        if (appProcess.importance ==
+                ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
+                appProcess.processName == packageName
+        ) {
+            return true
+        }
+    }
+    return false
+}
 fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
     observeForever(object : Observer<T> {
         override fun onChanged(value: T) {

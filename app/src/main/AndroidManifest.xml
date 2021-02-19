@@ -60,6 +60,12 @@
             android:windowSoftInputMode="adjustResize" />
 
         <receiver android:name=".location.LocationUpdatesBroadcastReceiver" />
+        <service
+            android:name=".notification.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

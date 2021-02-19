@@ -11,5 +11,6 @@ data class User(
     var gender: String? = null,
     var location: Location = Location(),
     var nat: String? = null,
-    var socialMedia: SocialMedia = SocialMedia()
+    var socialMedia: SocialMedia = SocialMedia(),
+    var token:String?=null
 ) : Serializable

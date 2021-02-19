@@ -176,6 +176,15 @@ class FirebaseDao {
         return result
     }
 
+    fun updateToken(token:String){
+        cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid()).update("token",token).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.i(TAG, "updateToken: Successful  -> $token")
+            } else {
+                Log.i(TAG, "updateToken: failed")
+            }
+        }
+    }
     val currentLocation = MutableLiveData<GeoLocation>()
     fun getLocation(uid: String) {
         geoFire.getLocation(uid, object : LocationCallback {
