@@ -1,50 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerInParent="true"
-    android:layout_gravity="center"
-    android:background="@color/colorAccent"
-    android:gravity="center">
+    android:weightSum="1"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="@color/colorAccent">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
         android:layout_margin="10dp"
         android:src="@mipmap/ic_photo" />
 
-
-    <TextView
-        android:id="@+id/txtEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:singleLine="true"
-        android:textColor="@android:color/white"
-        android:textSize="18sp" />
-
     <LinearLayout
         android:id="@+id/lnrShow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtEmail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtFullName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:maxWidth="200dp"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:gravity="center"
             android:singleLine="true"
             android:textColor="@android:color/white"
             android:textSize="18sp" />
@@ -53,11 +38,11 @@
             android:id="@+id/txtInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:gravity="start"
             android:maxWidth="200dp"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:padding="5dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="15sp" />
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

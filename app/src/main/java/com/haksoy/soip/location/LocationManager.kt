@@ -12,6 +12,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.haksoy.soip.utlis.hasPermission
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.Throws
 
 private const val TAG = "SoIP:LocationManager"
 
@@ -37,11 +38,11 @@ class LocationManager private constructor(private val context: Context) {
         // IMPORTANT NOTE: Apps running on "O" devices (regardless of targetSdkVersion) may
         // receive updates less frequently than this interval when the app is no longer in the
         // foreground.
-        interval = TimeUnit.SECONDS.toMillis(60)
+        interval = TimeUnit.MINUTES.toMillis(5)
 
         // Sets the fastest rate for active location updates. This interval is exact, and your
         // application will never receive updates faster than this value.
-        fastestInterval = TimeUnit.MINUTES.toMillis(1)
+        fastestInterval = TimeUnit.MINUTES.toMillis(5)
 
         // Sets the maximum time when batched location updates are delivered. Updates may be
         // delivered sooner than this interval.

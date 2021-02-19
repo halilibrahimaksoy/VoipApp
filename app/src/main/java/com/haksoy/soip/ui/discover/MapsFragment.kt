@@ -18,12 +18,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -49,9 +50,7 @@ class MapsFragment : Fragment() {
     private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
     private val userListViewModel: UserListViewModel by activityViewModels()
-    private val viewModel by lazy {
-        ViewModelProviders.of(this).get(MapsViewModel::class.java)
-    }
+    private val viewModel: MapsViewModel by activityViewModels()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -144,24 +143,15 @@ class MapsFragment : Fragment() {
             it.isMyLocationEnabled = true
             it.uiSettings.isMyLocationButtonEnabled = false
             binding.myLocation.setOnClickListener { view ->
-                it.myLocation?.let { location ->
-                    it.animateCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(
-                                            location.latitude,
-                                            location.longitude
-                                    ), 14f
-                            )
-                    )
-
-                }
+                moveToCurrentLocation(it)
             }
+            moveToCurrentLocation(it)
 
             it.setMaxZoomPreference(14f)
 
             userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
-                Log.i(TAG, "userListViewModel  :  nearlyUsers observed")
-                context?.let { it1 -> ProgressHelper.getInstance().showLoading(it1) }
+                Log.i(TAG, "updateMap  :  nearlyUsers observed")
+//                context?.let { it1 -> ProgressHelper.getInstance().showLoading(it1) }
                 it.clear()
                 for (user in userList) {
                     Glide.with(activity?.applicationContext!!)
@@ -191,8 +181,8 @@ class MapsFragment : Fragment() {
                                 }
                             })
                 }
-                ProgressHelper.getInstance().hideLoading()
-                Log.i(TAG, "userListViewModel  :  nearlyUsers added to maps")
+//                ProgressHelper.getInstance().hideLoading()
+                Log.i(TAG, "updateMap  :  nearlyUsers added to maps")
             })
 
 
@@ -202,6 +192,21 @@ class MapsFragment : Fragment() {
             }
         }
 
+    }
+
+    private fun moveToCurrentLocation(it: GoogleMap) {
+        context?.let { it1 ->
+            LocationServices.getFusedLocationProviderClient(it1).lastLocation.addOnSuccessListener { location ->
+                it.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                                LatLng(
+                                        location.latitude,
+                                        location.longitude
+                                ), 14f
+                        )
+                )
+            }
+        }
     }
 
     private fun showUserList(selectedUserUid: String) {

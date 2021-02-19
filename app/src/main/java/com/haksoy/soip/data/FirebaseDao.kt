@@ -5,7 +5,13 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.firebase.geofire.GeoFire
+import com.firebase.geofire.GeoLocation
+import com.firebase.geofire.GeoQueryEventListener
+import com.firebase.geofire.LocationCallback
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -31,8 +37,11 @@ class FirebaseDao {
     val auth = Firebase.auth
     private val cloudFirestoreDB = Firebase.firestore
     private val storageFirebase = Firebase.storage
+    private val realtimeDB = FirebaseDatabase.getInstance().getReference("Location")
+    private val geoFire = GeoFire(realtimeDB)
+
     fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
-        var result = MutableLiveData<Resource<Exception>>()
+        val result = MutableLiveData<Resource<Exception>>()
 
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
@@ -45,7 +54,7 @@ class FirebaseDao {
     }
 
     fun signIn(email: String, password: String): LiveData<Resource<Exception>> {
-        var result = MutableLiveData<Resource<Exception>>()
+        val result = MutableLiveData<Resource<Exception>>()
 
         auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
@@ -58,7 +67,7 @@ class FirebaseDao {
     }
 
     fun forgetPassword(email: String): LiveData<Resource<Exception>> {
-        var result = MutableLiveData<Resource<Exception>>()
+        val result = MutableLiveData<Resource<Exception>>()
         auth.sendPasswordResetEmail(email)
                 .addOnSuccessListener {
                     result.value = Resource.success(null)
@@ -78,13 +87,12 @@ class FirebaseDao {
     }
 
     fun addLocation(location: Location) {
-        cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
-                .update(Constants.location, location)
+        geoFire.setLocation(getCurrentUserUid(), GeoLocation(location.latitude, location.longitude))
     }
 
     fun fetchUserDate(uid: String): LiveData<Resource<User>> {
         val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
-        var result = MutableLiveData<Resource<User>>()
+        val result = MutableLiveData<Resource<User>>()
         docRef.get().addOnCompleteListener {
             if (it.isSuccessful) {
                 result.value = Resource.success(it.result.toObject(User::class.java))
@@ -95,7 +103,7 @@ class FirebaseDao {
     }
 
     fun updateUserProfile(user: User): MutableLiveData<Resource<Exception>> {
-        var result = MutableLiveData<Resource<Exception>>()
+        val result = MutableLiveData<Resource<Exception>>()
         if (!user.profileImage.toString()
                         .contains(Constants.firebaseStoregeURL, false)
         ) {// for understanding to is image changed ?
@@ -132,7 +140,7 @@ class FirebaseDao {
     private fun updateUser(
             user: User
     ): MutableLiveData<Resource<Exception>> {
-        var result = MutableLiveData<Resource<Exception>>()
+        val result = MutableLiveData<Resource<Exception>>()
         cloudFirestoreDB.collection(Constants.User).document(user.uid!!).set(user)
                 .addOnSuccessListener {
                     result.value = Resource.success(null)
@@ -148,7 +156,7 @@ class FirebaseDao {
             uid: String,
             imageUri: String
     ): MutableLiveData<Resource<String>> {
-        var result = MutableLiveData<Resource<String>>()
+        val result = MutableLiveData<Resource<String>>()
         val updateRef = storageFirebase.reference.child(Constants.User_Profile_Image).child(uid)
         val uploadTask = updateRef.putFile(Uri.parse(imageUri))
 
@@ -168,105 +176,101 @@ class FirebaseDao {
         return result
     }
 
+    val currentLocation = MutableLiveData<GeoLocation>()
+    fun getLocation(uid: String) {
+        geoFire.getLocation(uid, object : LocationCallback {
+            override fun onLocationResult(key: String?, location: GeoLocation?) {
+                Log.i(TAG, "getLocation: onLocationResult")
+                currentLocation.postValue(location)
+            }
 
-    fun getLocation(uid: String): MutableLiveData<Location> {
-        val location = MutableLiveData<Location>()
-        val docRef = cloudFirestoreDB.collection(Constants.User).document(uid)
-                .addSnapshotListener { snapshot, error ->
-                    if (snapshot != null && snapshot.data != null)
-                        location.value = snapshot.toObject(User::class.java)!!.location
-                }
-        return location
+            override fun onCancelled(databaseError: DatabaseError?) {
+                Log.i(TAG, "getLocation: onCancelled")
+            }
+
+        })
     }
 
-//    fun getNearlyUsers(location: Location): List<User> {
-//
-//        var user: User
-//        val users: MutableList<User> = mutableListOf()
-//        for (i in 1..20) {
-//            user = User(
-//                UUID.randomUUID().toString(),
-//                "email_$i",
-//                "Name_$i",
-//                "user info user info user info user info user info user info user info user info ",
-//                Constants.randomImageUrl,
-//                null,
-//                Location(
-//                    UUID.randomUUID().toString(),
-//                    location.latitude - Constants.nerlyLimit / 2 + Random.nextDouble(Constants.nerlyLimit),
-//                    location.longitude - Constants.nerlyLimit / 2 + Random.nextDouble(Constants.nerlyLimit),
-//                    true,
-//                    Date()
-//                )
-//            )
-//            users.add(user)
-//        }
-//        return users
-//    }
+    val nearlyUser = MutableLiveData<Resource<List<User>>>()
+    fun getNearlyUsers(location: GeoLocation) {
+        getNearlyLocations(location)
+        nearlyLocationLiveData.observeForever { nearlyLocation ->
+            val userResultList = ArrayList<User>()
+            val nearlyUserKeyList = nearlyLocation.keys.reversed()
 
-    fun getNearlyUsers(location: Location): MutableLiveData<Resource<List<User>>> {
-        var result = MutableLiveData<Resource<List<User>>>()
-        Log.i(TAG, "getNearlyUsers filter -> location.latitude >= ${location.latitude - Constants.nerlyLimit}")
-        Log.i(TAG, "getNearlyUsers filter -> location.latitude <= ${location.latitude + Constants.nerlyLimit}")
-        Log.i(TAG, "getNearlyUsers filter -> location.longitude >= ${location.longitude - Constants.nerlyLimit}")
-        Log.i(TAG, "getNearlyUsers filter -> location.longitude <= ${location.longitude + Constants.nerlyLimit}")
-
-        cloudFirestoreDB.collection(Constants.User).whereGreaterThanOrEqualTo("location.latitude", location.latitude - Constants.nerlyLimit)
-                .whereLessThanOrEqualTo("location.latitude", location.latitude + Constants.nerlyLimit)
-                .get().addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        cloudFirestoreDB.collection(Constants.User)
-                                .whereGreaterThanOrEqualTo("location.longitude", location.longitude - Constants.nerlyLimit)
-                                .whereLessThanOrEqualTo("location.longitude", location.longitude + Constants.nerlyLimit)
-                                .get().addOnCompleteListener { it1 ->
-                                    if (it1.isSuccessful) {
-                                        val latitudeList = it.result.toObjects(User::class.java)
-                                        Log.i(TAG, "Lat List")
-                                        for (user in latitudeList) {
-                                            Log.i(TAG, user.toString())
-                                        }
-                                        val longitudeList = it1.result.toObjects(User::class.java)
-                                        Log.i(TAG, "Long List")
-                                        for (user in longitudeList) {
-                                            Log.i(TAG, user.toString())
-                                        }
-                                        val lasResult = latitudeList.intersect(longitudeList)
-                                        result.value = Resource.success(lasResult.toMutableList())
-                                        Log.i(TAG, "Result List")
-                                        for (user in lasResult) {
-                                            Log.i(TAG, user.toString())
-                                        }
-                                    } else
-                                        result.value = Resource.error(it.exception!!.localizedMessage)
+            for (i in 0 until nearlyLocation.size step Constants.userFetchStep) {
+                val endPoint = if (i + Constants.userFetchStep <= nearlyLocation.size) i + Constants.userFetchStep else nearlyLocation.size
+                Log.i(TAG, "getNearlyUsers: get subList from $i between $endPoint")
+                val subList = nearlyUserKeyList.subList(i, endPoint)
+                cloudFirestoreDB.collection(Constants.User).whereIn(Constants.uid, subList)
+                        .get().addOnCompleteListener { it1 ->
+                            if (it1.isSuccessful) {
+                                val userTempList = it1.result.toObjects(User::class.java)
+                                Log.i(TAG, "getNearlyUsers: fetched nearly users")
+                                for (user in userTempList) {
+                                    Log.i(TAG, "getNearlyUsers: added location to ${user.uid}")
+                                    user.location = Location(
+                                            latitude = nearlyLocation[user.uid]!!.latitude,
+                                            longitude = nearlyLocation[user.uid]!!.longitude
+                                    )
                                 }
+                                userResultList.addAll(userTempList)
+                                Log.i(TAG, "getNearlyUsers: postValue userResultList")
+                                nearlyUser.postValue(Resource.success(userResultList))
+                            } else {
+                                Log.i(TAG, "getNearlyUsers: postValue error")
+                                nearlyUser.postValue(Resource.error(it1.exception!!.localizedMessage))
+                            }
+                        }
+            }
 
-                    } else
-                        result.value = Resource.error(it.exception!!.localizedMessage)
-                }
-        return result
+        }
     }
 
-//    fun getNearlyUsers(location: Location): MutableLiveData<Resource<List<User>>> {
-//        var result = MutableLiveData<Resource<List<User>>>()
-//        Log.i(TAG, "getNearlyUsers filter -> location.latitude >= ${location.latitude - Constants.nerlyLimit}")
-//        Log.i(TAG, "getNearlyUsers filter -> location.latitude <= ${location.latitude + Constants.nerlyLimit}")
-//        Log.i(TAG, "getNearlyUsers filter -> location.longitude >= ${location.longitude - Constants.nerlyLimit}")
-//        Log.i(TAG, "getNearlyUsers filter -> location.longitude <= ${location.longitude + Constants.nerlyLimit}")
-//
-//        cloudFirestoreDB.collection(Constants.User)
-////                .whereGreaterThanOrEqualTo("location.latitude", location.latitude - Constants.nerlyLimit)
-////                .whereLessThanOrEqualTo("location.latitude", location.latitude + Constants.nerlyLimit)
-//                .get().addOnCompleteListener {
-//                    if (it.isSuccessful) {
-//                        result.value = Resource.success(it.result.toObjects(User::class.java))
-//                    } else
-//                        result.value = Resource.error(it.exception!!.localizedMessage)
-//                }
-//        return result
-//    }
+    private val nearlyLocationLiveData = MutableLiveData<HashMap<String, GeoLocation>>()
+    private fun getNearlyLocations(location: GeoLocation) {
+        val nearlyLocation = LinkedHashMap<String, GeoLocation>()
+        geoFire.queryAtLocation(location, Constants.nearlyLimit)
+                .addGeoQueryEventListener(object : GeoQueryEventListener {
+                    override fun onGeoQueryReady() {
+                        Log.i(TAG, "getNearlyLocations: onGeoQueryReady")
+                        Log.i(TAG, "getNearlyLocations:  postValue nearlyLocation")
+                        nearlyLocationLiveData.postValue(nearlyLocation)
+                    }
+
+                    override fun onKeyEntered(key: String?, location: GeoLocation?) {
+                        Log.i(TAG, "getNearlyLocations: onKeyEntered : $key")
+                        if (key != getCurrentUserUid())
+                            nearlyLocation[key!!] = location!!
+                    }
+
+                    override fun onKeyMoved(key: String?, location: GeoLocation?) {
+                        if (key == getCurrentUserUid()){
+                            Log.i(TAG, "getNearlyLocations: onKeyMoved (Current User) : $key")
+                            currentLocation.postValue(location)
+                        }
+                        else {
+                            Log.i(TAG, "getNearlyLocations: onKeyMoved : $key")
+                            nearlyLocation[key!!] = location!!
+                            nearlyLocationLiveData.postValue(nearlyLocation)
+                        }
+                    }
+
+                    override fun onKeyExited(key: String?) {
+                        Log.i(TAG, "getNearlyLocations: onKeyExited : $key")
+                        nearlyLocation.remove(key)
+                        nearlyLocationLiveData.postValue(nearlyLocation)
+                    }
+
+                    override fun onGeoQueryError(error: DatabaseError?) {
+                        Log.i(TAG, "getNearlyLocations: onGeoQueryError")
+                    }
+
+                })
+    }
 
     fun isUserDataExist(uid: String): MutableLiveData<Resource<Boolean>> {
-        var result = MutableLiveData<Resource<Boolean>>()
+        val result = MutableLiveData<Resource<Boolean>>()
         cloudFirestoreDB.collection(Constants.User).document(uid)
                 .get().addOnCompleteListener {
                     if (it.isSuccessful) {

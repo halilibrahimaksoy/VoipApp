@@ -224,7 +224,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
-        _user?.let {
+        _user.let {
             binding.txtInstagram2.setText(it.socialMedia.instagram)
             binding.txtFacebook2.setText(it.socialMedia.facebook)
             binding.txtTwitter2.setText(it.socialMedia.twitter)

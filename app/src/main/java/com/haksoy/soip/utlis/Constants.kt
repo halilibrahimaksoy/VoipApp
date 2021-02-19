@@ -4,7 +4,6 @@ import java.util.regex.Pattern
 
 object Constants {
     const val User_Profile_Image = "USER_PROFILE_IMAGE"
-    const val nerlyLimit: Double = 0.1
 
     //    val randomImageUrl = "https://loremflickr.com/320/240"
     const val randomImageUrl =
@@ -45,4 +44,8 @@ object Constants {
                 "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
                 ")+"
     )
+
+    //Location
+    const val nearlyLimit: Double = 10.0//Kilometer
+    const val userFetchStep: Int = 10
 }

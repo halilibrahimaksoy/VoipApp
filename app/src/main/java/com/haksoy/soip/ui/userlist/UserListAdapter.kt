@@ -53,7 +53,6 @@ class UserViewHolder(
     fun bind(item: User) {
         this.user = item
         itemBinding.txtFullName.text = item.name
-        itemBinding.txtEmail.text = item.email
         itemBinding.txtInfo.text = item.info
         Glide.with(itemBinding.root /* context */)
             .load(item.profileImage)

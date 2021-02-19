@@ -22,7 +22,7 @@ class UserProfileViewModel : ViewModel() {
     fun fetchUserDate(uid: String) {
         firebaseDao.fetchUserDate(uid).observeOnce {
             if (it.status == Resource.Status.SUCCESS) {
-                currentUser.postValue(it.data)
+                currentUser.postValue(it.data!!)
             } else if (it.status == Resource.Status.ERROR) {
 
             }
