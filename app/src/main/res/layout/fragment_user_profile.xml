@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@android:color/transparent">
+            android:background="@color/colorPrimary">
 
             <RelativeLayout
                 android:id="@+id/rltvEdit"
@@ -85,6 +85,7 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@id/toolbar"
+            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
             android:src="@mipmap/ic_photo" />
 

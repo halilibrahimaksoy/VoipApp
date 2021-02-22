@@ -29,13 +29,13 @@ class UserListViewModel : ViewModel() {
     fun fetchNearlyUsers() {
         firebaseDao.getLocation(firebaseDao.getCurrentUserUid())
         firebaseDao.currentLocation.observeForever {
-            Log.i(TAG, "fetchNearlyUsers: Location Observed")
-            firebaseDao.getNearlyUsers(it);
-            firebaseDao.nearlyUser.observeForever {
-                if (it.status == Resource.Status.SUCCESS) {
-                    Log.i(TAG, "fetchNearlyUsers: postValue data")
-                    nearlyUsers.postValue(it.data!!)
-                } else if (it.status == Resource.Status.ERROR) {
+                Log.i(TAG, "fetchNearlyUsers: Location Observed")
+                firebaseDao.getNearlyUsers(it);
+                firebaseDao.nearlyUser.observeForever {
+                    if (it.status == Resource.Status.SUCCESS) {
+                        Log.i(TAG, "fetchNearlyUsers: postValue data")
+                        nearlyUsers.postValue(it.data!!)
+                    } else if (it.status == Resource.Status.ERROR) {
 
                 }
             }

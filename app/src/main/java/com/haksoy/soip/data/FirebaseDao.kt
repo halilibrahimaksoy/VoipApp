@@ -10,8 +10,10 @@ import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
 import com.firebase.geofire.LocationCallback
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -177,6 +179,7 @@ class FirebaseDao {
     }
 
     fun updateToken(token:String){
+        if(auth.currentUser != null)
         cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid()).update("token",token).addOnCompleteListener {
             if (it.isSuccessful) {
                 Log.i(TAG, "updateToken: Successful  -> $token")
@@ -187,17 +190,27 @@ class FirebaseDao {
     }
     val currentLocation = MutableLiveData<GeoLocation>()
     fun getLocation(uid: String) {
-        geoFire.getLocation(uid, object : LocationCallback {
-            override fun onLocationResult(key: String?, location: GeoLocation?) {
-                Log.i(TAG, "getLocation: onLocationResult")
-                currentLocation.postValue(location)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError?) {
+        realtimeDB.child(uid).addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
                 Log.i(TAG, "getLocation: onCancelled")
             }
 
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.value != null)
+                    currentLocation.postValue(GeoFire.getLocationValue(snapshot))
+            }
         })
+//        geoFire.getLocation(uid, object : LocationCallback {
+//            override fun onLocationResult(key: String?, location: GeoLocation?) {
+//                Log.i(TAG, "getLocation: onLocationResult")
+//                currentLocation.postValue(location)
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError?) {
+//                Log.i(TAG, "getLocation: onCancelled")
+//            }
+//
+//        })
     }
 
     val nearlyUser = MutableLiveData<Resource<List<User>>>()
@@ -256,7 +269,7 @@ class FirebaseDao {
                     override fun onKeyMoved(key: String?, location: GeoLocation?) {
                         if (key == getCurrentUserUid()){
                             Log.i(TAG, "getNearlyLocations: onKeyMoved (Current User) : $key")
-                            currentLocation.postValue(location)
+//                            currentLocation.postValue(location)
                         }
                         else {
                             Log.i(TAG, "getNearlyLocations: onKeyMoved : $key")

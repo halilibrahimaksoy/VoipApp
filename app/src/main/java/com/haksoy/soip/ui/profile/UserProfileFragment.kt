@@ -88,19 +88,26 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (reasonStatus == Status.AUTH_USER || reasonStatus == Status.REGISTRATION) {
+        when (reasonStatus) {
+            Status.AUTH_USER -> {
 
-            binding.txtEmail.text = viewModel.getEmail()
-            _user = User(viewModel.getUid(), viewModel.getEmail())
-            viewModel.fetchUserDate(viewModel.getUid())
-            viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-                it?.let {
-                    fillUserData(it)
-                    _user = it
-                }
-            })
-        } else if (reasonStatus == Status.OTHER_USER) {
-            fillUserData(_user)
+                binding.txtEmail.text = viewModel.getEmail()
+                _user = User(viewModel.getUid(), viewModel.getEmail())
+                viewModel.fetchUserDate(viewModel.getUid())
+                viewModel.currentUser.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        fillUserData(it)
+                        _user = it
+                    }
+                })
+            }
+            Status.REGISTRATION -> {
+                binding.txtEmail.text = viewModel.getEmail()
+                _user = User(viewModel.getUid(), viewModel.getEmail())
+            }
+            Status.OTHER_USER -> {
+                fillUserData(_user)
+            }
         }
 
         optimizeMenuForStatus()
