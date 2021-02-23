@@ -48,4 +48,8 @@ object Constants {
     //Location
     const val nearlyLimit: Double = 10.0//Kilometer
     const val userFetchStep: Int = 10
+
+    //Database
+    const val CHAT_DATABASE = "chat-database"
+    const val CHAT_TABLE="chat_table"
 }

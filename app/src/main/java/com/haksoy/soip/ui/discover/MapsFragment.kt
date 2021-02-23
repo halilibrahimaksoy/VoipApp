@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.discover
 
-import User
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -32,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.haksoy.soip.BuildConfig
 import com.haksoy.soip.R
+import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.databinding.FragmentMapsBinding
 import com.haksoy.soip.ui.userlist.UserListViewModel
 import com.haksoy.soip.utlis.*

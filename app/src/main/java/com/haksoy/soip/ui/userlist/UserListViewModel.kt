@@ -1,6 +1,6 @@
 package com.haksoy.soip.ui.userlist
 
-import User
+import com.haksoy.soip.data.entiries.User
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

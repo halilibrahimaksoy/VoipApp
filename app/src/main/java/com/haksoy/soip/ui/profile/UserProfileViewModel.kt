@@ -1,6 +1,6 @@
 package com.haksoy.soip.ui.profile
 
-import User
+import com.haksoy.soip.data.entiries.User
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.haksoy.soip.data.FirebaseDao

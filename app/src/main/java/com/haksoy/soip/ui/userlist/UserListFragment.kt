@@ -1,6 +1,6 @@
 package com.haksoy.soip.ui.userlist
 
-import User
+import com.haksoy.soip.data.entiries.User
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater

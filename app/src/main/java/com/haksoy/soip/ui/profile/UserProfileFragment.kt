@@ -1,6 +1,6 @@
 package com.haksoy.soip.ui.profile
 
-import User
+import com.haksoy.soip.data.entiries.User
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri

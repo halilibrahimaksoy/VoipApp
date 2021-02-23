@@ -1,6 +1,6 @@
 package com.haksoy.soip.ui.main
 
-import User
+import com.haksoy.soip.data.entiries.User
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels

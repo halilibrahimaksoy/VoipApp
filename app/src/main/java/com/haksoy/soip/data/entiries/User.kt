@@ -1,5 +1,5 @@
-import com.haksoy.soip.data.entiries.Location
-import com.haksoy.soip.data.entiries.SocialMedia
+package com.haksoy.soip.data.entiries
+
 import java.io.Serializable
 
 data class User(
