@@ -13,13 +13,14 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.haksoy.soip.databinding.FragmentUserListBinding
+import com.haksoy.soip.ui.main.SharedViewModel
 
 private const val TAG = "SoIP:UserListFragment"
 
 class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     private lateinit var binding: FragmentUserListBinding
     private var adapter = UserListAdapter(this)
-    private val userListViewModel: UserListViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var currentItem: Int? = null
 
     companion object {
@@ -42,9 +43,9 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     }
 
     private fun fillList() {
-        adapter.setItems(userListViewModel.selectedUserList)
+        adapter.setItems(sharedViewModel.selectedUserList)
         binding.userViewPager.currentItem =
-            currentItem ?: userListViewModel.getPositionFromUid()
+            currentItem ?: sharedViewModel.getPositionFromUid()
     }
 
     private fun setupViewPager() {
@@ -64,8 +65,8 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
     }
 
     override fun onClickedUser(user: User) {
-        Log.i(TAG, "userListViewModel  :  selectedUser posted new value")
-        userListViewModel.selectedUser.postValue(user)
+        Log.i(TAG, "sharedViewModel  :  selectedUser posted new value")
+        sharedViewModel.selectedUser.postValue(user)
     }
 
     override fun onPause() {

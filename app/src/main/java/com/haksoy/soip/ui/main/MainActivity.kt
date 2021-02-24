@@ -9,9 +9,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haksoy.soip.R
 import com.haksoy.soip.databinding.ActivityMainBinding
+import com.haksoy.soip.ui.conversationDetail.ConversationDetailFragment
 import com.haksoy.soip.ui.profile.UserProfileFragment
 import com.haksoy.soip.ui.userlist.UserListFragment
-import com.haksoy.soip.ui.userlist.UserListViewModel
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
     }
-    private val userListViewModel: UserListViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,17 +42,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        userListViewModel.selectedUserUid.observe(this, Observer {
-            Log.i(TAG, "userListViewModel  :  selectedUserUid observed")
+        sharedViewModel.selectedUserUid.observe(this, Observer {
+            Log.i(TAG, "sharedViewModel  :  selectedUserUid observed")
 
             showUserList()
         })
-        userListViewModel.selectedUser.observe(this, Observer {
-            Log.i(TAG, "userListViewModel  :  selectedUser observed")
+        sharedViewModel.selectedUser.observe(this, Observer {
+            Log.i(TAG, "sharedViewModel  :  selectedUser observed")
 
             showUserDetailFragment(it)
         })
+        sharedViewModel.conversationDetailWithUser.observe(this, Observer {
+            showConversationDetailFragment(it)
+        })
     }
+
+
 
     private fun prepareUi() {
         setViewPager()
@@ -80,7 +85,18 @@ class MainActivity : AppCompatActivity() {
             .commit()
         setClickable(true)
     }
-
+    private fun showConversationDetailFragment(user: User) {
+        val conversationDetailFragment =
+            ConversationDetailFragment.newInstance(user)
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.usersFragment,
+                conversationDetailFragment,
+                Constants.UserProfileFragmentTag
+            )
+            .addToBackStack(Constants.ConversationDetailFragmentTag)
+            .commit()
+    }
     private fun showUserList() {
         supportFragmentManager.beginTransaction()
             .replace(

@@ -1,4 +1,4 @@
-package com.haksoy.soip.ui.userlist
+package com.haksoy.soip.ui.main
 
 import com.haksoy.soip.data.entiries.User
 import android.util.Log
@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.utlis.Resource
 
-private const val TAG = "SoIP:UserListViewModel"
+private const val TAG = "SoIP:SharedViewModel"
 
-class UserListViewModel : ViewModel() {
+class SharedViewModel : ViewModel() {
 
     private val firebaseDao = FirebaseDao.getInstance()
 
@@ -17,6 +17,7 @@ class UserListViewModel : ViewModel() {
     var selectedUserList = ArrayList<User>()
     val selectedUserUid = MutableLiveData<String>()
     val selectedUser = MutableLiveData<User>()
+    val conversationDetailWithUser = MutableLiveData<User>()
 
     fun getPositionFromUid(): Int {
         for (i in selectedUserList.indices) {

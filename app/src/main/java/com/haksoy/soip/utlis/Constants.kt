@@ -11,10 +11,12 @@ object Constants {
     const val firebaseStoregeURL = "https://firebasestorage.googleapis.com/"
     const val UserProfileFragmentReason = "UserProfileFragmentReason"
     const val UserProfileFragmentSelectedUser = "UserProfileFragmentSelectedUser"
+    const val ConversationDetailFragmentSelectedUser = "UserProfileFragmentSelectedUser"
 
     //    val randomImageUrl = "https://firebasestorage.googleapis.com/v0/b/voipapp-dbc05.appspot.com/o/USER_PROFILE_IMAGE%2Fw5VU6dSV4Jc56oiyb7LSH2vzwX92?alt=media&token=a0c50e33-2175-4d5e-badd-e7a58eac0446"
     const val UserListFragmentTag = "UserListFragment"
     const val UserProfileFragmentTag = "UserProfileFragmentTag"
+    const val ConversationDetailFragmentTag = "ConversationDetailFragmentTag"
     const val NearlyUserList = "NearlyUserList"
     const val SelectedUserUid = "SelectedUserUid"
 

@@ -27,9 +27,9 @@ class ChatRepository private constructor(
     private val chatDao = chatDatabase.chatDao()
 
 
-    fun getAllChatList(): LiveData<List<Chat>> = chatDao.getChats()
+    fun getConversationList(): LiveData<List<Chat>> = chatDao.getConversationList()
 
-    fun getChatListWithUser(uid: String): LiveData<List<Chat>> = chatDao.getChats(uid)
+    fun getConversationDetails(uid: String): LiveData<List<Chat>> = chatDao.getConversationDetails(uid)
 
     fun addChat(chatItem: Chat) {
         executor.execute {

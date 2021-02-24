@@ -12,10 +12,10 @@ data class Chat(
         val direction: ChatDirection,
         val is_seen: Boolean,
         val type: ChatType,
-        val text: String,
-        val contentUrl: String,
+        val text: String? = null,
+        val contentUrl: String? = null,
         val createDate: Date,
-        val updateDate: Date
+        val updateDate: Date? = null
 ) {
 
     override fun toString(): String {

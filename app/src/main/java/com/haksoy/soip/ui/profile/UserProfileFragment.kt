@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.profile
 
-import com.haksoy.soip.data.entiries.User
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -13,13 +12,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.soip.R
+import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.databinding.FragmentUserProfileBinding
 import com.haksoy.soip.ui.main.MainActivity
+import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.ui.settings.SettingsActivity
 import com.haksoy.soip.utlis.*
 
@@ -29,8 +31,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     companion object {
         fun newInstance(status: Status, selectedUser: User? = null) = UserProfileFragment().apply {
             arguments = bundleOf(
-                Constants.UserProfileFragmentReason to status,
-                Constants.UserProfileFragmentSelectedUser to selectedUser
+                    Constants.UserProfileFragmentReason to status,
+                    Constants.UserProfileFragmentSelectedUser to selectedUser
             )
         }
     }
@@ -46,12 +48,14 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(UserProfileViewModel::class.java)
     }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private var editMode: Boolean = false
     private var newImageUri: Uri? = null
     private lateinit var reasonStatus: Status
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentUserProfileBinding.inflate(layoutInflater, container, false)
 
@@ -133,22 +137,22 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private fun pickImage() {
         ImagePicker.with(this)
-            .compress(1024)
-            .crop()//Final image size will be less than 1 MB(Optional)
-            .maxResultSize(
-                1080,
-                1080
-            ) //Final image resolution will be less than 1080 x 1080(Optional)
-            .start { resultCode, data ->
-                if (resultCode == Activity.RESULT_OK) {
-                    newImageUri = data?.data!!
-                    showProfileImage(newImageUri.toString())
-                    _user.profileImage = newImageUri.toString()
-                } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                    Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
-                        .show()
+                .compress(1024)
+                .crop()//Final image size will be less than 1 MB(Optional)
+                .maxResultSize(
+                        1080,
+                        1080
+                ) //Final image resolution will be less than 1080 x 1080(Optional)
+                .start { resultCode, data ->
+                    if (resultCode == Activity.RESULT_OK) {
+                        newImageUri = data?.data!!
+                        showProfileImage(newImageUri.toString())
+                        _user.profileImage = newImageUri.toString()
+                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                        Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                                .show()
+                    }
                 }
-            }
     }
 
     private fun validateForm(): Boolean {
@@ -169,7 +173,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun updateUserProfile() {
         if (validateForm()) {
             context?.let {
-                viewModel.updateUserProfile(_user).observeWithProgress(it,viewLifecycleOwner, Observer {
+                viewModel.updateUserProfile(_user).observeWithProgress(it, viewLifecycleOwner, Observer {
                     if (it.status == Resource.Status.SUCCESS) {
                         updateUserProfileCompleted()
                     } else if (it.status == Resource.Status.ERROR) {
@@ -182,9 +186,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private fun showProfileImage(currentImageReferance: String) {
         Glide.with(binding.root /* context */)
-            .load(currentImageReferance)
-            .circleCrop()
-            .into(binding.imageView)
+                .load(currentImageReferance)
+                .circleCrop()
+                .into(binding.imageView)
 
     }
 
@@ -257,6 +261,9 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             }
             R.id.btnSettings -> {
                 activity?.startActivity(Intent(context, SettingsActivity::class.java))
+            }
+            R.id.btnSend -> {
+                sharedViewModel.conversationDetailWithUser.postValue(_user)
             }
             R.id.imageView -> {
                 if (editMode)

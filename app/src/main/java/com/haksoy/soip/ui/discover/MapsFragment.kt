@@ -33,7 +33,7 @@ import com.haksoy.soip.BuildConfig
 import com.haksoy.soip.R
 import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.databinding.FragmentMapsBinding
-import com.haksoy.soip.ui.userlist.UserListViewModel
+import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.*
 
 private const val TAG = "SoIP:MapsFragment"
@@ -49,7 +49,7 @@ class MapsFragment : Fragment() {
 
     private lateinit var binding: FragmentMapsBinding
     lateinit var mapFragment: SupportMapFragment
-    private val userListViewModel: UserListViewModel by activityViewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private val viewModel: MapsViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -149,7 +149,7 @@ class MapsFragment : Fragment() {
 
             it.setMaxZoomPreference(14f)
 
-            userListViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
+            sharedViewModel.nearlyUsers.observe(viewLifecycleOwner, Observer { userList ->
                 Log.i(TAG, "updateMap  :  nearlyUsers observed")
 //                context?.let { it1 -> ProgressHelper.getInstance().showLoading(it1) }
                 it.clear()
@@ -210,10 +210,10 @@ class MapsFragment : Fragment() {
     }
 
     private fun showUserList(selectedUserUid: String) {
-        Log.i(TAG, "userListViewModel  :  selectedUserList added new value")
-        userListViewModel.selectedUserList = userListViewModel.nearlyUsers.value as ArrayList<User>
-        Log.i(TAG, "userListViewModel  :  selectedUserUid added new value")
-        userListViewModel.selectedUserUid.postValue(selectedUserUid)
+        Log.i(TAG, "showUserList  :  selectedUserList added new value")
+        sharedViewModel.selectedUserList = sharedViewModel.nearlyUsers.value as ArrayList<User>
+        Log.i(TAG, "showUserList  :  selectedUserUid added new value")
+        sharedViewModel.selectedUserUid.postValue(selectedUserUid)
     }
 
     private fun getMarkerOptions(user: User): MarkerOptions? {
@@ -285,7 +285,7 @@ class MapsFragment : Fragment() {
     }
 
     private fun prepareUi() {
-        userListViewModel.fetchNearlyUsers()
+        sharedViewModel.fetchNearlyUsers()
         updateMap()
         getBackgroundPermission()
     }
