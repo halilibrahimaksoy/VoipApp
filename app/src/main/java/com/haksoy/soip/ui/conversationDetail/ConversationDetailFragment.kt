@@ -20,7 +20,7 @@ import com.haksoy.soip.databinding.FragmentConversationDetailBinding
 import com.haksoy.soip.utlis.Constants
 import java.util.*
 
-class ConversationDetailFragment : Fragment(), View.OnClickListener {
+class ConversationDetailFragment : Fragment(), View.OnClickListener, ConversationDetailAdapter.ConversationDetailItemClickListener {
     companion object {
         fun newInstance(selectedUser: User? = null) = ConversationDetailFragment().apply {
             arguments = bundleOf(
@@ -31,6 +31,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener {
 
     private val viewModel: ConversationDetailViewModel by viewModels()
     private lateinit var binding: FragmentConversationDetailBinding
+    private var adapter = ConversationDetailAdapter(this)
     private lateinit var user: User
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +55,10 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener {
         if (user.profileImage != null)
             showProfileImage(user.profileImage!!)
         binding.txtFullName.text = user.name
+
+        viewModel.getConversationDetail(user.uid!!).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            adapter.setItems(it as ArrayList<Chat>)
+        })
     }
 
     private fun showProfileImage(currentImageReferance: String) {
@@ -65,9 +70,11 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setupViewPager() {
-        binding.recyclerView.setHasFixedSize(true)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-//        binding.recyclerView.adapter = adapter
+        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        linearLayoutManager.reverseLayout = true
+        linearLayoutManager.stackFromEnd = true
+        binding.recyclerView.layoutManager = linearLayoutManager
+        binding.recyclerView.adapter = adapter
     }
 
     private fun validateForm(): Boolean {
@@ -101,7 +108,12 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener {
     private fun sendChat() {
         if (validateForm()) {
             viewModel.sendChat(Chat(UUID.randomUUID(), user.uid!!, ChatDirection.OutGoing, true, ChatType.TEXT, binding.txtMessage.text.toString(), null, Date(), null))
+            binding.txtMessage.setText("")
         }
+    }
+
+    override fun onClickedUser(chat: Chat) {
+
     }
 
 }
