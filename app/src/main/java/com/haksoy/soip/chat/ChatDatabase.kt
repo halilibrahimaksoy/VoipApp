@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.haksoy.soip.utlis.Constants
 
-@Database(entities = [Chat::class], version = 1)
+@Database(entities = [Chat::class, Conversation::class], version = 1)
 @TypeConverters(ChatTypeConverters::class)
 abstract class ChatDatabase : RoomDatabase() {
     abstract fun chatDao(): ChatDao
+    abstract fun conversationDao(): ConversationDao
 
     companion object {
         // For Singleton instantiation
@@ -25,9 +26,9 @@ abstract class ChatDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context): ChatDatabase {
             return Room.databaseBuilder(
-                context,
-                ChatDatabase::class.java,
-                Constants.CHAT_DATABASE
+                    context,
+                    ChatDatabase::class.java,
+                    Constants.CHAT_DATABASE
             ).build()
         }
     }

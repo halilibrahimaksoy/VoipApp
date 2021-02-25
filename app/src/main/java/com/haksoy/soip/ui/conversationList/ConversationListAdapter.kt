@@ -6,37 +6,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.haksoy.soip.chat.Chat
+import com.haksoy.soip.chat.Conversation
 import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.LinkedHashMap
 
 class ConversationListAdapter(private val listener: ConversationListItemClickListener) :
-    RecyclerView.Adapter<ConversationListViewHolder>() {
+        RecyclerView.Adapter<ConversationListViewHolder>() {
 
     interface ConversationListItemClickListener {
         fun onClickedUser(user: User)
     }
 
-    private val items = LinkedHashMap<User, Chat>()
+    private val items = LinkedHashMap<User, Conversation>()
 
-    fun setItems(items: LinkedHashMap<User, Chat>) {
+    fun setItems(items: LinkedHashMap<User, Conversation>) {
         this.items.clear()
         this.items.putAll(items)
         notifyDataSetChanged()
     }
 
-    fun addItems(items: LinkedHashMap<User, Chat>) {
+    fun addItems(items: LinkedHashMap<User, Conversation>) {
         this.items.putAll(items)
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationListViewHolder {
         val binding: ConversationListItemBinding =
-            ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ConversationListViewHolder(binding, listener)
     }
 
@@ -49,10 +47,10 @@ class ConversationListAdapter(private val listener: ConversationListItemClickLis
 }
 
 class ConversationListViewHolder(
-    private val itemBinding: ConversationListItemBinding,
-    private val listener: ConversationListAdapter.ConversationListItemClickListener
+        private val itemBinding: ConversationListItemBinding,
+        private val listener: ConversationListAdapter.ConversationListItemClickListener
 ) : RecyclerView.ViewHolder(itemBinding.root),
-    View.OnClickListener {
+        View.OnClickListener {
 
     private lateinit var user: User
 
@@ -60,7 +58,7 @@ class ConversationListViewHolder(
         itemBinding.root.setOnClickListener(this)
     }
 
-    fun bind(user: User, chat: Chat) {
+    fun bind(user: User, chat: Conversation) {
         this.user = user
         itemBinding.txtFullName.text = user.name
         itemBinding.txtMessage.text = chat.text.toString()
@@ -68,9 +66,9 @@ class ConversationListViewHolder(
         cal.time = chat.createDate
         itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
         Glide.with(itemBinding.root /* context */)
-            .load(user.profileImage)
-            .circleCrop()
-            .into(itemBinding.imageView)
+                .load(user.profileImage)
+                .circleCrop()
+                .into(itemBinding.imageView)
 
     }
 

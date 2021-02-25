@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -17,6 +18,7 @@ import com.haksoy.soip.chat.ChatDirection
 import com.haksoy.soip.chat.ChatType
 import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
+import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.Constants
 import java.util.*
 
@@ -30,6 +32,8 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
     }
 
     private val viewModel: ConversationDetailViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+
     private lateinit var binding: FragmentConversationDetailBinding
     private var adapter = ConversationDetailAdapter(this)
     private lateinit var user: User
@@ -43,9 +47,11 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
             (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         }
         (activity as AppCompatActivity).supportActionBar?.title = ""
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.btnSend.setOnClickListener(this)
+        binding.btnBack.setOnClickListener(this)
+        binding.imageView.setOnClickListener(this)
+        binding.txtFullName.setOnClickListener(this)
         setupViewPager()
         fillUserData()
         return binding.root
@@ -102,6 +108,13 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
             R.id.btnSend -> {
                 sendChat()
             }
+            R.id.imageView,
+            R.id.txtFullName -> {
+                sharedViewModel.selectedUser.postValue(user)
+            }
+            R.id.btnBack -> {
+                activity?.onBackPressed()
+            }
         }
     }
 
@@ -112,7 +125,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
         }
     }
 
-    override fun onClickedUser(chat: Chat) {
+    override fun onClickChat(chat: Chat) {
 
     }
 

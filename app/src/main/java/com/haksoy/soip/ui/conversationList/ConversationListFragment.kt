@@ -32,7 +32,6 @@ class ConversationListFragment : Fragment(), ConversationListAdapter.Conversatio
         setupViewPager()
         viewModel.conversationWithUserLiveData.observe(viewLifecycleOwner, Observer {
             adapter.setItems(it)
-            println("asfr")
         })
         return binding.root
     }

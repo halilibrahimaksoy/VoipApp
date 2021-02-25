@@ -21,7 +21,7 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
     }
 
     interface ConversationDetailItemClickListener {
-        fun onClickedUser(chat: Chat)
+        fun onClickChat(chat: Chat)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -71,7 +71,7 @@ class LeftViewHolder(
     }
 
     override fun onClick(v: View?) {
-        listener.onClickedUser(chat)
+        listener.onClickChat(chat)
     }
 }
 
@@ -97,6 +97,6 @@ class RightViewHolder(
     }
 
     override fun onClick(v: View?) {
-        listener.onClickedUser(chat)
+        listener.onClickChat(chat)
     }
 }

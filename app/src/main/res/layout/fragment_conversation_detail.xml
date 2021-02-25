@@ -18,11 +18,18 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_margin="5dp"
+                android:src="@mipmap/ic_back" />
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_toRightOf="@id/btnBack"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
                 android:src="@mipmap/ic_profile" />

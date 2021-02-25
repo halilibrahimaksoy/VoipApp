@@ -54,4 +54,5 @@ object Constants {
     //Database
     const val CHAT_DATABASE = "chat-database"
     const val CHAT_TABLE="chat_table"
+    const val LATEST_CHAT_TABLE="latest_chat_table"
 }

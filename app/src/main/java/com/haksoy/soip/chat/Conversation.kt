@@ -1,0 +1,23 @@
+package com.haksoy.soip.chat
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.haksoy.soip.utlis.Constants
+import java.util.*
+
+@Entity(tableName = Constants.LATEST_CHAT_TABLE)
+data class Conversation(
+        val uid: UUID = UUID.randomUUID(),
+        @PrimaryKey val userUid: String,
+        val direction: ChatDirection,
+        val is_seen: Boolean,
+        val type: ChatType,
+        val text: String? = null,
+        val createDate: Date
+) {
+
+    override fun toString(): String {
+        return if (direction == ChatDirection.InComing) "$text from  $userUid" else "$text to  $userUid"
+    }
+
+}

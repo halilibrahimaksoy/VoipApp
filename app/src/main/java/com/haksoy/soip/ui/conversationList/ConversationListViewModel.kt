@@ -3,8 +3,8 @@ package com.haksoy.soip.ui.conversationList
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.haksoy.soip.chat.Chat
 import com.haksoy.soip.chat.ChatRepository
+import com.haksoy.soip.chat.Conversation
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.entiries.User
 import com.haksoy.soip.utlis.observeOnce
@@ -18,9 +18,9 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
     )
     val conversationWithUserLiveData = getConversationList()
 
-    private fun getConversationList(): MutableLiveData<LinkedHashMap<User, Chat>> {
-        val result = MutableLiveData<LinkedHashMap<User, Chat>>()
-        val conversationsWithUser = LinkedHashMap<User, Chat>()
+    private fun getConversationList(): MutableLiveData<LinkedHashMap<User, Conversation>> {
+        val result = MutableLiveData<LinkedHashMap<User, Conversation>>()
+        val conversationsWithUser = LinkedHashMap<User, Conversation>()
         chatRepository.getConversationList().observeForever { conversations ->
             conversationsWithUser.clear()
             for (chat in conversations) {
