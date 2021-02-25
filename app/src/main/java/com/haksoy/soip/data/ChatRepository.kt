@@ -1,7 +1,10 @@
-package com.haksoy.soip.chat
+package com.haksoy.soip.data
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import com.haksoy.soip.data.chat.Chat
+import com.haksoy.soip.data.chat.ChatDatabase
+import com.haksoy.soip.data.chat.Conversation
 import java.util.concurrent.ExecutorService
 
 class ChatRepository private constructor(
@@ -15,10 +18,11 @@ class ChatRepository private constructor(
 
         fun getInstance(context: Context, executor: ExecutorService): ChatRepository {
             return INSTANCE ?: synchronized(this) {
-                INSTANCE ?: ChatRepository(
-                        ChatDatabase.getInstance(context),
-                        executor
-                )
+                INSTANCE
+                        ?: ChatRepository(
+                                ChatDatabase.getInstance(context),
+                                executor
+                        )
                         .also { INSTANCE = it }
             }
         }

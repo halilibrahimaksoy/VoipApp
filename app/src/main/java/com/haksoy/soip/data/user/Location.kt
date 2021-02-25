@@ -1,4 +1,4 @@
-package com.haksoy.soip.data.entiries
+package com.haksoy.soip.data.user
 
 import java.io.Serializable
 import java.util.*

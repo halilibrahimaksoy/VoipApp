@@ -13,10 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.haksoy.soip.R
-import com.haksoy.soip.chat.Chat
-import com.haksoy.soip.chat.ChatDirection
-import com.haksoy.soip.chat.ChatType
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.chat.Chat
+import com.haksoy.soip.data.chat.ChatDirection
+import com.haksoy.soip.data.chat.ChatType
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.Constants

@@ -1,6 +1,8 @@
-package com.haksoy.soip.chat
+package com.haksoy.soip.data
 
 import androidx.room.TypeConverter
+import com.haksoy.soip.data.chat.ChatDirection
+import com.haksoy.soip.data.chat.ChatType
 import java.util.*
 
 class ChatTypeConverters {

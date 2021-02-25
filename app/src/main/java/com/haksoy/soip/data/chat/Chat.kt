@@ -1,4 +1,4 @@
-package com.haksoy.soip.chat
+package com.haksoy.soip.data.chat
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

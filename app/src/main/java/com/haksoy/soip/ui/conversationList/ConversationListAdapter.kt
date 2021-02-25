@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.haksoy.soip.chat.Conversation
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.chat.Conversation
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
 import java.util.*
 import kotlin.collections.LinkedHashMap

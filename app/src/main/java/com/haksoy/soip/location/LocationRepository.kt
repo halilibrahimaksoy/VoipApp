@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.annotation.MainThread
 import com.haksoy.soip.data.FirebaseDao
-import com.haksoy.soip.data.entiries.Location
+import com.haksoy.soip.data.user.Location
 import java.util.concurrent.ExecutorService
 
 private const val TAG = "SoIP:LocationRepository"

@@ -3,10 +3,10 @@ package com.haksoy.soip.ui.conversationList
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.haksoy.soip.chat.ChatRepository
-import com.haksoy.soip.chat.Conversation
+import com.haksoy.soip.data.ChatRepository
+import com.haksoy.soip.data.chat.Conversation
 import com.haksoy.soip.data.FirebaseDao
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.utlis.observeOnce
 import java.util.concurrent.Executors
 

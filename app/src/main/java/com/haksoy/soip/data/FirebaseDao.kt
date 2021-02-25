@@ -15,8 +15,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.haksoy.soip.data.entiries.Location
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.user.Location
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
@@ -201,17 +201,6 @@ class FirebaseDao {
                     currentLocation.postValue(GeoFire.getLocationValue(snapshot))
             }
         })
-//        geoFire.getLocation(uid, object : LocationCallback {
-//            override fun onLocationResult(key: String?, location: GeoLocation?) {
-//                Log.i(TAG, "getLocation: onLocationResult")
-//                currentLocation.postValue(location)
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError?) {
-//                Log.i(TAG, "getLocation: onCancelled")
-//            }
-//
-//        })
     }
 
     val nearlyUser = MutableLiveData<Resource<List<User>>>()

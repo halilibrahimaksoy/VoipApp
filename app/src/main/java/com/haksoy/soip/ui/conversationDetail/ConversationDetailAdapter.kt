@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.haksoy.soip.chat.Chat
-import com.haksoy.soip.chat.ChatDirection
+import com.haksoy.soip.data.chat.Chat
+import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.databinding.ConversationDetailItemLeftBinding
 import com.haksoy.soip.databinding.ConversationDetailItemRightBinding
 import java.util.*

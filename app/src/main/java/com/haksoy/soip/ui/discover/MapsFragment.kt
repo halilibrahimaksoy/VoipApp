@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.haksoy.soip.BuildConfig
 import com.haksoy.soip.R
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentMapsBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.*

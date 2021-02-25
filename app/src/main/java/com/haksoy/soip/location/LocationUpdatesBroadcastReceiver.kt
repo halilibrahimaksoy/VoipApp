@@ -1,12 +1,11 @@
 package com.haksoy.soip.location
 
-import android.app.ActivityManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.location.LocationResult
-import com.haksoy.soip.data.entiries.Location
+import com.haksoy.soip.data.user.Location
 import com.haksoy.soip.utlis.isAppInForeground
 import java.util.*
 import java.util.concurrent.Executors

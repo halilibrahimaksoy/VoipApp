@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentConversationListBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 

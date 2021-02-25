@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.soip.R
-import com.haksoy.soip.data.entiries.User
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentUserProfileBinding
 import com.haksoy.soip.ui.main.MainActivity
 import com.haksoy.soip.ui.main.SharedViewModel
