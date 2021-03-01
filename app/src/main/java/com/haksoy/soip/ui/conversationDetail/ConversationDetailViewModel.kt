@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.haksoy.soip.data.chat.Chat
-import com.haksoy.soip.data.ChatRepository
+import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.FirebaseDao
 import java.util.concurrent.Executors
 

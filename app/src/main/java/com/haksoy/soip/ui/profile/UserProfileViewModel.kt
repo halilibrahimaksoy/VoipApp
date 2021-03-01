@@ -1,16 +1,23 @@
 package com.haksoy.soip.ui.profile
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import com.haksoy.soip.data.user.User
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.haksoy.soip.data.FirebaseDao
+import com.haksoy.soip.data.database.UserRepository
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
+import java.util.concurrent.Executors
 
-class UserProfileViewModel : ViewModel() {
+class UserProfileViewModel(application: Application) : AndroidViewModel(application) {
     val currentUser = MutableLiveData<User>()
 
     private val firebaseDao = FirebaseDao.getInstance()
+    private val userRepository = UserRepository.getInstance(
+            application.applicationContext,
+            Executors.newSingleThreadExecutor()
+    )
     fun getUid(): String {
         return firebaseDao.getCurrentUserUid()
     }
@@ -27,6 +34,9 @@ class UserProfileViewModel : ViewModel() {
 
             }
         }
+    }
+    fun addUser(user: User){
+        userRepository.addUser(user)
     }
 
     fun updateUserProfile(user: User): MutableLiveData<Resource<Exception>> {

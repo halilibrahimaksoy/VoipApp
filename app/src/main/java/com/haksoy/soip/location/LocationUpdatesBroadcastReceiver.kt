@@ -6,8 +6,6 @@ import android.content.Intent
 import android.util.Log
 import com.google.android.gms.location.LocationResult
 import com.haksoy.soip.data.user.Location
-import com.haksoy.soip.utlis.isAppInForeground
-import java.util.*
 import java.util.concurrent.Executors
 
 private const val TAG = "SoIP:LUBroadcastReceiver"
@@ -33,28 +31,22 @@ class LocationUpdatesBroadcastReceiver : BroadcastReceiver() {
         if (intent.action == ACTION_PROCESS_UPDATES) {
             LocationResult.extractResult(intent)?.let { locationResult ->
                 val location = locationResult.lastLocation.let {
-                    Location(
-                        UUID.randomUUID().toString(),
-                        latitude = it.latitude,
-                        longitude = it.longitude,
-                        foreground = context.isAppInForeground(),
-                        date = Date(it.time)
+                    Location(it.latitude, it.longitude
                     )
                 }
 
                 LocationRepository.getInstance(context,
-                    Executors.newSingleThreadExecutor()
+                        Executors.newSingleThreadExecutor()
                 )
-                    .addLocation(location)
+                        .addLocation(location)
             }
         }
     }
 
 
-
     companion object {
         const val ACTION_PROCESS_UPDATES =
-            "com.haksoy.soip.location.LocationUpdatesBroadcastReceiver" +
-                    "PROCESS_UPDATES"
+                "com.haksoy.soip.location.LocationUpdatesBroadcastReceiver" +
+                        "PROCESS_UPDATES"
     }
 }

@@ -111,6 +111,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             }
             Status.OTHER_USER -> {
                 fillUserData(_user)
+                viewModel.addUser(_user)
             }
         }
 

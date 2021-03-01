@@ -86,12 +86,12 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = binding.txtFullName.text.toString()
+        val email = binding.txtMessage.text.toString()
         if (TextUtils.isEmpty(email)) {
-            binding.txtFullName.error = "Required."
+            binding.txtMessage.error = "Required."
             valid = false
         } else {
-            binding.txtFullName.error = null
+            binding.txtMessage.error = null
         }
 
 

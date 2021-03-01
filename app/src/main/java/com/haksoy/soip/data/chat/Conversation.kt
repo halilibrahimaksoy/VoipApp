@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.haksoy.soip.utlis.Constants
 import java.util.*
 
-@Entity(tableName = Constants.LATEST_CHAT_TABLE)
+@Entity(tableName = Constants.CONVERSATION_TABLE)
 data class Conversation(
         val uid: UUID = UUID.randomUUID(),
         @PrimaryKey val userUid: String,
