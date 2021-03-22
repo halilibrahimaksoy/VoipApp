@@ -300,5 +300,6 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.socialMedia.instagram = binding.txtInstagram2.text.toString()
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
         _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
+        _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN, "")
     }
 }

@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.haksoy.soip.R
+import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.ui.auth.AuthenticationActivity
 import com.haksoy.soip.ui.main.MainActivity
 
@@ -16,9 +17,8 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
 
-        val auth: FirebaseAuth = Firebase.auth
         val intent: Intent
-        intent = if (auth.currentUser != null) {
+        intent = if (FirebaseDao.getInstance().isAuthUserExist()) {
             Intent(this, MainActivity::class.java)
         } else {
             Intent(this, AuthenticationActivity::class.java)

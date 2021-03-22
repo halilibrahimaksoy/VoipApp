@@ -178,7 +178,6 @@ class FirebaseDao {
     }
 
     fun updateToken(token: String) {
-        if (auth.currentUser != null)
             cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
                 .update("token", token).addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -188,6 +187,8 @@ class FirebaseDao {
                 }
             }
     }
+
+    fun isAuthUserExist() = auth.currentUser != null
 
     val currentLocation = MutableLiveData<GeoLocation>()
     fun getLocation(uid: String) {

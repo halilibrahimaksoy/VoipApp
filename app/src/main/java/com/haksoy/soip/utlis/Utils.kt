@@ -45,6 +45,18 @@ fun Context.getPreferencesBoolean(key: String, defaultValue: Boolean): Boolean {
     return preferences.getBoolean(key, defaultValue)
 }
 
+fun Context.putPreferencesString(key: String, value: String) {
+    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+    with(preferences.edit()) {
+        putString(key, value)
+        commit()
+    }
+}
+
+fun Context.getPreferencesString(key: String, defaultValue: String): String {
+    val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+    return preferences.getString(key, defaultValue).toString()
+}
 // Note: This function's implementation is only for debugging purposes. If you are going to do
 // this in a production app, you should instead track the state of all your activities in a
 // process via android.app.Application.ActivityLifecycleCallbacks's

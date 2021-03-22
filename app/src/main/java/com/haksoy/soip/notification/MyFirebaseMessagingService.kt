@@ -13,6 +13,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.haksoy.soip.R
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.ui.splash.SplashActivity
+import com.haksoy.soip.utlis.Constants
+import com.haksoy.soip.utlis.putPreferencesString
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
@@ -21,7 +23,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
-        FirebaseDao.getInstance().updateToken(p0)
+        if (FirebaseDao.getInstance().isAuthUserExist())
+            FirebaseDao.getInstance().updateToken(p0)
+        else
+            putPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN, p0)
+
     }
 
     private fun sendNotification(messageBody: String) {
