@@ -7,6 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -19,11 +23,12 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * Helper functions to simplify permission checks/requests.
  */
+private const val TAG = "SoIP:Utils"
 fun Context.hasPermission(permission: String): Boolean {
 
     // Background permissions didn't exit prior to Q, so it's approved by default.
     if (permission == Manifest.permission.ACCESS_BACKGROUND_LOCATION &&
-            android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
+        android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q
     ) {
         return true
     }
@@ -57,34 +62,47 @@ fun Context.getPreferencesString(key: String, defaultValue: String): String {
     val preferences = PreferenceManager.getDefaultSharedPreferences(this)
     return preferences.getString(key, defaultValue).toString()
 }
-// Note: This function's implementation is only for debugging purposes. If you are going to do
-// this in a production app, you should instead track the state of all your activities in a
-// process via android.app.Application.ActivityLifecycleCallbacks's
-// unregisterActivityLifecycleCallbacks(). For more information, check out the link:
-// https://developer.android.com/reference/android/app/Application.html#unregisterActivityLifecycleCallbacks(android.app.Application.ActivityLifecycleCallbacks
+
+fun Context.vibratePhone() {
+    val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    if (Build.VERSION.SDK_INT >= 26) {
+        vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        vibrator.vibrate(200)
+    }
+}
+
 fun Context.isAppInForeground(): Boolean {
     val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
     val appProcesses = activityManager.runningAppProcesses ?: return false
 
     appProcesses.forEach { appProcess ->
         if (appProcess.importance ==
-                ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
-                appProcess.processName == packageName
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND &&
+            appProcess.processName == packageName
         ) {
             return true
         }
     }
     return false
 }
+
 fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
+    Log.i(TAG, "observeOnce  : called")
     observeForever(object : Observer<T> {
         override fun onChanged(value: T) {
-            observer(value)
-            removeObserver(this)
+            Log.i(TAG, "observeOnce  : onChanged")
+                observer(value)
+                removeObserver(this)
         }
     })
 }
-fun <T> LiveData<T>.observeWithProgress(context: Context,lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+
+fun <T> LiveData<T>.observeWithProgress(
+    context: Context,
+    lifecycleOwner: LifecycleOwner,
+    observer: Observer<T>
+) {
     ProgressHelper.getInstance().showLoading(context)
     observe(lifecycleOwner, object : Observer<T> {
         override fun onChanged(t: T?) {
@@ -103,10 +121,10 @@ fun Context.startInstagram(username: String) {
         startActivity(i)
     } catch (e: ActivityNotFoundException) {
         startActivity(
-                Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("http://instagram.com/$username")
-                )
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("http://instagram.com/$username")
+            )
         )
     }
 }
@@ -114,17 +132,17 @@ fun Context.startInstagram(username: String) {
 fun Context.startTwitter(username: String) {
     try {
         startActivity(
-                Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("twitter://user?screen_name=$username")
-                )
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("twitter://user?screen_name=$username")
+            )
         )
     } catch (e: Exception) {
         startActivity(
-                Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://twitter.com/$username")
-                )
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://twitter.com/$username")
+            )
         )
     }
 }
@@ -144,19 +162,19 @@ fun Context.startFacebook(username: String) {
         startActivity(facebookIntent)
     } catch (e: java.lang.Exception) {
         startActivity(
-                Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://www.facebook.com/$username")
-                )
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://www.facebook.com/$username")
+            )
         )
     }
 
 }
 
 fun Fragment.requestPermissionWithRationale(
-        permission: String,
-        requestCode: Int,
-        snackbar: Snackbar
+    permission: String,
+    requestCode: Int,
+    snackbar: Snackbar
 ) {
     val provideRationale = shouldShowRequestPermissionRationale(permission)
 
@@ -168,9 +186,9 @@ fun Fragment.requestPermissionWithRationale(
 }
 
 fun Fragment.requestPermissionsWithRationale(
-        permissions: Array<String>,
-        requestCode: Int,
-        snackbar: Array<Snackbar>
+    permissions: Array<String>,
+    requestCode: Int,
+    snackbar: Array<Snackbar>
 ) {
     if (shouldShowRequestPermissionRationale(permissions[0])) {
         snackbar[0].show()

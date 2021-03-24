@@ -13,7 +13,7 @@ data class Conversation(
         val is_seen: Boolean,
         val type: ChatType,
         val text: String? = null,
-        val createDate: Date
+        val createDate: Long
 ) {
 
     override fun toString(): String {

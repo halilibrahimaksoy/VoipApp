@@ -1,10 +1,7 @@
 package com.haksoy.soip.data.chat
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface ConversationDao {
@@ -13,4 +10,7 @@ interface ConversationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addConversation(conversation: Conversation)
+
+    @Delete
+    fun removeConversation(conversation: Conversation)
 }

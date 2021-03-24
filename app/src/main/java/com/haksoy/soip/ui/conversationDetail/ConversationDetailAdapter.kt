@@ -64,7 +64,7 @@ class LeftViewHolder(
         this.chat = chat
         leftBinding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
-        cal.time = chat.createDate
+        cal.time = Date(chat.createDate)
         leftBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
 
 
@@ -90,7 +90,7 @@ class RightViewHolder(
         this.chat = chat
         rightBinding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
-        cal.time = chat.createDate
+        cal.time = Date(chat.createDate)
         rightBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
 
 

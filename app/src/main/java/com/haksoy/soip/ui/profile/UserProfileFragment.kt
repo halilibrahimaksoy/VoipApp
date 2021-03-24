@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
+import com.google.firebase.iid.FirebaseInstanceId
 import com.haksoy.soip.R
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentUserProfileBinding
@@ -300,6 +301,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.socialMedia.instagram = binding.txtInstagram2.text.toString()
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
         _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
-        _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN, "")
+        _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN,
+            FirebaseInstanceId.getInstance().token!!
+        )
     }
 }

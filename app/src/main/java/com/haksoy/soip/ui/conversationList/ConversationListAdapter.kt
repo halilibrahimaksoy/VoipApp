@@ -63,7 +63,7 @@ class ConversationListViewHolder(
         itemBinding.txtFullName.text = user.name
         itemBinding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
-        cal.time = chat.createDate
+        cal.time = Date(chat.createDate)
         itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
         Glide.with(itemBinding.root /* context */)
                 .load(user.profileImage)

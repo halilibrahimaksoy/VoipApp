@@ -36,7 +36,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
 
     private lateinit var binding: FragmentConversationDetailBinding
     private var adapter = ConversationDetailAdapter(this)
-    private lateinit var user: User
+
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
@@ -58,12 +58,13 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
     }
 
     private fun fillUserData() {
-        if (user.profileImage != null)
-            showProfileImage(user.profileImage!!)
-        binding.txtFullName.text = user.name
+        if (viewModel.user.profileImage != null)
+            showProfileImage(viewModel.user.profileImage!!)
+        binding.txtFullName.text = viewModel.user.name
 
-        viewModel.getConversationDetail(user.uid!!).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.getConversationDetail(viewModel.user.uid).observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             adapter.setItems(it as ArrayList<Chat>)
+            binding.recyclerView.scrollToPosition(0)
         })
     }
 
@@ -100,7 +101,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.get(Constants.ConversationDetailFragmentSelectedUser)?.let { user = it as User }
+        arguments?.get(Constants.ConversationDetailFragmentSelectedUser)?.let { viewModel.user = it as User }
     }
 
     override fun onClick(v: View) {
@@ -110,7 +111,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
             }
             R.id.imageView,
             R.id.txtFullName -> {
-                sharedViewModel.selectedUser.postValue(user)
+                sharedViewModel.selectedUser.postValue(viewModel.user)
             }
             R.id.btnBack -> {
                 activity?.onBackPressed()
@@ -120,7 +121,9 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener, Conversatio
 
     private fun sendChat() {
         if (validateForm()) {
-            viewModel.sendChat(Chat(UUID.randomUUID(), user.uid!!, ChatDirection.OutGoing, true, ChatType.TEXT, binding.txtMessage.text.toString(), null, Date(), null))
+            viewModel.sendChat(
+                binding.txtMessage.text.toString()
+            )
             binding.txtMessage.setText("")
         }
     }
