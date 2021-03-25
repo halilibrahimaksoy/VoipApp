@@ -55,7 +55,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             null
         )
 
-
+        if (!user.token.isNullOrEmpty())
         RetrofitService.getService().create(FirebaseAPIService::class.java).sendNotification(
             NotificationBody(
                 user.token.toString(),

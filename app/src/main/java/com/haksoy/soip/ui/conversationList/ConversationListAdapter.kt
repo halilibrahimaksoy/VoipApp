@@ -31,6 +31,10 @@ class ConversationListAdapter(private val listener: ConversationListItemClickLis
         this.items.putAll(items)
         notifyDataSetChanged()
     }
+    fun removeAt(position: Int) {
+        items.remove(items.keys.toList()[position])
+        notifyItemRemoved(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationListViewHolder {
         val binding: ConversationListItemBinding =
