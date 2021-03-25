@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.haksoy.soip.data.user.Location
@@ -60,6 +61,7 @@ class FirebaseDao {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 result.value = Resource.success(null)
+                updateToken()
             }
             .addOnFailureListener {
                 result.value = Resource.error(it.localizedMessage, it)
@@ -186,6 +188,17 @@ class FirebaseDao {
                     Log.i(TAG, "updateToken: failed")
                 }
             }
+    }
+    fun updateToken() {
+        val token = FirebaseInstanceId.getInstance().token!!
+        cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
+                .update("token", token).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.i(TAG, "updateToken: Successful  -> $token")
+                    } else {
+                        Log.i(TAG, "updateToken: failed")
+                    }
+                }
     }
 
     fun isAuthUserExist() = auth.currentUser != null

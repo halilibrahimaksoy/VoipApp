@@ -18,6 +18,10 @@ import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.database.UserRepository
+import com.haksoy.soip.data.notification.NotificationChat
+import com.haksoy.soip.data.notification.NotificationChatType
+import com.haksoy.soip.data.notification.NotificationData
+import com.haksoy.soip.data.notification.NotificationType
 import com.haksoy.soip.ui.splash.SplashActivity
 import com.haksoy.soip.utlis.*
 import kotlinx.coroutines.Dispatchers

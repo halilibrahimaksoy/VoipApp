@@ -8,6 +8,7 @@ import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
+import com.haksoy.soip.data.notification.*
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.notification.*
 import retrofit2.Call
@@ -57,21 +58,21 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
 
         if (!user.token.isNullOrEmpty())
         RetrofitService.getService().create(FirebaseAPIService::class.java).sendNotification(
-            NotificationBody(
-                user.token.toString(),
-                NotificationData(
-                    NotificationType.CHAT,
-                    NotificationChat(NotificationChatType.NEW, remoteChat)
+                NotificationBody(
+                        user.token.toString(),
+                        NotificationData(
+                                NotificationType.CHAT,
+                                NotificationChat(NotificationChatType.NEW, remoteChat)
+                        )
                 )
-            )
         ).enqueue(object : Callback<NotificationResponse> {
             override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
                 println("")
             }
 
             override fun onResponse(
-                call: Call<NotificationResponse>,
-                response: Response<NotificationResponse>
+                    call: Call<NotificationResponse>,
+                    response: Response<NotificationResponse>
             ) {
                 println("")
             }
