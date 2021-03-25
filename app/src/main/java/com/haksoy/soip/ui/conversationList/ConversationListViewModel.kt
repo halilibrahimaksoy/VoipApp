@@ -36,4 +36,8 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
         }
         return result
     }
+
+    fun removeConversationAtPosition( position:Int){
+        chatRepository.removeConversation(conversationWithUserLiveData.value!!.keys.toList()[position].uid)
+    }
 }

@@ -10,27 +10,14 @@ import com.haksoy.soip.data.chat.Conversation
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
 import java.util.*
-import kotlin.collections.LinkedHashMap
 
-class ConversationListAdapter(private val listener: ConversationListItemClickListener) :
+class ConversationListAdapter(private val listener: ConversationListItemClickListener, val items: LinkedHashMap<User, Conversation>) :
         RecyclerView.Adapter<ConversationListViewHolder>() {
 
     interface ConversationListItemClickListener {
         fun onClickedUser(user: User)
     }
 
-    private val items = LinkedHashMap<User, Conversation>()
-
-    fun setItems(items: LinkedHashMap<User, Conversation>) {
-        this.items.clear()
-        this.items.putAll(items)
-        notifyDataSetChanged()
-    }
-
-    fun addItems(items: LinkedHashMap<User, Conversation>) {
-        this.items.putAll(items)
-        notifyDataSetChanged()
-    }
     fun removeAt(position: Int) {
         items.remove(items.keys.toList()[position])
         notifyItemRemoved(position)

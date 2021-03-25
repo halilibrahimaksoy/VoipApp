@@ -16,4 +16,7 @@ interface ChatDao {
 
     @Delete
     fun removeChat(chatItem: Chat)
+
+    @Query("DELETE FROM chat_table WHERE userUid=(:userUid)")
+    fun removeChat(userUid: String)
 }

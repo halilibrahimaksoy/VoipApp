@@ -11,6 +11,6 @@ interface ConversationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addConversation(conversation: Conversation)
 
-    @Delete
-    fun removeConversation(conversation: Conversation)
+    @Query("DELETE FROM conversation_table WHERE userUid=(:userUid)")
+    fun removeConversation(userUid: String)
 }
