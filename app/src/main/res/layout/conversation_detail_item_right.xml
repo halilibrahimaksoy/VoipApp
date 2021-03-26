@@ -1,36 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
-        android:orientation="vertical"
-        android:background="#ddd"
-        android:gravity="end">
+        android:background="@color/conversation_detail_item_right_background">
 
-        <TextView
-            android:id="@+id/txtMessage"
+        <LinearLayout
+            android:id="@+id/lnrMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="350dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:text="MerhabMerhabaMerhabaMerhabaMerhabaMerhabaMerhabaMerhabaMerhabaa"
+                android:textColor="@color/conversation_detail_item_right_message"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="21:21"
+                android:textColor="@color/conversation_detail_item_right_date"
+                android:textSize="8sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtUnsend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingRight="10dp"
             android:paddingBottom="5dp"
-            android:text="Merhaba"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/txtDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="21:21"
-            android:textSize="8sp" />
-    </LinearLayout>
+            android:text="UNSEND"
+            android:textColor="@color/conversation_detail_item_right_message"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 
 </RelativeLayout>
