@@ -11,4 +11,5 @@
     <color name="conversation_detail_item_left_background">#ffffff</color>
     <color name="conversation_detail_item_left_message">#303030</color>
     <color name="conversation_detail_item_left_date">#c1c1c1</color>
+    <color name="delete_menu_background">#80FFFFFF</color>
 </resources>

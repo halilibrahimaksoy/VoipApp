@@ -20,6 +20,7 @@
             android:paddingLeft="10dp"
             android:paddingTop="5dp"
             android:paddingRight="10dp"
+            android:maxWidth="350dp"
             android:paddingBottom="5dp"
             android:text="Merhaba"
             android:textColor="@color/conversation_detail_item_left_message"

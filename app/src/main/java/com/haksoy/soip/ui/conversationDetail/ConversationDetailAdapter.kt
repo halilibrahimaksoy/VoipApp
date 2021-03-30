@@ -4,11 +4,13 @@ import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.databinding.ConversationDetailItemLeftBinding
 import com.haksoy.soip.databinding.ConversationDetailItemRightBinding
+import com.haksoy.soip.utlis.SwipeToDeleteCallback
 import java.util.*
 
 class ConversationDetailAdapter(private val listener: ConversationDetailItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -24,6 +26,10 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
         fun onClickChat(chat: Chat)
     }
 
+    fun removeAt(position: Int) {
+        items.remove(items[position])
+        notifyItemRemoved(position)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             1 -> return RightViewHolder(
@@ -76,23 +82,22 @@ class LeftViewHolder(
 }
 
 class RightViewHolder(
-        private val rightBinding: ConversationDetailItemRightBinding,
+        private val binding: ConversationDetailItemRightBinding,
         private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
-) : RecyclerView.ViewHolder(rightBinding.root),
+) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
 
     init {
-        rightBinding.root.setOnClickListener(this)
+        binding.root.setOnClickListener(this)
     }
 
     private lateinit var chat: Chat
     fun bind(chat: Chat) {
         this.chat = chat
-        rightBinding.txtMessage.text = chat.text.toString()
+        binding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
         cal.time = Date(chat.createDate)
-        rightBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
-
+        binding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
 
     }
 

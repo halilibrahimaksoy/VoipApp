@@ -8,12 +8,8 @@ import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
-import com.haksoy.soip.data.notification.*
+import com.haksoy.soip.data.notification.NotificationRepository
 import com.haksoy.soip.data.user.User
-import com.haksoy.soip.notification.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -23,10 +19,15 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
         application.applicationContext,
         Executors.newSingleThreadExecutor()
     )
+    private val notificationRepository = NotificationRepository.getInstance(
+        Executors.newSingleThreadExecutor()
+    )
 
     lateinit var user: User
-    fun getConversationDetail(uid: String): LiveData<List<Chat>> =
-        chatRepository.getConversationDetails(uid)
+    lateinit var conversationDetailList: LiveData<List<Chat>>
+    fun getConversationDetail(uid: String) {
+        conversationDetailList = chatRepository.getConversationDetails(uid)
+    }
 
 
     fun sendChat(message: String) {
@@ -57,26 +58,21 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
         )
 
         if (!user.token.isNullOrEmpty())
-        RetrofitService.getService().create(FirebaseAPIService::class.java).sendNotification(
-                NotificationBody(
-                        user.token.toString(),
-                        NotificationData(
-                                NotificationType.CHAT,
-                                NotificationChat(NotificationChatType.NEW, remoteChat)
-                        )
-                )
-        ).enqueue(object : Callback<NotificationResponse> {
-            override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
-                println("")
-            }
+            notificationRepository.sendChat(user.token.toString(), remoteChat)
+    }
 
-            override fun onResponse(
-                    call: Call<NotificationResponse>,
-                    response: Response<NotificationResponse>
-            ) {
-                println("")
-            }
 
-        })
+    fun removeChatAtPosition(position: Int) {
+        chatRepository.removeChat(conversationDetailList.value!![position])
+    }
+
+    fun getChatDirection(position: Int): ChatDirection =
+        conversationDetailList.value!![position].direction
+
+    fun sendRemoveRequestAtPosition(position: Int) {
+        notificationRepository.removeChat(
+            user.token.toString(),
+            conversationDetailList.value!![position]
+        )
     }
 }
