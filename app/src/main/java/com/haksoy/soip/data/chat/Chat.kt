@@ -7,7 +7,7 @@ import java.util.*
 
 @Entity(tableName = Constants.CHAT_TABLE)
 data class Chat(
-    @PrimaryKey val uid: UUID = UUID.randomUUID(),
+    @PrimaryKey val uid: String = UUID.randomUUID().toString(),
     val userUid: String,
     val direction: ChatDirection,
     val is_seen: Boolean,

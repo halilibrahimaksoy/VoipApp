@@ -41,7 +41,6 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
                 android:layout_toEndOf="@id/imageView"
-                android:text="Halil İbrahim Aksoy"
                 android:textColor="@android:color/white"
                 android:textSize="18sp" />
         </RelativeLayout>

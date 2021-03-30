@@ -57,6 +57,7 @@ class ChatRepository private constructor(
     fun removeChat(chatItem: Chat) {
         executor.execute {
             chatDao.removeChat(chatItem)
+            conversationDao.removeChat(chatItem.uid)
         }
     }
 

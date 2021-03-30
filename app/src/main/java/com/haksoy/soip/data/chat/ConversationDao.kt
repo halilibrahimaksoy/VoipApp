@@ -13,4 +13,7 @@ interface ConversationDao {
 
     @Query("DELETE FROM conversation_table WHERE userUid=(:userUid)")
     fun removeConversation(userUid: String)
+
+    @Query("UPDATE conversation_table SET text = null WHERE chatUid=(:chatUid)")
+    fun removeChat(chatUid: String)
 }

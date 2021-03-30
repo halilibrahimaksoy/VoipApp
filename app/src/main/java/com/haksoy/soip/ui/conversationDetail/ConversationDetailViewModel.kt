@@ -33,7 +33,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     fun sendChat(message: String) {
 
         val localChat = Chat(
-            UUID.randomUUID(),
+            UUID.randomUUID().toString(),
             user.uid,
             ChatDirection.OutGoing,
             true,

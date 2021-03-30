@@ -52,7 +52,8 @@ class ConversationListViewHolder(
     fun bind(user: User, chat: Conversation) {
         this.user = user
         itemBinding.txtFullName.text = user.name
-        itemBinding.txtMessage.text = chat.text.toString()
+        if (chat.text != null)
+            itemBinding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
         cal.time = Date(chat.createDate)
         itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)

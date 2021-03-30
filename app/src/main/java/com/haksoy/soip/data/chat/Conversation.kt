@@ -7,13 +7,13 @@ import java.util.*
 
 @Entity(tableName = Constants.CONVERSATION_TABLE)
 data class Conversation(
-        val uid: UUID = UUID.randomUUID(),
-        @PrimaryKey val userUid: String,
-        val direction: ChatDirection,
-        val is_seen: Boolean,
-        val type: ChatType,
-        val text: String? = null,
-        val createDate: Long
+    val chatUid: String = UUID.randomUUID().toString(),
+    @PrimaryKey val userUid: String,
+    val direction: ChatDirection,
+    val is_seen: Boolean,
+    val type: ChatType,
+    val text: String? = null,
+    val createDate: Long
 ) {
 
     override fun toString(): String {
