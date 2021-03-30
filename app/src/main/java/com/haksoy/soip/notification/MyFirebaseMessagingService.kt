@@ -22,6 +22,7 @@ import com.haksoy.soip.data.notification.NotificationChat
 import com.haksoy.soip.data.notification.NotificationChatType
 import com.haksoy.soip.data.notification.NotificationData
 import com.haksoy.soip.data.notification.NotificationType
+import com.haksoy.soip.ui.main.MainActivity
 import com.haksoy.soip.ui.splash.SplashActivity
 import com.haksoy.soip.utlis.*
 import kotlinx.coroutines.Dispatchers
@@ -74,9 +75,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             if (!isAppInForeground()) {
                 userRepository.getUser(incomingChat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
-                        sendNotification(
+                        NotificationHelper.getInstance(this@MyFirebaseMessagingService).sendNotification(
                             incomingChat.uid.hashCode(),
-                            it.data!!.name!!,
+                            it.data!!.uid,
+                            it.data.name!!,
                             incomingChat.text!!
                         )
                     }
@@ -114,41 +116,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         MainApplication.instance.applicationContext,
         Executors.newSingleThreadExecutor()
     )
-
-    private fun sendNotification(id: Int, messageTitle: String, messageBody: String) {
-        val intent = Intent(this, SplashActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT
-        )
-
-        val channelId = getString(R.string.default_notification_channel_id)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher)
-            .setContentTitle(messageTitle)
-            .setContentText(messageBody)
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri)
-            .setVibrate(longArrayOf(300))
-            .setContentIntent(pendingIntent)
-
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        notificationManager.notify(id/* ID of notification */, notificationBuilder.build())
-    }
 
     private fun removeNotification(id: Int) {
         val notificationManager =

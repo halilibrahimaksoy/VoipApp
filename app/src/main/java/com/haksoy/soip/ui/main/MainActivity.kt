@@ -52,6 +52,12 @@ class MainActivity : AppCompatActivity() {
 
             showUserDetailFragment(it)
         })
+        intent.getStringExtra(Constants.ConversationDetailFragmentSelectedUser)?.let {
+            viewModel.getUser(it).observeOnce {
+                sharedViewModel.conversationDetailWithUser.postValue(it.data)
+            }
+        }
+
         sharedViewModel.conversationDetailWithUser.observe(this, Observer {
             showConversationDetailFragment(it)
         })

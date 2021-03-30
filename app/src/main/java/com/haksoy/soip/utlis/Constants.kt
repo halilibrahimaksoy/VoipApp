@@ -20,6 +20,7 @@ object Constants {
     const val ConversationDetailFragmentTag = "ConversationDetailFragmentTag"
     const val NearlyUserList = "NearlyUserList"
     const val SelectedUserUid = "SelectedUserUid"
+    const val NotificationChannelID="Soip App Notification Channel"
 
 
     const val REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 34
