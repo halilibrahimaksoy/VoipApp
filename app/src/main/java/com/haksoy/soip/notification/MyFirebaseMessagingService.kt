@@ -1,19 +1,13 @@
 package com.haksoy.soip.notification
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
-import android.os.Build
-import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
 import com.haksoy.soip.MainApplication
-import com.haksoy.soip.R
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.database.ChatRepository
@@ -22,8 +16,6 @@ import com.haksoy.soip.data.notification.NotificationChat
 import com.haksoy.soip.data.notification.NotificationChatType
 import com.haksoy.soip.data.notification.NotificationData
 import com.haksoy.soip.data.notification.NotificationType
-import com.haksoy.soip.ui.main.MainActivity
-import com.haksoy.soip.ui.splash.SplashActivity
 import com.haksoy.soip.utlis.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -75,12 +67,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             if (!isAppInForeground()) {
                 userRepository.getUser(incomingChat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
-                        NotificationHelper.getInstance(this@MyFirebaseMessagingService).sendNotification(
-                            incomingChat.uid.hashCode(),
-                            it.data!!.uid,
-                            it.data.name!!,
-                            incomingChat.text!!
-                        )
+                        NotificationHelper.getInstance(this@MyFirebaseMessagingService)
+                            .sendNotification(
+                                incomingChat.uid.hashCode(),
+                                it.data!!.uid,
+                                it.data.name!!,
+                                incomingChat.text!!
+                            )
                     }
                 }
 
