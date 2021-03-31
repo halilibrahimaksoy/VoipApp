@@ -1,7 +1,10 @@
 package com.haksoy.soip.data.chat
 
 import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface ConversationDao {
@@ -16,4 +19,7 @@ interface ConversationDao {
 
     @Query("UPDATE conversation_table SET text = null WHERE chatUid=(:chatUid)")
     fun removeChat(chatUid: String)
+
+    @Query("UPDATE conversation_table SET is_seen=1 WHERE userUid=(:userUid)")
+    fun marAsRead(userUid: String)
 }

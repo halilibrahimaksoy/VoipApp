@@ -11,6 +11,7 @@ data class Conversation(
     @PrimaryKey val userUid: String,
     val direction: ChatDirection,
     val is_seen: Boolean,
+    var unread_message_count: Int,
     val type: ChatType,
     val text: String? = null,
     val createDate: Long

@@ -18,7 +18,7 @@ import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.SwipeToDeleteCallback
 
 class ConversationListFragment : Fragment(),
-        ConversationListAdapter.ConversationListItemClickListener {
+    ConversationListAdapter.ConversationListItemClickListener {
 
     private lateinit var binding: FragmentConversationListBinding
     private lateinit var adapter: ConversationListAdapter
@@ -30,8 +30,8 @@ class ConversationListFragment : Fragment(),
     private val viewModel: ConversationListViewModel by viewModels()
     private val sharedViewModel: SharedViewModel by activityViewModels()
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentConversationListBinding.inflate(inflater, container, false)
         setupViewPager()
@@ -45,8 +45,13 @@ class ConversationListFragment : Fragment(),
     private fun setupViewPager() {
         binding.chatRecyclerView.setHasFixedSize(true)
         binding.chatRecyclerView.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        binding.chatRecyclerView.addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.chatRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                this.context,
+                DividerItemDecoration.VERTICAL
+            )
+        )
         val swipeHandler = object : SwipeToDeleteCallback() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.removeConversationAtPosition(viewHolder.adapterPosition)
@@ -58,6 +63,7 @@ class ConversationListFragment : Fragment(),
     }
 
     override fun onClickedUser(user: User) {
+        viewModel.markAsReadConversation(user.uid)
         sharedViewModel.conversationDetailWithUser.postValue(user)
     }
 

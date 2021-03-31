@@ -34,6 +34,9 @@ class ChatRepository private constructor(
 
     fun getConversationList(): LiveData<List<Conversation>> = conversationDao.getConversationList()
 
+    fun getUnreadMessageCount(userUid: String): LiveData<Int> =
+        chatDao.getUnreadMessageCount(userUid)
+
     fun getConversationDetails(uid: String): LiveData<List<Chat>> =
         chatDao.getConversationDetails(uid)
 
@@ -46,6 +49,7 @@ class ChatRepository private constructor(
                     chatItem.userUid,
                     chatItem.direction,
                     chatItem.is_seen,
+                    0,
                     chatItem.type,
                     chatItem.text,
                     chatItem.createDate
@@ -65,6 +69,13 @@ class ChatRepository private constructor(
         executor.execute {
             chatDao.removeConversation(userUid)
             conversationDao.removeConversation(userUid)
+        }
+    }
+
+    fun marAsRead(userUid: String) {
+        executor.execute {
+            chatDao.marAsRead(userUid)
+            conversationDao.marAsRead(userUid)
         }
     }
 }

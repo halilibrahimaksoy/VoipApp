@@ -13,12 +13,12 @@ import java.util.concurrent.Executors
 
 class ConversationListViewModel(application: Application) : AndroidViewModel(application) {
     private val chatRepository = ChatRepository.getInstance(
-            application.applicationContext,
-            Executors.newSingleThreadExecutor()
+        application.applicationContext,
+        Executors.newSingleThreadExecutor()
     )
     private val userRepository = UserRepository.getInstance(
-            application.applicationContext,
-            Executors.newSingleThreadExecutor()
+        application.applicationContext,
+        Executors.newSingleThreadExecutor()
     )
     val conversationWithUserLiveData = getConversationList()
 
@@ -28,6 +28,10 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
         chatRepository.getConversationList().observeForever { conversations ->
             conversationsWithUser.clear()
             for (chat in conversations) {
+                if (!chat.is_seen)
+                    chatRepository.getUnreadMessageCount(chat.userUid).observeOnce {
+                        chat.unread_message_count = it
+                    }
                 userRepository.getUser(chat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
                         conversationsWithUser[it.data as User] = chat
@@ -42,4 +46,6 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
     fun removeConversationAtPosition(position: Int) {
         chatRepository.removeConversation(conversationWithUserLiveData.value!!.keys.toList()[position].uid)
     }
+
+    fun markAsReadConversation(userUid: String) = chatRepository.marAsRead(userUid)
 }

@@ -29,7 +29,6 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
         conversationDetailList = chatRepository.getConversationDetails(uid)
     }
 
-
     fun sendChat(message: String) {
 
         val localChat = Chat(
@@ -60,7 +59,6 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
         if (!user.token.isNullOrEmpty())
             notificationRepository.sendChat(user.token.toString(), remoteChat)
     }
-
 
     fun removeChatAtPosition(position: Int) {
         chatRepository.removeChat(conversationDetailList.value!![position])

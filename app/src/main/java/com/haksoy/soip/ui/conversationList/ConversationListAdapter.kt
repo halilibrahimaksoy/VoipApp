@@ -11,8 +11,11 @@ import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
 import java.util.*
 
-class ConversationListAdapter(private val listener: ConversationListItemClickListener, val items: LinkedHashMap<User, Conversation>) :
-        RecyclerView.Adapter<ConversationListViewHolder>() {
+class ConversationListAdapter(
+    private val listener: ConversationListItemClickListener,
+    val items: LinkedHashMap<User, Conversation>
+) :
+    RecyclerView.Adapter<ConversationListViewHolder>() {
 
     interface ConversationListItemClickListener {
         fun onClickedUser(user: User)
@@ -25,7 +28,7 @@ class ConversationListAdapter(private val listener: ConversationListItemClickLis
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationListViewHolder {
         val binding: ConversationListItemBinding =
-                ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ConversationListViewHolder(binding, listener)
     }
 
@@ -38,10 +41,10 @@ class ConversationListAdapter(private val listener: ConversationListItemClickLis
 }
 
 class ConversationListViewHolder(
-        private val itemBinding: ConversationListItemBinding,
-        private val listener: ConversationListAdapter.ConversationListItemClickListener
+    private val itemBinding: ConversationListItemBinding,
+    private val listener: ConversationListAdapter.ConversationListItemClickListener
 ) : RecyclerView.ViewHolder(itemBinding.root),
-        View.OnClickListener {
+    View.OnClickListener {
 
     private lateinit var user: User
 
@@ -54,13 +57,18 @@ class ConversationListViewHolder(
         itemBinding.txtFullName.text = user.name
         if (chat.text != null)
             itemBinding.txtMessage.text = chat.text.toString()
+
+        if (!chat.is_seen) {
+            itemBinding.txtUnreadMessageCount.visibility = View.VISIBLE
+            itemBinding.txtUnreadMessageCount.text = chat.unread_message_count.toString()
+        }
         val cal = Calendar.getInstance()
         cal.time = Date(chat.createDate)
         itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
         Glide.with(itemBinding.root /* context */)
-                .load(user.profileImage)
-                .circleCrop()
-                .into(itemBinding.imageView)
+            .load(user.profileImage)
+            .circleCrop()
+            .into(itemBinding.imageView)
 
     }
 
