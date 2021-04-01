@@ -8,8 +8,8 @@ import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
-import com.haksoy.soip.data.notification.NotificationRepository
 import com.haksoy.soip.data.user.User
+import com.haksoy.soip.notification.NotificationRepository
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -72,5 +72,9 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             user.token.toString(),
             conversationDetailList.value!![position]
         )
+    }
+
+    fun markAsRead(){
+        chatRepository.marAsRead(user.uid)
     }
 }

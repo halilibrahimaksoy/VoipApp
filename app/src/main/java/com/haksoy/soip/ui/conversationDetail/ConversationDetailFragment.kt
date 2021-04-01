@@ -73,6 +73,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         viewModel.conversationDetailList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             adapter.setItems(it as ArrayList<Chat>)
             binding.recyclerView.scrollToPosition(0)
+            viewModel.markAsRead()
         })
     }
 

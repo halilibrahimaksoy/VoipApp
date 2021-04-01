@@ -58,7 +58,7 @@ class ConversationListViewHolder(
         if (chat.text != null)
             itemBinding.txtMessage.text = chat.text.toString()
 
-        if (!chat.is_seen) {
+        if (!chat.is_seen && chat.unread_message_count > 0) {
             itemBinding.txtUnreadMessageCount.visibility = View.VISIBLE
             itemBinding.txtUnreadMessageCount.text = chat.unread_message_count.toString()
         }

@@ -4,16 +4,15 @@ import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.databinding.ConversationDetailItemLeftBinding
 import com.haksoy.soip.databinding.ConversationDetailItemRightBinding
-import com.haksoy.soip.utlis.SwipeToDeleteCallback
 import java.util.*
 
-class ConversationDetailAdapter(private val listener: ConversationDetailItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ConversationDetailAdapter(private val listener: ConversationDetailItemClickListener) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val items = ArrayList<Chat>()
 
     fun setItems(items: ArrayList<Chat>) {
@@ -33,12 +32,27 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
             1 -> return RightViewHolder(
-                    ConversationDetailItemRightBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+                ConversationDetailItemRightBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ), listener
+            )
             0 -> return LeftViewHolder(
-                    ConversationDetailItemLeftBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+                ConversationDetailItemLeftBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                ), listener
+            )
         }
         return LeftViewHolder(
-                ConversationDetailItemLeftBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+            ConversationDetailItemLeftBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ), listener
+        )
     }
 
     override fun getItemCount(): Int = items.size
@@ -46,6 +60,7 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
     override fun getItemViewType(position: Int): Int {
         return items[position].direction.ordinal
     }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (items[position].direction == ChatDirection.InComing)
             (holder as LeftViewHolder).bind(items[position])
@@ -56,10 +71,10 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
 }
 
 class LeftViewHolder(
-        private val leftBinding: ConversationDetailItemLeftBinding,
-        private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
+    private val leftBinding: ConversationDetailItemLeftBinding,
+    private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
 ) : RecyclerView.ViewHolder(leftBinding.root),
-        View.OnClickListener {
+    View.OnClickListener {
 
     init {
         leftBinding.root.setOnClickListener(this)
@@ -82,10 +97,10 @@ class LeftViewHolder(
 }
 
 class RightViewHolder(
-        private val binding: ConversationDetailItemRightBinding,
-        private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
+    private val binding: ConversationDetailItemRightBinding,
+    private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
 ) : RecyclerView.ViewHolder(binding.root),
-        View.OnClickListener {
+    View.OnClickListener {
 
     init {
         binding.root.setOnClickListener(this)

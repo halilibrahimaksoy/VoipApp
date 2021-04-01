@@ -47,5 +47,8 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
         chatRepository.removeConversation(conversationWithUserLiveData.value!!.keys.toList()[position].uid)
     }
 
-    fun markAsReadConversation(userUid: String) = chatRepository.marAsRead(userUid)
+    fun markAsReadConversation(user: User) {
+        if (!conversationWithUserLiveData.value!![user]!!.is_seen)
+            chatRepository.marAsRead(user.uid)
+    }
 }

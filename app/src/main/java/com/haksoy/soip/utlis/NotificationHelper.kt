@@ -45,7 +45,7 @@ class NotificationHelper(private val context: Context) {
             .setContentText(messageText)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-            .setVibrate(longArrayOf(300))
+            .setVibrate(longArrayOf(300,300))
             .setContentIntent(pendingIntent)
 
         val notificationManager =

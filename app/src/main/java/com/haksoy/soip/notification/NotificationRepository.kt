@@ -1,8 +1,7 @@
-package com.haksoy.soip.data.notification
+package com.haksoy.soip.notification
 
 import com.haksoy.soip.data.chat.Chat
-import com.haksoy.soip.notification.FirebaseAPIService
-import com.haksoy.soip.notification.RetrofitService
+import com.haksoy.soip.data.notification.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +32,10 @@ class NotificationRepository(private val executor: ExecutorService) {
                 to,
                 NotificationData(
                     NotificationType.CHAT,
-                    NotificationChat(NotificationChatType.NEW, remoteChat)
+                    NotificationChat(
+                        NotificationChatType.NEW,
+                        remoteChat
+                    )
                 )
             )
         ).enqueue(object : Callback<NotificationResponse> {
@@ -57,7 +59,10 @@ class NotificationRepository(private val executor: ExecutorService) {
                 to,
                 NotificationData(
                     NotificationType.CHAT,
-                    NotificationChat(NotificationChatType.DELETE, remoteChat)
+                    NotificationChat(
+                        NotificationChatType.DELETE,
+                        remoteChat
+                    )
                 )
             )
         ).enqueue(object : Callback<NotificationResponse> {
