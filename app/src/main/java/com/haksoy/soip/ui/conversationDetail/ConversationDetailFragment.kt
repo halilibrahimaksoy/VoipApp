@@ -24,6 +24,7 @@ import com.haksoy.soip.databinding.ConversationDetailDeteleMenuBinding
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.Constants
+import com.haksoy.soip.utlis.NotificationHelper
 import com.haksoy.soip.utlis.SwipeToDeleteCallback
 import java.util.*
 
@@ -64,6 +65,10 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        context?.let { NotificationHelper.getInstance(it).removeNotification(viewModel.user.uid) }
+    }
     private fun fillUserData() {
         if (viewModel.user.profileImage != null)
             showProfileImage(viewModel.user.profileImage!!)

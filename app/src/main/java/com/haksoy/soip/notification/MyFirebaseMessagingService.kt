@@ -1,7 +1,5 @@
 package com.haksoy.soip.notification
 
-import android.app.NotificationManager
-import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -56,7 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private fun handleRemoveChat(notificationChat: NotificationChat) {
         val incomingChat: Chat = notificationChat.chat
         chatRepository.removeChat(incomingChat)
-        removeNotification(incomingChat.uid.hashCode())
+        NotificationHelper.getInstance(this).removeNotification(incomingChat.userUid)
     }
 
     private fun handleNewChat(notificationChat: NotificationChat) {
@@ -69,7 +67,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     if (it.status == Resource.Status.SUCCESS) {
                         NotificationHelper.getInstance(this@MyFirebaseMessagingService)
                             .sendNotification(
-                                incomingChat.uid.hashCode(),
                                 it.data!!.uid,
                                 it.data.name!!,
                                 incomingChat.text!!
@@ -109,12 +106,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         MainApplication.instance.applicationContext,
         Executors.newSingleThreadExecutor()
     )
-
-    private fun removeNotification(id: Int) {
-        val notificationManager =
-            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(id)
-    }
 
     companion object {
 

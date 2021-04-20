@@ -23,6 +23,9 @@ interface ChatDao {
     @Query("SELECT count(*) FROM chat_table WHERE userUid=(:userUid) and is_seen=0")
     fun getUnreadMessageCount(userUid: String): LiveData<Int>
 
+    @Query("SELECT * FROM chat_table WHERE userUid=(:userUid) and is_seen=0 ORDER BY createDate ASC")
+    fun getUnreadConversation(userUid: String): LiveData<List<Chat>>
+
     @Query("UPDATE chat_table SET is_seen=1 WHERE userUid=(:userUid) and is_seen=0")
     fun marAsRead(userUid: String)
 }

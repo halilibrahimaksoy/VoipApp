@@ -40,6 +40,10 @@ class ChatRepository private constructor(
     fun getConversationDetails(uid: String): LiveData<List<Chat>> =
         chatDao.getConversationDetails(uid)
 
+
+    fun getUnreadConversation(uid: String): LiveData<List<Chat>> =
+        chatDao.getUnreadConversation(uid)
+
     fun addChat(chatItem: Chat) {
         executor.execute {
             chatDao.addChat(chatItem)

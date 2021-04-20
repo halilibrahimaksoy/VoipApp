@@ -197,6 +197,7 @@ class MapsFragment : Fragment() {
     private fun moveToCurrentLocation(it: GoogleMap) {
         context?.let { it1 ->
             LocationServices.getFusedLocationProviderClient(it1).lastLocation.addOnSuccessListener { location ->
+                if(location!=null)
                 it.animateCamera(
                         CameraUpdateFactory.newLatLngZoom(
                                 LatLng(
