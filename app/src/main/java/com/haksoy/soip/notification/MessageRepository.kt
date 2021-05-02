@@ -7,16 +7,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.ExecutorService
 
-class NotificationRepository(private val executor: ExecutorService) {
+class MessageRepository(private val executor: ExecutorService) {
     companion object {
         @Volatile
-        private var INSTANCE: NotificationRepository? = null
+        private var INSTANCE: MessageRepository? = null
 
-        fun getInstance(executor: ExecutorService): NotificationRepository {
+        fun getInstance(executor: ExecutorService): MessageRepository {
             return INSTANCE
                 ?: synchronized(this) {
                     INSTANCE
-                        ?: NotificationRepository(
+                        ?: MessageRepository(
                             executor
                         )
                             .also { INSTANCE = it }
@@ -28,24 +28,24 @@ class NotificationRepository(private val executor: ExecutorService) {
 
     fun sendChat(to: String, remoteChat: Chat) {
         firebaseAPIService.create(FirebaseAPIService::class.java).sendNotification(
-            NotificationBody(
+            MessageBody(
                 to,
-                NotificationData(
-                    NotificationType.CHAT,
-                    NotificationChat(
-                        NotificationChatType.NEW,
+                MessageData(
+                    EventType.CHAT,
+                    MessageChat(
+                        ChatEventType.NEW,
                         remoteChat
                     )
                 )
             )
-        ).enqueue(object : Callback<NotificationResponse> {
-            override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+        ).enqueue(object : Callback<MessageResponse> {
+            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
                 println("")
             }
 
             override fun onResponse(
-                call: Call<NotificationResponse>,
-                response: Response<NotificationResponse>
+                    call: Call<MessageResponse>,
+                    response: Response<MessageResponse>
             ) {
                 println("")
             }
@@ -55,24 +55,24 @@ class NotificationRepository(private val executor: ExecutorService) {
 
     fun removeChat(to: String, remoteChat: Chat) {
         firebaseAPIService.create(FirebaseAPIService::class.java).sendNotification(
-            NotificationBody(
+            MessageBody(
                 to,
-                NotificationData(
-                    NotificationType.CHAT,
-                    NotificationChat(
-                        NotificationChatType.DELETE,
+                MessageData(
+                    EventType.CHAT,
+                    MessageChat(
+                        ChatEventType.DELETE,
                         remoteChat
                     )
                 )
             )
-        ).enqueue(object : Callback<NotificationResponse> {
-            override fun onFailure(call: Call<NotificationResponse>, t: Throwable) {
+        ).enqueue(object : Callback<MessageResponse> {
+            override fun onFailure(call: Call<MessageResponse>, t: Throwable) {
                 println("")
             }
 
             override fun onResponse(
-                call: Call<NotificationResponse>,
-                response: Response<NotificationResponse>
+                    call: Call<MessageResponse>,
+                    response: Response<MessageResponse>
             ) {
                 println("")
             }

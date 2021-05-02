@@ -10,10 +10,10 @@ import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.database.UserRepository
-import com.haksoy.soip.data.notification.NotificationChat
-import com.haksoy.soip.data.notification.NotificationChatType
-import com.haksoy.soip.data.notification.NotificationData
-import com.haksoy.soip.data.notification.NotificationType
+import com.haksoy.soip.data.notification.ChatEventType
+import com.haksoy.soip.data.notification.EventType
+import com.haksoy.soip.data.notification.MessageChat
+import com.haksoy.soip.data.notification.MessageData
 import com.haksoy.soip.utlis.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -24,41 +24,41 @@ import java.util.concurrent.Executors
 class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
-        val notificationData = Gson().fromJson<NotificationData>(
+        val notificationData = Gson().fromJson<MessageData>(
             p0.data.toString(),
-            NotificationData::class.java
+            MessageData::class.java
         )
-        when (notificationData.notificationType) {
-            NotificationType.CHAT -> {
+        when (notificationData.event) {
+            EventType.CHAT -> {
                 handleChatNotificationData(notificationData)
             }
         }
 
     }
 
-    private fun handleChatNotificationData(notificationData: NotificationData) {
-        val notificationChat = Gson().fromJson<NotificationChat>(
-            notificationData.content.toString(),
-            NotificationChat::class.java
+    private fun handleChatNotificationData(messageData: MessageData) {
+        val notificationChat = Gson().fromJson<MessageChat>(
+            messageData.content.toString(),
+            MessageChat::class.java
         )
-        when (notificationChat.chatType) {
-            NotificationChatType.NEW -> {
+        when (notificationChat.chatEventType) {
+            ChatEventType.NEW -> {
                 handleNewChat(notificationChat)
             }
-            NotificationChatType.DELETE -> {
+            ChatEventType.DELETE -> {
                 handleRemoveChat(notificationChat)
             }
         }
     }
 
-    private fun handleRemoveChat(notificationChat: NotificationChat) {
-        val incomingChat: Chat = notificationChat.chat
+    private fun handleRemoveChat(messageChat: MessageChat) {
+        val incomingChat: Chat = messageChat.chat
         chatRepository.removeChat(incomingChat)
         NotificationHelper.getInstance(this).removeNotification(incomingChat.userUid)
     }
 
-    private fun handleNewChat(notificationChat: NotificationChat) {
-        val incomingChat: Chat = notificationChat.chat
+    private fun handleNewChat(messageChat: MessageChat) {
+        val incomingChat: Chat = messageChat.chat
         chatRepository.addChat(incomingChat)
 
         GlobalScope.launch(Dispatchers.Main) {
