@@ -31,7 +31,7 @@ class MessageRepository(private val executor: ExecutorService) {
             MessageBody(
                 to,
                 MessageData(
-                    EventType.CHAT,
+                    MessageEventType.CHAT,
                     MessageChat(
                         ChatEventType.NEW,
                         remoteChat
@@ -58,7 +58,7 @@ class MessageRepository(private val executor: ExecutorService) {
             MessageBody(
                 to,
                 MessageData(
-                    EventType.CHAT,
+                    MessageEventType.CHAT,
                     MessageChat(
                         ChatEventType.DELETE,
                         remoteChat

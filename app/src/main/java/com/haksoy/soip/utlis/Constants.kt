@@ -59,4 +59,22 @@ object Constants {
     const val CHAT_TABLE="chat_table"
     const val CONVERSATION_TABLE="conversation_table"
     const val USER_TABLE="user_table"
+
+
+
+
+    //DB_CONSTANTS
+    const val MESSAGE_EVENT_TYPE = "messageEventType"
+    const val CHAT_EVENT_TYPE = "chatEventType"
+    const val CONTENT = "content"
+    const val CHAT = "chat"
+    const val UID = "uid"
+    const val USER_UID = "userUid"
+    const val DIRECTION = "direction"
+    const val IS_SEEN = "is_seen"
+    const val TYPE = "type"
+    const val TEXT = "text"
+    const val CONTENT_URL = "contentUrl"
+    const val CREATE_DATE = "createDate"
+    const val UPDATE_DATE = "updateDate"
 }
