@@ -1,4 +1,4 @@
-package com.haksoy.soip.notification
+package com.haksoy.soip.messaging
 
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.notification.*

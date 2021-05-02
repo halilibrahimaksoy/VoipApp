@@ -1,4 +1,4 @@
-package com.haksoy.soip.notification
+package com.haksoy.soip.messaging
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

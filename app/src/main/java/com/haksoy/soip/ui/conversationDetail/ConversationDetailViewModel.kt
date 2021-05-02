@@ -9,7 +9,7 @@ import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.user.User
-import com.haksoy.soip.notification.MessageRepository
+import com.haksoy.soip.messaging.MessageRepository
 import java.util.*
 import java.util.concurrent.Executors
 

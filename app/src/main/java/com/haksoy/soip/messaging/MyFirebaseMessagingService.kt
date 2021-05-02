@@ -1,4 +1,4 @@
-package com.haksoy.soip.notification
+package com.haksoy.soip.messaging
 
 import android.media.RingtoneManager
 import android.net.Uri

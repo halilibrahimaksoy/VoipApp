@@ -1,4 +1,4 @@
-package com.haksoy.soip.notification
+package com.haksoy.soip.messaging
 
 import com.haksoy.soip.data.notification.MessageBody
 import com.haksoy.soip.data.notification.MessageResponse
