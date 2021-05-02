@@ -10,10 +10,10 @@ import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.database.UserRepository
-import com.haksoy.soip.data.notification.ChatEventType
-import com.haksoy.soip.data.notification.EventType
-import com.haksoy.soip.data.notification.MessageChat
-import com.haksoy.soip.data.notification.MessageData
+import com.haksoy.soip.data.message.ChatEventType
+import com.haksoy.soip.data.message.EventType
+import com.haksoy.soip.data.message.MessageChat
+import com.haksoy.soip.data.message.MessageData
 import com.haksoy.soip.utlis.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

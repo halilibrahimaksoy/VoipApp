@@ -1,7 +1,7 @@
 package com.haksoy.soip.messaging
 
 import com.haksoy.soip.data.chat.Chat
-import com.haksoy.soip.data.notification.*
+import com.haksoy.soip.data.message.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

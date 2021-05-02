@@ -1,4 +1,4 @@
-package com.haksoy.soip.data.notification
+package com.haksoy.soip.data.message
 
 data class MessageData(val event: EventType, val content: Any) {
 }

@@ -1,7 +1,7 @@
 package com.haksoy.soip.messaging
 
-import com.haksoy.soip.data.notification.MessageBody
-import com.haksoy.soip.data.notification.MessageResponse
+import com.haksoy.soip.data.message.MessageBody
+import com.haksoy.soip.data.message.MessageResponse
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers
