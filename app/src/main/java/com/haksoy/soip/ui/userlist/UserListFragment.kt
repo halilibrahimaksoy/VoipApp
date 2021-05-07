@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.userlist
 
-import com.haksoy.soip.data.user.User
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentUserListBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 
@@ -64,9 +64,13 @@ class UserListFragment : Fragment(), UserListAdapter.UserItemListener {
         binding.userViewPager.setPageTransformer(compositeTransformer)
     }
 
-    override fun onClickedUser(user: User) {
+    override fun onSelectedUser(user: User) {
         Log.i(TAG, "sharedViewModel  :  selectedUser posted new value")
         sharedViewModel.selectedUser.postValue(user)
+    }
+
+    override fun onStartConversationWithUser(user: User) {
+        sharedViewModel.conversationDetailWithUser.postValue(user)
     }
 
     override fun onPause() {

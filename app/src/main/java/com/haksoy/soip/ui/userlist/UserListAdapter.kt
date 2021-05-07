@@ -1,18 +1,20 @@
 package com.haksoy.soip.ui.userlist
 
-import com.haksoy.soip.data.user.User
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.haksoy.soip.R
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.UserItemBinding
 
 class UserListAdapter(private val listener: UserItemListener) :
     RecyclerView.Adapter<UserViewHolder>() {
 
     interface UserItemListener {
-        fun onClickedUser(user: User)
+        fun onSelectedUser(user: User)
+        fun onStartConversationWithUser(user: User)
     }
 
     private val items = ArrayList<User>()
@@ -48,6 +50,7 @@ class UserViewHolder(
 
     init {
         itemBinding.root.setOnClickListener(this)
+        itemBinding.btnSend.setOnClickListener(this)
     }
 
     fun bind(item: User) {
@@ -61,7 +64,14 @@ class UserViewHolder(
 
     }
 
-    override fun onClick(v: View?) {
-        listener.onClickedUser(user)
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btnSend -> {
+                listener.onStartConversationWithUser(user)
+            }
+            else ->
+                listener.onSelectedUser(user)
+        }
+
     }
 }
