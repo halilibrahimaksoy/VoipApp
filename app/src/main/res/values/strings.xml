@@ -50,4 +50,5 @@
     <string name="password">Password</string>
     <string name="delete_for_me">Delete For Me</string>
     <string name="delete_for_everyone">Delete For Everyone</string>
+    <string name="delete">Delete</string>
 </resources>

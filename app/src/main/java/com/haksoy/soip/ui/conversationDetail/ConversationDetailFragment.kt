@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.conversationDetail
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -20,21 +19,22 @@ import com.haksoy.soip.R
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.user.User
-import com.haksoy.soip.databinding.ConversationDetailDeteleMenuBinding
+import com.haksoy.soip.databinding.ConversationDeteleMenuBinding
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.NotificationHelper
 import com.haksoy.soip.utlis.SwipeToDeleteCallback
+import eightbitlab.com.blurview.RenderScriptBlur
 import java.util.*
 
 
 class ConversationDetailFragment : Fragment(), View.OnClickListener,
-    ConversationDetailAdapter.ConversationDetailItemClickListener {
+        ConversationDetailAdapter.ConversationDetailItemClickListener {
     companion object {
         fun newInstance(selectedUser: User? = null) = ConversationDetailFragment().apply {
             arguments = bundleOf(
-                Constants.ConversationDetailFragmentSelectedUser to selectedUser
+                    Constants.ConversationDetailFragmentSelectedUser to selectedUser
             )
         }
     }
@@ -46,8 +46,8 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     private var adapter = ConversationDetailAdapter(this)
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = FragmentConversationDetailBinding.inflate(inflater, container, false)
 
@@ -69,6 +69,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         super.onResume()
         context?.let { NotificationHelper.getInstance(it).removeNotification(viewModel.user.uid) }
     }
+
     private fun fillUserData() {
         if (viewModel.user.profileImage != null)
             showProfileImage(viewModel.user.profileImage!!)
@@ -84,9 +85,9 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
 
     private fun showProfileImage(currentImageReferance: String) {
         Glide.with(binding.root /* context */)
-            .load(currentImageReferance)
-            .circleCrop()
-            .into(binding.imageView)
+                .load(currentImageReferance)
+                .circleCrop()
+                .into(binding.imageView)
 
     }
 
@@ -106,12 +107,20 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     }
 
     private fun onRemoveRequest(position: Int) {
+
         val dialogBinding =
-            ConversationDetailDeteleMenuBinding.inflate(layoutInflater, null, false)
+                ConversationDeteleMenuBinding.inflate(layoutInflater, null, false)
+
+        dialogBinding.blurView.setupWith(binding.root)
+                .setFrameClearDrawable(binding.root.background)
+                .setBlurAlgorithm(RenderScriptBlur(context))
+                .setBlurAutoUpdate(true)
+                .setHasFixedTransformationMatrix(true)
+
         val builder = context?.let {
             AlertDialog.Builder(
-                it,
-                android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen
+                    it,
+                    android.R.style.Theme_DeviceDefault_Light_NoActionBar
             ).setView(dialogBinding.root).setCancelable(false)
         }
 
@@ -130,10 +139,10 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
             removeForEveryOne(position)
             dialog.dismiss()
         }
-        val window = dialog.window!!
-        context?.let {
-            window.setBackgroundDrawable(ColorDrawable(it.getColor(R.color.delete_menu_background)))
-        }
+//        val window = dialog.window!!
+//        context?.let {
+//            window.setBackgroundDrawable(ColorDrawable(it.getColor(R.color.delete_menu_background)))
+//        }
 
     }
 
@@ -165,7 +174,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.get(Constants.ConversationDetailFragmentSelectedUser)
-            ?.let { viewModel.user = it as User }
+                ?.let { viewModel.user = it as User }
     }
 
     override fun onClick(v: View) {
@@ -186,7 +195,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     private fun sendChat() {
         if (validateForm()) {
             viewModel.sendChat(
-                binding.txtMessage.text.toString()
+                    binding.txtMessage.text.toString()
             )
             binding.txtMessage.setText("")
         }
