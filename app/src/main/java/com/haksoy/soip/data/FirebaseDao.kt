@@ -21,6 +21,7 @@ import com.haksoy.soip.data.user.User
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
+import java.io.File
 
 private const val TAG = "SoIP:FirebaseDao"
 
@@ -162,6 +163,29 @@ class FirebaseDao {
         val result = MutableLiveData<Resource<String>>()
         val updateRef = storageFirebase.reference.child(Constants.User_Profile_Image).child(uid)
         val uploadTask = updateRef.putFile(Uri.parse(imageUri))
+
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    result.value = Resource.error(it.localizedMessage)
+                }
+            }
+            updateRef.downloadUrl
+        }.addOnSuccessListener {
+            result.value = Resource.success(it.toString())
+        }.addOnFailureListener {
+            result.value = Resource.error(it.localizedMessage)
+        }
+
+        return result
+    }
+    fun uploadMedia(
+        uid: String,
+        imageUri: String
+    ): MutableLiveData<Resource<String>> {
+        val result = MutableLiveData<Resource<String>>()
+        val updateRef = storageFirebase.reference.child(Constants.MEDIA).child(uid)
+        val uploadTask = updateRef.putFile(Uri.fromFile(File(imageUri)))
 
         uploadTask.continueWithTask { task ->
             if (!task.isSuccessful) {

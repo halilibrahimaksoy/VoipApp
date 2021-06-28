@@ -1,14 +1,14 @@
 package com.haksoy.soip.ui.conversationDetail
 
-import android.icu.text.SimpleDateFormat
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.databinding.ConversationDetailItemLeftBinding
 import com.haksoy.soip.databinding.ConversationDetailItemRightBinding
+import com.haksoy.soip.ui.holdes.ReceivedChatViewHolder
+import com.haksoy.soip.ui.holdes.SendChatViewHolder
 import java.util.*
 
 class ConversationDetailAdapter(private val listener: ConversationDetailItemClickListener) :
@@ -31,14 +31,14 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
-            1 -> return RightViewHolder(
+            1 -> return SendChatViewHolder(
                 ConversationDetailItemRightBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 ), listener
             )
-            0 -> return LeftViewHolder(
+            0 -> return ReceivedChatViewHolder(
                 ConversationDetailItemLeftBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -46,7 +46,7 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
                 ), listener
             )
         }
-        return LeftViewHolder(
+        return ReceivedChatViewHolder(
             ConversationDetailItemLeftBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -63,60 +63,12 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (items[position].direction == ChatDirection.InComing)
-            (holder as LeftViewHolder).bind(items[position])
+            (holder as ReceivedChatViewHolder).bind(items[position])
         else
-            (holder as RightViewHolder).bind(items[position])
+            (holder as SendChatViewHolder).bind(items[position])
 
     }
 }
 
-class LeftViewHolder(
-    private val leftBinding: ConversationDetailItemLeftBinding,
-    private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
-) : RecyclerView.ViewHolder(leftBinding.root),
-    View.OnClickListener {
-
-    init {
-        leftBinding.root.setOnClickListener(this)
-    }
-
-    private lateinit var chat: Chat
-    fun bind(chat: Chat) {
-        this.chat = chat
-        leftBinding.txtMessage.text = chat.text.toString()
-        val cal = Calendar.getInstance()
-        cal.time = Date(chat.createDate)
-        leftBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
 
 
-    }
-
-    override fun onClick(v: View?) {
-        listener.onClickChat(chat)
-    }
-}
-
-class RightViewHolder(
-    private val binding: ConversationDetailItemRightBinding,
-    private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
-) : RecyclerView.ViewHolder(binding.root),
-    View.OnClickListener {
-
-    init {
-        binding.root.setOnClickListener(this)
-    }
-
-    private lateinit var chat: Chat
-    fun bind(chat: Chat) {
-        this.chat = chat
-        binding.txtMessage.text = chat.text.toString()
-        val cal = Calendar.getInstance()
-        cal.time = Date(chat.createDate)
-        binding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
-
-    }
-
-    override fun onClick(v: View?) {
-        listener.onClickChat(chat)
-    }
-}

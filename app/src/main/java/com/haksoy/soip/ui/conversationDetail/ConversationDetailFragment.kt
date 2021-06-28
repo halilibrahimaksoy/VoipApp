@@ -217,7 +217,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         intent.putExtra(IntentUtils.CAMERA_VIEW_SHOW_PICK_IMAGE_BUTTON, true)
 
         startForResult(Intent(intent)) { result ->
-            println("asdf")
+            viewModel.sendImage(result.data!!.getStringExtra(IntentUtils.EXTRA_PATH_RESULT)!!)
         }.onFailed { result ->
             println("asdf")
         }

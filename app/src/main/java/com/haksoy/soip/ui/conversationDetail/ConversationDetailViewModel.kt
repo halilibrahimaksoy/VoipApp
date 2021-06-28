@@ -16,11 +16,11 @@ import java.util.concurrent.Executors
 class ConversationDetailViewModel(application: Application) : AndroidViewModel(application) {
     private val firebaseDao = FirebaseDao.getInstance()
     private val chatRepository = ChatRepository.getInstance(
-        application.applicationContext,
-        Executors.newSingleThreadExecutor()
+            application.applicationContext,
+            Executors.newSingleThreadExecutor()
     )
-    private val notificationRepository = MessageRepository.getInstance(
-        Executors.newSingleThreadExecutor()
+    private val messageRepository = MessageRepository.getInstance(
+            Executors.newSingleThreadExecutor()
     )
 
     lateinit var user: User
@@ -32,32 +32,63 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     fun sendChat(message: String) {
 
         val localChat = Chat(
-            UUID.randomUUID().toString(),
-            user.uid,
-            ChatDirection.OutGoing,
-            true,
-            ChatType.TEXT,
-            message,
-            null,
-            Date().time,
-            null
+                UUID.randomUUID().toString(),
+                user.uid,
+                ChatDirection.OutGoing,
+                true,
+                ChatType.TEXT,
+                message,
+                null,
+                Date().time,
+                null
         )
         chatRepository.addChat(localChat)
 
         val remoteChat = Chat(
-            localChat.uid,
-            firebaseDao.getCurrentUserUid(),
-            ChatDirection.InComing,
-            false,
-            ChatType.TEXT,
-            message,
-            null,
-            localChat.createDate,
-            null
+                localChat.uid,
+                firebaseDao.getCurrentUserUid(),
+                ChatDirection.InComing,
+                false,
+                ChatType.TEXT,
+                message,
+                null,
+                localChat.createDate,
+                null
         )
 
         if (!user.token.isNullOrEmpty())
-            notificationRepository.sendChat(user.token.toString(), remoteChat)
+            messageRepository.sendChat(user.token.toString(), remoteChat)
+    }
+
+    fun sendImage(messageUri: String) {
+
+        val localChat = Chat(
+                UUID.randomUUID().toString(),
+                user.uid,
+                ChatDirection.OutGoing,
+                true,
+                ChatType.IMAGE,
+                "message",
+                messageUri,
+                Date().time,
+                null
+        )
+        chatRepository.addChat(localChat)
+
+        val remoteChat = Chat(
+                localChat.uid,
+                firebaseDao.getCurrentUserUid(),
+                ChatDirection.InComing,
+                false,
+                ChatType.IMAGE,
+                "message",
+                messageUri,
+                localChat.createDate,
+                null
+        )
+
+        if (!user.token.isNullOrEmpty())
+            messageRepository.sendChat(user.token.toString(), remoteChat)
     }
 
     fun removeChatAtPosition(position: Int) {
@@ -65,16 +96,16 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun getChatDirection(position: Int): ChatDirection =
-        conversationDetailList.value!![position].direction
+            conversationDetailList.value!![position].direction
 
     fun sendRemoveRequestAtPosition(position: Int) {
-        notificationRepository.removeChat(
-            user.token.toString(),
-            conversationDetailList.value!![position]
+        messageRepository.removeChat(
+                user.token.toString(),
+                conversationDetailList.value!![position]
         )
     }
 
-    fun markAsRead(){
+    fun markAsRead() {
         chatRepository.marAsRead(user.uid)
     }
 }

@@ -4,6 +4,7 @@ import java.util.regex.Pattern
 
 object Constants {
     const val User_Profile_Image = "USER_PROFILE_IMAGE"
+    const val MEDIA = "MEDIA"
 
     //    val randomImageUrl = "https://loremflickr.com/320/240"
     const val randomImageUrl =

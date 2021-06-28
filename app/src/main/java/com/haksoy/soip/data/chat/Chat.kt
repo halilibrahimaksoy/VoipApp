@@ -7,15 +7,15 @@ import java.util.*
 
 @Entity(tableName = Constants.CHAT_TABLE)
 data class Chat(
-    @PrimaryKey val uid: String = UUID.randomUUID().toString(),
-    val userUid: String,
-    val direction: ChatDirection,
-    val is_seen: Boolean,
-    val type: ChatType,
-    val text: String? = null,
-    val contentUrl: String? = null,
-    val createDate: Long,
-    val updateDate: Long? = null
+        @PrimaryKey val uid: String = UUID.randomUUID().toString(),
+        val userUid: String,
+        val direction: ChatDirection,
+        val is_seen: Boolean,
+        val type: ChatType,
+        val text: String? = null,
+        var contentUrl: String? = null,
+        val createDate: Long,
+        val updateDate: Long? = null
 ) {
 
     override fun toString(): String {

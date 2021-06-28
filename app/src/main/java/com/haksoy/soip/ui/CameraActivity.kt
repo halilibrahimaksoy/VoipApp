@@ -88,7 +88,7 @@ class CameraActivity : AppCompatActivity() {
             override fun captureSuccess(bitmap: Bitmap) {
                 val outputFile: File? = FileUtils.generateFile(ChatType.IMAGE)
                 FileUtils.convertBitmapToJpeg(bitmap, outputFile!!)
-                val path = outputFile!!.path
+                val path = outputFile.path
                 val intent = Intent()
                 intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, path)
                 intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.IMAGE)

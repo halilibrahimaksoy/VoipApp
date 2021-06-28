@@ -61,7 +61,7 @@
         android:layout_height="0dp"
         android:layout_below="@id/toolbar"
         android:scrollbars="vertical"
-        anim:layout_constraintBottom_toTopOf="@id/lnrSend"
+        anim:layout_constraintBottom_toTopOf="@id/input_layout"
         anim:layout_constraintTop_toBottomOf="@id/toolbar" />
 
     <include layout="@layout/conversation_input_layout"
