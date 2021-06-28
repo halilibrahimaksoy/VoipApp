@@ -16,6 +16,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.github.drjacky.imagepicker.ImagePicker
 import com.google.firebase.iid.FirebaseInstanceId
 import com.haksoy.soip.R

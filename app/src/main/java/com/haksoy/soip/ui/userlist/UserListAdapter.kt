@@ -10,7 +10,7 @@ import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.UserItemBinding
 
 class UserListAdapter(private val listener: UserItemListener) :
-    RecyclerView.Adapter<UserViewHolder>() {
+        RecyclerView.Adapter<UserViewHolder>() {
 
     interface UserItemListener {
         fun onSelectedUser(user: User)
@@ -27,7 +27,7 @@ class UserListAdapter(private val listener: UserItemListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val binding: UserItemBinding =
-            UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                UserItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding, listener)
     }
 
@@ -41,10 +41,10 @@ class UserListAdapter(private val listener: UserItemListener) :
 }
 
 class UserViewHolder(
-    private val itemBinding: UserItemBinding,
-    private val listener: UserListAdapter.UserItemListener
+        private val itemBinding: UserItemBinding,
+        private val listener: UserListAdapter.UserItemListener
 ) : RecyclerView.ViewHolder(itemBinding.root),
-    View.OnClickListener {
+        View.OnClickListener {
 
     private lateinit var user: User
 

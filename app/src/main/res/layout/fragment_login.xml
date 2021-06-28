@@ -39,7 +39,7 @@
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
+                android:textColor="@color/color_text1"
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -62,7 +62,7 @@
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
+                android:textColor="@color/color_text1"
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,7 +74,7 @@
             android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
             android:text="@string/login"
-            android:textColor="@android:color/white"
+            android:textColor="@color/color_text1"
             android:textSize="18sp" />
 
         <TextView

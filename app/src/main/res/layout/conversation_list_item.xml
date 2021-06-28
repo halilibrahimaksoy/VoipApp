@@ -8,6 +8,8 @@
         android:id="@+id/imageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="@drawable/image_circle"
+        android:padding="@dimen/border_size"
         android:layout_margin="10dp"
         android:src="@mipmap/ic_profile" />
 

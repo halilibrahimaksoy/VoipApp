@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.main
 
-import com.haksoy.soip.data.user.User
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -8,7 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haksoy.soip.R
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ActivityMainBinding
+import com.haksoy.soip.databinding.CustomtabBinding
 import com.haksoy.soip.ui.conversationDetail.ConversationDetailFragment
 import com.haksoy.soip.ui.profile.UserProfileFragment
 import com.haksoy.soip.ui.userlist.UserListFragment
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun prepareUi() {
         setViewPager()
         setupTabIcons()
@@ -72,45 +72,47 @@ class MainActivity : AppCompatActivity() {
 
     private fun showUserUpdateFragment() {
         val userProfileFragment =
-            UserProfileFragment.newInstance(UserProfileFragment.Status.REGISTRATION)
+                UserProfileFragment.newInstance(UserProfileFragment.Status.REGISTRATION)
         supportFragmentManager.beginTransaction()
-            .add(R.id.usersFragment, userProfileFragment, Constants.UserProfileFragmentTag)
-            .commit()
+                .add(R.id.usersFragment, userProfileFragment, Constants.UserProfileFragmentTag)
+                .commit()
     }
 
     private fun showUserDetailFragment(user: User) {
         val userProfileFragment =
-            UserProfileFragment.newInstance(UserProfileFragment.Status.OTHER_USER, user)
+                UserProfileFragment.newInstance(UserProfileFragment.Status.OTHER_USER, user)
         supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.usersFragment,
-                userProfileFragment,
-                Constants.UserProfileFragmentTag
-            )
-            .addToBackStack(Constants.UserProfileFragmentTag)
-            .commit()
+                .replace(
+                        R.id.usersFragment,
+                        userProfileFragment,
+                        Constants.UserProfileFragmentTag
+                )
+                .addToBackStack(Constants.UserProfileFragmentTag)
+                .commit()
         setClickable(true)
     }
+
     private fun showConversationDetailFragment(user: User) {
         val conversationDetailFragment =
-            ConversationDetailFragment.newInstance(user)
+                ConversationDetailFragment.newInstance(user)
         supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.usersFragment,
-                conversationDetailFragment,
-                Constants.UserProfileFragmentTag
-            )
-            .addToBackStack(Constants.ConversationDetailFragmentTag)
-            .commit()
+                .replace(
+                        R.id.usersFragment,
+                        conversationDetailFragment,
+                        Constants.UserProfileFragmentTag
+                )
+                .addToBackStack(Constants.ConversationDetailFragmentTag)
+                .commit()
     }
+
     private fun showUserList() {
         supportFragmentManager.beginTransaction()
-            .replace(
-                R.id.usersFragment,
-                UserListFragment.newInstance(),
-                Constants.UserListFragmentTag
-            ).addToBackStack(Constants.UserListFragmentTag)
-            .commit()
+                .replace(
+                        R.id.usersFragment,
+                        UserListFragment.newInstance(),
+                        Constants.UserListFragmentTag
+                ).addToBackStack(Constants.UserListFragmentTag)
+                .commit()
         setClickable(true)
     }
 
@@ -121,19 +123,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun setViewPager() {
         val sectionsPagerAdapter =
-            SectionsPagerAdapter(
-                this,
-                supportFragmentManager
-            )
+                SectionsPagerAdapter(
+                        this,
+                        supportFragmentManager
+                )
         binding.viewPager.adapter = sectionsPagerAdapter
         binding.viewPager.offscreenPageLimit = 3
         binding.tabs.setupWithViewPager(binding.viewPager)
     }
 
     private fun setupTabIcons() {
-        binding.tabs.getTabAt(0)!!.icon = getDrawable(R.mipmap.ic_map)
-        binding.tabs.getTabAt(1)!!.icon = getDrawable(R.mipmap.ic_chat)
-        binding.tabs.getTabAt(2)!!.icon = getDrawable(R.mipmap.ic_person)
+        val bindingTab1 = CustomtabBinding.inflate(layoutInflater)
+        val bindingTab2 = CustomtabBinding.inflate(layoutInflater)
+        val bindingTab3 = CustomtabBinding.inflate(layoutInflater)
+        bindingTab1.icon.setBackgroundResource(R.mipmap.ic_map)
+        bindingTab2.icon.setBackgroundResource(R.mipmap.ic_chat)
+        bindingTab3.icon.setBackgroundResource(R.mipmap.ic_person)
+        binding.tabs.getTabAt(0)!!.customView = bindingTab1.root
+        binding.tabs.getTabAt(1)!!.customView = bindingTab2.root
+        binding.tabs.getTabAt(2)!!.customView = bindingTab3.root
 
     }
 
@@ -142,4 +150,5 @@ class MainActivity : AppCompatActivity() {
         if (supportFragmentManager.backStackEntryCount == 0)
             setClickable(false)
     }
+
 }

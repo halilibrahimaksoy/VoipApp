@@ -51,4 +51,7 @@
     <string name="delete_for_me">Delete For Me</string>
     <string name="delete_for_everyone">Delete For Everyone</string>
     <string name="delete">Delete</string>
+
+    <string name="camera_tip">Tap to Take a Photo,Hold to Record Video</string>
+    <string name="audio_permission_error">Audio Permissions are Missing</string>
 </resources>

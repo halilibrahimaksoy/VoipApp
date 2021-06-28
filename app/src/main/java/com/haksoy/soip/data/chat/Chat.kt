@@ -25,7 +25,7 @@ data class Chat(
 }
 
 enum class ChatType {
-    TEXT, IMAGE, CONTACT
+    TEXT, IMAGE, CONTACT, VIDEO
 }
 
 enum class ChatDirection {

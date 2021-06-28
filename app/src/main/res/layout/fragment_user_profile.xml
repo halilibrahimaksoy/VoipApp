@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimary"
+            app:contentInsetEnd="0dp"
+            app:contentInsetLeft="0dp"
+            app:contentInsetRight="0dp"
+            app:contentInsetStart="0dp">
 
             <RelativeLayout
                 android:id="@+id/rltvEdit"
@@ -85,8 +90,10 @@
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:layout_below="@id/toolbar"
-            android:layout_marginTop="10dp"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/image_circle"
+            android:padding="@dimen/border_size"
+            android:layout_marginTop="10dp"
             android:src="@mipmap/ic_photo" />
 
 
@@ -100,7 +107,7 @@
             android:background="@color/colorAccent"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@android:color/white"
+            android:textColor="@color/color_text1"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -138,11 +145,11 @@
                 android:gravity="top|start"
                 android:hint="Abouth me .."
                 android:inputType="textMultiLine"
-                android:textColor="@android:color/white"
-                android:maxLines="10"
                 android:maxLength="200"
+                android:maxLines="10"
                 android:minLines="6"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:textColor="@android:color/white" />
 
             <EditText
                 android:id="@+id/txtInstagram2"
@@ -193,7 +200,7 @@
                 android:layout_marginTop="20dp"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:textColor="@android:color/white"
+                android:textColor="@color/color_text1"
                 android:textSize="18sp" />
 
             <TextView
@@ -203,7 +210,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="start"
                 android:padding="10dp"
-                android:textColor="@android:color/white"
+                android:textColor="@color/color_text2"
                 android:textSize="18sp" />
 
             <LinearLayout

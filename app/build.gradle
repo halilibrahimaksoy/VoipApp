@@ -10,14 +10,14 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "29.0.3"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
 
     defaultConfig {
         applicationId "com.haksoy.soip"
         minSdkVersion 23
-        targetSdkVersion 30
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -104,6 +104,14 @@ dependencies {
 
     //Record View
     implementation 'com.devlomi.record-view:record-view:2.0.1'
+    implementation 'com.zhihu.android:matisse:0.5.3-beta3'
+    implementation 'me.zhanghai.android.systemuihelper:library:1.0.0'
+    implementation project(path: ':cameraView')
+
+    implementation 'com.camerakit:camerakit:1.0.0-beta3.11'
+    implementation 'com.camerakit:jpegkit:0.1.0'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

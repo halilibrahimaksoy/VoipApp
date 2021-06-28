@@ -1,5 +1,6 @@
 package com.haksoy.soip.ui.conversationDetail
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -15,16 +16,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.github.florent37.inlineactivityresult.kotlin.startForResult
 import com.haksoy.soip.R
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationDeteleMenuBinding
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
+import com.haksoy.soip.ui.CameraActivity
 import com.haksoy.soip.ui.main.SharedViewModel
-import com.haksoy.soip.utlis.Constants
-import com.haksoy.soip.utlis.NotificationHelper
-import com.haksoy.soip.utlis.SwipeToDeleteCallback
+import com.haksoy.soip.utlis.*
 import eightbitlab.com.blurview.RenderScriptBlur
 import java.util.*
 
@@ -56,7 +57,8 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         }
         (activity as AppCompatActivity).supportActionBar?.title = ""
 
-        binding.btnSend.setOnClickListener(this)
+        binding.inputLayout.btnSend.setOnClickListener(this)
+        binding.inputLayout.btnStartCamera.setOnClickListener(this)
         binding.btnBack.setOnClickListener(this)
         binding.imageView.setOnClickListener(this)
         binding.txtFullName.setOnClickListener(this)
@@ -159,12 +161,12 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = binding.txtMessage.text.toString()
+        val email = binding.inputLayout.txtMessage.text.toString()
         if (TextUtils.isEmpty(email)) {
-            binding.txtMessage.error = "Required."
+            binding.inputLayout.txtMessage.error = "Required."
             valid = false
         } else {
-            binding.txtMessage.error = null
+            binding.inputLayout.txtMessage.error = null
         }
 
 
@@ -182,6 +184,15 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
             R.id.btnSend -> {
                 sendChat()
             }
+            R.id.btn_start_camera -> {
+                if (PermissionsUtil.hasStoragePermissions(context))
+                    startCamera()
+                else
+                    requestPermissions(
+                            PermissionsUtil.cameraPermission,
+                            PermissionsUtil.REQUEST_CAMERA_PERMISSION
+                    )
+            }
             R.id.imageView,
             R.id.txtFullName -> {
                 sharedViewModel.selectedUser.postValue(viewModel.user)
@@ -195,14 +206,40 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     private fun sendChat() {
         if (validateForm()) {
             viewModel.sendChat(
-                    binding.txtMessage.text.toString()
+                    binding.inputLayout.txtMessage.text.toString()
             )
-            binding.txtMessage.setText("")
+            binding.inputLayout.txtMessage.setText("")
         }
+    }
+
+    private fun startCamera() {
+        val intent = Intent(activity, CameraActivity::class.java)
+        intent.putExtra(IntentUtils.CAMERA_VIEW_SHOW_PICK_IMAGE_BUTTON, true)
+
+        startForResult(Intent(intent)) { result ->
+            println("asdf")
+        }.onFailed { result ->
+            println("asdf")
+        }
+
     }
 
     override fun onClickChat(chat: Chat) {
 
     }
 
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PermissionsUtil.REQUEST_CAMERA_PERMISSION -> {
+                if (PermissionsUtil.permissionsGranted(grantResults)) {
+                    startCamera()
+                }
+            }
+        }
+    }
 }

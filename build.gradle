@@ -18,7 +18,11 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
+project.ext {
+    compileSdkVersion = 30
+    buildToolsVersion = '29.0.3'
+    targetSdkVersion = 30
+}
 allprojects {
     repositories {
         google()

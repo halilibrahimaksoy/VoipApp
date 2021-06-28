@@ -15,7 +15,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
         android:background="@color/colorPrimary"
-        android:textColor="@android:color/white"
+        android:textColor="@color/color_text1"
         android:text="@string/logout"
         android:textSize="18sp" />
 </RelativeLayout>
