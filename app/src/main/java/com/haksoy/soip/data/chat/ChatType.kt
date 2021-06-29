@@ -8,6 +8,7 @@ enum class ChatType {
     SEND_IMAGE,
     RECEIVED_IMAGE,
     SEND_VIDEO,
+    TEXT,
     RECEIVED_VIDEO;
 
     companion object {

@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.haksoy.soip.data.user.Location
 import com.haksoy.soip.data.user.User
@@ -179,12 +180,13 @@ class FirebaseDao {
 
         return result
     }
+
     fun uploadMedia(
-        uid: String,
+        fileName: String,
         imageUri: String
     ): MutableLiveData<Resource<String>> {
         val result = MutableLiveData<Resource<String>>()
-        val updateRef = storageFirebase.reference.child(Constants.MEDIA).child(uid)
+        val updateRef = storageFirebase.reference.child(Constants.MEDIA).child(fileName)
         val uploadTask = updateRef.putFile(Uri.fromFile(File(imageUri)))
 
         uploadTask.continueWithTask { task ->
@@ -204,8 +206,8 @@ class FirebaseDao {
     }
 
     fun updateToken(token: String) {
-            cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
-                .update("token", token).addOnCompleteListener {
+        cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
+            .update("token", token).addOnCompleteListener {
                 if (it.isSuccessful) {
                     Log.i(TAG, "updateToken: Successful  -> $token")
                 } else {
@@ -213,16 +215,17 @@ class FirebaseDao {
                 }
             }
     }
+
     fun updateToken() {
         val token = FirebaseInstanceId.getInstance().token!!
         cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
-                .update("token", token).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.i(TAG, "updateToken: Successful  -> $token")
-                    } else {
-                        Log.i(TAG, "updateToken: failed")
-                    }
+            .update("token", token).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.i(TAG, "updateToken: Successful  -> $token")
+                } else {
+                    Log.i(TAG, "updateToken: failed")
                 }
+            }
     }
 
     fun isAuthUserExist() = auth.currentUser != null
@@ -333,5 +336,26 @@ class FirebaseDao {
                     result.value = Resource.error(it.exception!!.localizedMessage)
             }
         return result
+    }
+
+    fun getImage(url: String, destinationName: String): MutableLiveData<Resource<Boolean>> {
+        val result = MutableLiveData<Resource<Boolean>>()
+
+        val imageReference = storageFirebase.reference.child(Constants.MEDIA).child(url)
+
+        imageReference.getFile(File(destinationName))
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    result.value = Resource.success(true)
+                    deleteImage(imageReference)
+                } else
+                    result.value = Resource.error(it.exception!!.localizedMessage)
+            }
+        return result
+    }
+
+    fun deleteImage(reference: StorageReference) {
+        reference.delete()
+        //todo handle remove complete listener
     }
 }

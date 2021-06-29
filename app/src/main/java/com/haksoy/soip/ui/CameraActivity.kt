@@ -26,8 +26,6 @@ import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import me.zhanghai.android.systemuihelper.SystemUiHelper
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class CameraActivity : AppCompatActivity() {
@@ -88,9 +86,9 @@ class CameraActivity : AppCompatActivity() {
             override fun captureSuccess(bitmap: Bitmap) {
                 val outputFile: File? = FileUtils.generateFile(ChatType.SEND_IMAGE)
                 FileUtils.convertBitmapToJpeg(bitmap, outputFile!!)
-                val path = outputFile.path
                 val intent = Intent()
-                intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, path)
+                intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, outputFile.path)
+                intent.putExtra(IntentUtils.EXTRA_FILE_NAME_RESULT, outputFile.name)
                 intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
@@ -99,6 +97,7 @@ class CameraActivity : AppCompatActivity() {
             override fun recordSuccess(url: String, firstFrame: Bitmap) {
                 val intent = Intent()
                 intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, url)
+                intent.putExtra(IntentUtils.EXTRA_FILE_NAME_RESULT, url)
                 intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_VIDEO)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
@@ -165,19 +164,12 @@ class CameraActivity : AppCompatActivity() {
         if (requestCode == REQUEST_CODE_PICK_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
 //            setResult(ResultCodes.PICK_IMAGE_FROM_CAMERA, data)
             val intent = Intent()
-            intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, Matisse.obtainPathResult(data)[0])
+            val fileUri = Matisse.obtainPathResult(data)[0]
+            intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, fileUri)
+            intent.putExtra(IntentUtils.EXTRA_FILE_NAME_RESULT, File(fileUri).name)
             intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
-    }
-
-    fun generateNewName(type: String): String? {
-        val date = Date()
-        val sdf = SimpleDateFormat(
-            "yyyyMMddSSSS",
-            Locale.US
-        ) //the Locale us is to use english numbers
-        return type + "_" + sdf.format(date)
     }
 }

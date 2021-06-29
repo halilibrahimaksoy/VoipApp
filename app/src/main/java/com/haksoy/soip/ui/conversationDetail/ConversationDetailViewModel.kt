@@ -60,31 +60,30 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             messageRepository.sendChat(user.token.toString(), remoteChat)
     }
 
-    fun sendImage(messageUri: String) {
-
+    fun sendImage(fileName: String, messageUri: String) {
         val localChat = Chat(
-                UUID.randomUUID().toString(),
-                user.uid,
-                ChatDirection.OutGoing,
-                true,
-                ChatType.SEND_IMAGE,
-                null,
-                messageUri,
-                Date().time,
-                null
+            UUID.randomUUID().toString(),
+            user.uid,
+            ChatDirection.OutGoing,
+            true,
+            ChatType.SEND_IMAGE,
+            getFileNameWithUserUid(fileName),
+            messageUri,
+            Date().time,
+            null
         )
         chatRepository.addChat(localChat)
 
         val remoteChat = Chat(
-                localChat.uid,
-                firebaseDao.getCurrentUserUid(),
-                ChatDirection.InComing,
-                false,
-                ChatType.RECEIVED_IMAGE,
-                null,
-                messageUri,
-                localChat.createDate,
-                null
+            localChat.uid,
+            firebaseDao.getCurrentUserUid(),
+            ChatDirection.InComing,
+            false,
+            ChatType.RECEIVED_IMAGE,
+            localChat.text,
+            messageUri,
+            localChat.createDate,
+            null
         )
 
         if (!user.token.isNullOrEmpty())
@@ -107,5 +106,9 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
 
     fun markAsRead() {
         chatRepository.marAsRead(user.uid)
+    }
+
+    fun getFileNameWithUserUid(fileName: String): String {
+        return firebaseDao.getCurrentUserUid() + "_" + fileName
     }
 }

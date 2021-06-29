@@ -25,6 +25,14 @@ object FileUtils {
         if (!file.exists()) file.parentFile.mkdirs()
         return file
     }
+    fun generateFile(name: String): File? {
+        val file: File = File(
+            mainAppFolder() + "/" + APP_FOLDER_NAME + "/" + "MEDIA" + "/" +name
+        )
+        //create dirs if not exists
+        if (!file.exists()) file.parentFile.mkdirs()
+        return file
+    }
 
     //Main App Folder: /sdcard/FireApp/
     private fun mainAppFolder(): String? {

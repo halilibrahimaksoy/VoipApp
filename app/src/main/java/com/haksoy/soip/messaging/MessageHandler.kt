@@ -4,7 +4,9 @@ import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
 import com.haksoy.soip.MainApplication
+import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
+import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.database.UserRepository
 import com.haksoy.soip.data.message.ChatEventType
@@ -43,7 +45,23 @@ class MessageHandler(val context: Context) {
     }
 
     private fun handleNewChat(chat: Chat) {
-        chatRepository.addChat(chat)
+        if (ChatType.isMedia(chat.type)) {
+            val desFile = FileUtils.generateFile(ChatType.SEND_IMAGE)
+            GlobalScope.launch(Dispatchers.Main) {
+                FirebaseDao.getInstance().getImage(chat.text!!, desFile!!.absolutePath)
+                    .observeOnce {
+                        if (it.status == Resource.Status.SUCCESS) {
+                            chat.contentUrl = desFile.absolutePath
+                            chatRepository.addChat(chat)
+                        } else if (it.status == Resource.Status.ERROR) {
+//todo handle donwload error
+                            chatRepository.addChat(chat)
+                        }
+                    }
+            }
+        } else {
+            chatRepository.addChat(chat)
+        }
 
         GlobalScope.launch(Dispatchers.Main) {
             if (!context.isAppInForeground()) {
