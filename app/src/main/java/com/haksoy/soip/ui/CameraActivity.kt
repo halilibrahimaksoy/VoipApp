@@ -59,7 +59,7 @@ class CameraActivity : AppCompatActivity() {
         isStatus = intent.hasExtra(IntentUtils.IS_STATUS)
         jCameraView = findViewById(R.id.jcameraview)
         //if it's status we will save the video in received video folder,otherwise we will save it in sent video folder
-        jCameraView?.setSaveVideoPath(FileUtils.generateFile(ChatType.VIDEO)!!.path)
+        jCameraView?.setSaveVideoPath(FileUtils.generateFile(ChatType.SEND_VIDEO)!!.path)
         jCameraView?.setFeatures(JCameraView.BUTTON_STATE_BOTH)
         jCameraView?.setTip(getString(R.string.camera_tip))
 
@@ -86,12 +86,12 @@ class CameraActivity : AppCompatActivity() {
         })
         jCameraView?.setJCameraLisenter(object : JCameraListener {
             override fun captureSuccess(bitmap: Bitmap) {
-                val outputFile: File? = FileUtils.generateFile(ChatType.IMAGE)
+                val outputFile: File? = FileUtils.generateFile(ChatType.SEND_IMAGE)
                 FileUtils.convertBitmapToJpeg(bitmap, outputFile!!)
                 val path = outputFile.path
                 val intent = Intent()
                 intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, path)
-                intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.IMAGE)
+                intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -99,7 +99,7 @@ class CameraActivity : AppCompatActivity() {
             override fun recordSuccess(url: String, firstFrame: Bitmap) {
                 val intent = Intent()
                 intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, url)
-                intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.VIDEO)
+                intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_VIDEO)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
             }
@@ -166,7 +166,7 @@ class CameraActivity : AppCompatActivity() {
 //            setResult(ResultCodes.PICK_IMAGE_FROM_CAMERA, data)
             val intent = Intent()
             intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, Matisse.obtainPathResult(data)[0])
-            intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.IMAGE)
+            intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
             setResult(Activity.RESULT_OK, intent)
             finish()
         }

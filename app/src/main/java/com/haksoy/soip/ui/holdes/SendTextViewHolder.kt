@@ -4,28 +4,27 @@ import android.icu.text.SimpleDateFormat
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.haksoy.soip.data.chat.Chat
-import com.haksoy.soip.databinding.ConversationDetailItemLeftBinding
+import com.haksoy.soip.databinding.SendTextItemBinding
 import com.haksoy.soip.ui.conversationDetail.ConversationDetailAdapter
 import java.util.*
 
-class ReceivedChatViewHolder(
-        private val leftBinding: ConversationDetailItemLeftBinding,
+class SendTextViewHolder(
+        private val binding: SendTextItemBinding,
         private val listener: ConversationDetailAdapter.ConversationDetailItemClickListener
-) : RecyclerView.ViewHolder(leftBinding.root),
+) : RecyclerView.ViewHolder(binding.root),
         View.OnClickListener {
 
     init {
-        leftBinding.root.setOnClickListener(this)
+        binding.root.setOnClickListener(this)
     }
 
     private lateinit var chat: Chat
     fun bind(chat: Chat) {
         this.chat = chat
-        leftBinding.txtMessage.text = chat.text.toString()
+        binding.txtMessage.text = chat.text.toString()
         val cal = Calendar.getInstance()
         cal.time = Date(chat.createDate)
-        leftBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
-
+        binding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
 
     }
 

@@ -8,4 +8,7 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="border_radius">4dp</dimen>
     <dimen name="border_size">1dp</dimen>
+    <dimen name="chat_item_message_left_padding">5dp</dimen>
+    <dimen name="message_item_date_margin">2dp</dimen>
+    <dimen name="message_item_date_size">8sp</dimen>
 </resources>

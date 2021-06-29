@@ -55,16 +55,16 @@ object FileUtils {
 
     private fun getFileTypeString(type: ChatType): String? {
         return when (type) {
-            ChatType.IMAGE -> "IMG"
-            ChatType.VIDEO -> "VID"
+            ChatType.SEND_IMAGE -> "IMG"
+            ChatType.SEND_VIDEO -> "VID"
             else -> "FILE"
         }
     }
 
     private fun getFileExtensionString(type: ChatType): String? {
         return when (type) {
-            ChatType.IMAGE -> ".jpg"
-            ChatType.VIDEO -> ".mp4"
+            ChatType.SEND_IMAGE -> ".jpg"
+            ChatType.SEND_VIDEO -> ".mp4"
             else -> ""
         }
     }

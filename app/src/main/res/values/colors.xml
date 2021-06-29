@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="color_text1">#222</color>
+    <color name="color_text2">#444</color>
+    <color name="border_shadow">#CABBBBBB</color>
     <color name="colorPrimary">#FFF</color>
     <color name="colorPrimaryDark">#c1c1c1</color>
     <color name="colorAccent">#FFF</color>
@@ -7,13 +10,11 @@
     <color name="conversation_detail_background">#e5ddd5</color>
     <color name="conversation_detail_item_right_background">#dcf8c6</color>
     <color name="conversation_detail_item_right_message">#555b50</color>
-    <color name="conversation_detail_item_right_date">#a1b591</color>
+    <color name="conversation_detail_item_right_date">@color/color_text2</color>
     <color name="conversation_detail_item_left_background">#ffffff</color>
     <color name="conversation_detail_item_left_message">#303030</color>
-    <color name="conversation_detail_item_left_date">#c1c1c1</color>
+    <color name="conversation_detail_item_left_date">@color/color_text2</color>
     <color name="delete_menu_background">#80FFFFFF</color>
 
-    <color name="color_text1">#222</color>
-    <color name="color_text2">#444</color>
-    <color name="border_shadow">#CABBBBBB</color>
+
 </resources>

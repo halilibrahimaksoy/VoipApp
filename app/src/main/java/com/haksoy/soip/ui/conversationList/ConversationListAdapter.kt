@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.chat.Conversation
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
 import java.util.*
 
 class ConversationListAdapter(
-    private val listener: ConversationListItemClickListener,
-    val items: LinkedHashMap<User, Conversation>
+        private val listener: ConversationListItemClickListener,
+        val items: LinkedHashMap<User, Conversation>
 ) :
-    RecyclerView.Adapter<ConversationListViewHolder>() {
+        RecyclerView.Adapter<ConversationListViewHolder>() {
 
     interface ConversationListItemClickListener {
         fun onClickedUser(user: User)
@@ -28,7 +29,7 @@ class ConversationListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationListViewHolder {
         val binding: ConversationListItemBinding =
-            ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+                ConversationListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ConversationListViewHolder(binding, listener)
     }
 
@@ -41,10 +42,10 @@ class ConversationListAdapter(
 }
 
 class ConversationListViewHolder(
-    private val itemBinding: ConversationListItemBinding,
-    private val listener: ConversationListAdapter.ConversationListItemClickListener
+        private val itemBinding: ConversationListItemBinding,
+        private val listener: ConversationListAdapter.ConversationListItemClickListener
 ) : RecyclerView.ViewHolder(itemBinding.root),
-    View.OnClickListener {
+        View.OnClickListener {
 
     private lateinit var user: User
 
@@ -55,8 +56,14 @@ class ConversationListViewHolder(
     fun bind(user: User, chat: Conversation) {
         this.user = user
         itemBinding.txtFullName.text = user.name
-        if (chat.text != null)
+        if (!ChatType.isMedia(chat.type))
             itemBinding.txtMessage.text = chat.text.toString()
+        else {
+            itemBinding.txtMessage.setText(ChatType.getMessageId(chat.type))
+            itemBinding.imgIconMsg.setImageResource(ChatType.getDrawableId(chat.type))
+            itemBinding.imgIconMsg.visibility = View.VISIBLE
+        }
+
 
         if (!chat.is_seen && chat.unread_message_count > 0) {
             itemBinding.txtUnreadMessageCount.visibility = View.VISIBLE
@@ -66,9 +73,9 @@ class ConversationListViewHolder(
         cal.time = Date(chat.createDate)
         itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
         Glide.with(itemBinding.root /* context */)
-            .load(user.profileImage)
-            .circleCrop()
-            .into(itemBinding.imageView)
+                .load(user.profileImage)
+                .circleCrop()
+                .into(itemBinding.imageView)
 
     }
 

@@ -24,10 +24,5 @@ data class Chat(
 
 }
 
-enum class ChatType {
-    TEXT, IMAGE, CONTACT, VIDEO
-}
 
-enum class ChatDirection {
-    InComing, OutGoing
-}
+

@@ -54,4 +54,7 @@
 
     <string name="camera_tip">Tap to Take a Photo,Hold to Record Video</string>
     <string name="audio_permission_error">Audio Permissions are Missing</string>
+
+    <string name="image">Image</string>
+    <string name="video">Video</string>
 </resources>

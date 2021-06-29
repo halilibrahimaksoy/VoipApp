@@ -32,7 +32,7 @@ class MessageRepository(private val executor: ExecutorService) {
     private val firebaseDao = FirebaseDao.getInstance()
 
     fun sendChat(to: String, remoteChat: Chat) {
-        if (remoteChat.type == ChatType.IMAGE || remoteChat.type == ChatType.VIDEO) {
+        if (remoteChat.type != ChatType.SEND_TEXT && remoteChat.type != ChatType.RECEIVED_TEXT) {
             firebaseDao.uploadMedia(remoteChat.uid, remoteChat.contentUrl!!).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     remoteChat.contentUrl = it.data
