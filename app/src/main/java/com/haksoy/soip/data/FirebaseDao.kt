@@ -354,7 +354,7 @@ class FirebaseDao {
         return result
     }
 
-    fun deleteImage(reference: StorageReference) {
+    private fun deleteImage(reference: StorageReference) {
         reference.delete()
         //todo handle remove complete listener
     }

@@ -57,4 +57,7 @@
 
     <string name="image">Image</string>
     <string name="video">Video</string>
+    <string name="search">Search</string>
+
+    <string name="chats">Chats</string>
 </resources>

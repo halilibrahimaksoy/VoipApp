@@ -243,4 +243,22 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
             }
         }
     }
+
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.conversation_list_menu,menu)
+//        val searchItem = menu.findItem(R.id.action_search)
+//        val searchView = searchItem.actionView as SearchView
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+////                viewModel.filterNameForCLF.postValue(newText)
+//                return true
+//            }
+//        })
+//
+//        super.onCreateOptionsMenu(menu, inflater)
+//    }
 }

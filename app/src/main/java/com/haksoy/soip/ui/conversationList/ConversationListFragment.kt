@@ -1,10 +1,9 @@
 package com.haksoy.soip.ui.conversationList
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -38,15 +37,18 @@ class ConversationListFragment : Fragment(),
             savedInstanceState: Bundle?
     ): View? {
         binding = FragmentConversationListBinding.inflate(inflater, container, false)
-        setupViewPager()
+
+        initiateData()
         viewModel.conversationWithUserLiveData.observe(viewLifecycleOwner, Observer {
             adapter = ConversationListAdapter(this, it)
             binding.chatRecyclerView.adapter = adapter
         })
+
+        setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setupViewPager() {
+    private fun initiateData() {
         binding.chatRecyclerView.setHasFixedSize(true)
         binding.chatRecyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -113,4 +115,23 @@ class ConversationListFragment : Fragment(),
         sharedViewModel.conversationDetailWithUser.postValue(user)
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        binding.toolbar.menu.clear()
+        viewModel.filterNameForCLF.postValue("")
+        binding.toolbar.inflateMenu(R.menu.conversation_list_menu)
+        val searchItem = binding.toolbar.menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.filterNameForCLF.postValue(newText)
+                return true
+            }
+        })
+
+    }
 }

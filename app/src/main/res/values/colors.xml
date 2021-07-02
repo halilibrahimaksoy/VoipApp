@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <color name="actionModeBackground">#72b6e7</color>
     <color name="color_text1">#222</color>
     <color name="color_text2">#444</color>
     <color name="border_shadow">#CABBBBBB</color>
