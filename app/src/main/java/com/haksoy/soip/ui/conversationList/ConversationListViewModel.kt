@@ -36,7 +36,7 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
                     Transformations.switchMap(conversationWithUser) { linkedHashMap ->
                         val filteredResult = MutableLiveData<LinkedHashMap<User, Conversation>>()
                         val filteredList = linkedHashMap.filter {
-                            it.key.name!!.toLowerCase(Locale.getDefault())!!.contains(searchKey.trim().toLowerCase(Locale.getDefault()))
+                            it.key.name!!.toLowerCase(Locale.getDefault()).contains(searchKey.trim().toLowerCase(Locale.getDefault()))
                         }
                         filteredResult.value = LinkedHashMap(filteredList)
                         filteredResult
