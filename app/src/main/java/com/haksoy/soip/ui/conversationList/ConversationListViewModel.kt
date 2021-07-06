@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.haksoy.soip.data.chat.Conversation
-import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.database.UserRepository
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.utlis.Resource
@@ -16,10 +15,7 @@ import java.util.concurrent.Executors
 import kotlin.collections.LinkedHashMap
 
 class ConversationListViewModel(application: Application) : AndroidViewModel(application) {
-    private val chatRepository = ChatRepository.getInstance(
-            application.applicationContext,
-            Executors.newSingleThreadExecutor()
-    )
+
     private val userRepository = UserRepository.getInstance(
             application.applicationContext,
             Executors.newSingleThreadExecutor()
