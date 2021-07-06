@@ -42,6 +42,10 @@ android {
         dataBinding = true // for data binding
         viewBinding = true // for view binding
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
