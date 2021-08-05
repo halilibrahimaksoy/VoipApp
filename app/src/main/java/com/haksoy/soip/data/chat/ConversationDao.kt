@@ -20,6 +20,6 @@ interface ConversationDao {
     @Query("UPDATE conversation_table SET text = null WHERE chatUid=(:chatUid)")
     fun removeChat(chatUid: String)
 
-    @Query("UPDATE conversation_table SET is_seen=1 WHERE userUid=(:userUid)")
-    fun marAsRead(userUid: String)
+    @Query("UPDATE conversation_table SET is_seen=1 WHERE userUid=(:userUid) and is_seen=0")
+    fun markAsRead(userUid: String)
 }

@@ -27,5 +27,5 @@ interface ChatDao {
     fun getUnreadConversation(userUid: String): LiveData<List<Chat>>
 
     @Query("UPDATE chat_table SET is_seen=1 WHERE userUid=(:userUid) and is_seen=0")
-    fun marAsRead(userUid: String)
+    fun markAsRead(userUid: String)
 }

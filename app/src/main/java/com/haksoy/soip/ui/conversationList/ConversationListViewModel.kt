@@ -1,6 +1,7 @@
 package com.haksoy.soip.ui.conversationList
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,8 @@ import java.util.*
 import java.util.concurrent.Executors
 import kotlin.collections.LinkedHashMap
 
+private const val TAG = "SoIP:ConversationListViewModel"
+
 class ConversationListViewModel(application: Application) : AndroidViewModel(application) {
     private val chatRepository = ChatRepository.getInstance(
             application.applicationContext,
@@ -25,7 +28,6 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
             Executors.newSingleThreadExecutor()
     )
 
-    //    val conversationWithUserLiveData = getConversationList()
     val conversationWithUserLiveData: LiveData<LinkedHashMap<User, Conversation>>
         get() = Transformations.switchMap(filterNameForCLF) { searchKey ->
             val conversationWithUser = getConversationList()
@@ -50,6 +52,7 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
         val result = MutableLiveData<LinkedHashMap<User, Conversation>>()
         val conversationsWithUser = LinkedHashMap<User, Conversation>()
         chatRepository.getConversationList().observeForever { conversations ->
+            Log.i(TAG, "getConversationList: Conversations Observed $(conversations.size)")
             conversationsWithUser.clear()
             for (chat in conversations) {
                 if (!chat.is_seen)
@@ -59,6 +62,7 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
                 userRepository.getUser(chat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
                         conversationsWithUser[it.data as User] = chat
+                        Log.i(TAG, "getConversationList: postValue data")
                         result.postValue(conversationsWithUser)
                     }
                 }
@@ -68,18 +72,11 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
     }
 
     fun removeConversationAtPosition(position: Int) {
+        Log.i(TAG, "removeConversationAtPosition: position at $position")
         conversationWithUserLiveData.observeOnce {
             chatRepository.removeConversation(it.keys.toList()[position].uid)
         }
     }
 
-    fun markAsReadConversation(user: User) {
-        conversationWithUserLiveData.observeOnce {
-            if (!it[user]!!.is_seen)
-                chatRepository.marAsRead(user.uid)
-        }
-
-    }
-
-    val filterNameForCLF = MutableLiveData<String>()
+    val filterNameForCLF = MutableLiveData<String>("")
 }

@@ -76,10 +76,10 @@ class ChatRepository private constructor(
         }
     }
 
-    fun marAsRead(userUid: String) {
+    fun markAsRead(userUid: String) {
         executor.execute {
-            chatDao.marAsRead(userUid)
-            conversationDao.marAsRead(userUid)
+            chatDao.markAsRead(userUid)
+            conversationDao.markAsRead(userUid)
         }
     }
 }

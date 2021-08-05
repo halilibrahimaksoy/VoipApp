@@ -111,7 +111,7 @@ class ConversationListFragment : Fragment(),
     }
 
     override fun onClickedUser(user: User) {
-        viewModel.markAsReadConversation(user)
+//        viewModel.markAsReadConversation(user)
         sharedViewModel.conversationDetailWithUser.postValue(user)
     }
 

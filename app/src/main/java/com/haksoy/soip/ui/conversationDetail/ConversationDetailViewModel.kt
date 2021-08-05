@@ -105,7 +105,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun markAsRead() {
-        chatRepository.marAsRead(user.uid)
+        chatRepository.markAsRead(user.uid)
     }
 
     fun getFileNameWithUserUid(fileName: String): String {
