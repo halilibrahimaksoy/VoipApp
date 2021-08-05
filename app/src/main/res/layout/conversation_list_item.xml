@@ -61,6 +61,6 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/unread_message_count"
         android:textSize="12sp" />
 </RelativeLayout>

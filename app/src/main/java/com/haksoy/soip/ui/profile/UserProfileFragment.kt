@@ -16,7 +16,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.github.drjacky.imagepicker.ImagePicker
 import com.google.firebase.iid.FirebaseInstanceId
 import com.haksoy.soip.R
@@ -84,8 +83,12 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.get(Constants.UserProfileFragmentReason)?.let { reasonStatus = it as Status }
-        arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let { _user = it as User }
+        arguments?.get(Constants.UserProfileFragmentReason)?.let {
+            reasonStatus = it as Status
+        }
+        arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let {
+            _user = it as User
+        }
 
         if (reasonStatus == Status.REGISTRATION)
             editMode = true
@@ -99,7 +102,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
                 binding.txtEmail.text = viewModel.getEmail()
                 _user = User(viewModel.getUid(), viewModel.getEmail())
-                viewModel.fetchUserDate(viewModel.getUid())
+                viewModel.fetchUserDateFromLocale(viewModel.getUid())
                 viewModel.currentUser.observe(viewLifecycleOwner, Observer {
                     it?.let {
                         fillUserData(it)
@@ -113,7 +116,14 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             }
             Status.OTHER_USER -> {
                 fillUserData(_user)
-                viewModel.addUser(_user)
+                viewModel.fetchUserDate(_user.uid)
+                viewModel.currentUser.observe(viewLifecycleOwner, Observer {
+                    it?.let {
+                        fillUserData(it)
+                        _user = it
+                        viewModel.addUser(_user)
+                    }
+                })
             }
         }
 

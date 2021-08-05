@@ -2,10 +2,10 @@ package com.haksoy.soip.ui.profile
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.haksoy.soip.data.user.User
 import androidx.lifecycle.MutableLiveData
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.database.UserRepository
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
 import java.util.concurrent.Executors
@@ -35,6 +35,16 @@ class UserProfileViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
     }
+    fun fetchUserDateFromLocale(uid: String) {
+        userRepository.getUser(uid).observeOnce {
+            if (it.status == Resource.Status.SUCCESS) {
+                currentUser.postValue(it.data!!)
+            } else if (it.status == Resource.Status.ERROR) {
+
+            }
+        }
+    }
+
     fun addUser(user: User){
         userRepository.addUser(user)
     }
