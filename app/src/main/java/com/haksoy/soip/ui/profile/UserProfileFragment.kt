@@ -87,7 +87,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
             reasonStatus = it as Status
         }
         arguments?.get(Constants.UserProfileFragmentSelectedUser)?.let {
-            _user = it as User
+            viewModel.currentUser.value = (it as User)
         }
 
         if (reasonStatus == Status.REGISTRATION)
@@ -99,34 +99,22 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         when (reasonStatus) {
             Status.AUTH_USER -> {
-
                 binding.txtEmail.text = viewModel.getEmail()
-                _user = User(viewModel.getUid(), viewModel.getEmail())
-                viewModel.fetchUserDateFromLocale(viewModel.getUid())
-                viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-                    it?.let {
-                        fillUserData(it)
-                        _user = it
-                    }
-                })
+                viewModel.fetchUserDataFromLocale(viewModel.getUid())
             }
             Status.REGISTRATION -> {
                 binding.txtEmail.text = viewModel.getEmail()
-                _user = User(viewModel.getUid(), viewModel.getEmail())
+                viewModel.currentUser.value = User(viewModel.getUid(), viewModel.getEmail())
             }
             Status.OTHER_USER -> {
-                fillUserData(_user)
-                viewModel.fetchUserDate(_user.uid)
-                viewModel.currentUser.observe(viewLifecycleOwner, Observer {
-                    it?.let {
-                        fillUserData(it)
-                        _user = it
-                        viewModel.addUser(_user)
-                    }
-                })
+                viewModel.fetchUserData()
             }
         }
 
+        viewModel.currentUser.observe(viewLifecycleOwner, Observer {
+            fillUserData(it)
+            _user = it
+        })
         optimizeMenuForStatus()
         setEditMode()
     }
@@ -298,7 +286,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun updateUserProfileCompleted() {
         editMode = false
         setEditMode()
-        viewModel.fetchUserDate(viewModel.getUid())
+        viewModel.fetchUserData()
 
         if (reasonStatus == Status.REGISTRATION) {
             activity?.startActivity(Intent(context, MainActivity::class.java))
@@ -313,7 +301,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
         _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
         _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN,
-            FirebaseInstanceId.getInstance().token!!
+                FirebaseInstanceId.getInstance().token!!
         )
     }
 }

@@ -26,16 +26,17 @@ class UserProfileViewModel(application: Application) : AndroidViewModel(applicat
         return firebaseDao.getCurrentUserEmail()
     }
 
-    fun fetchUserDate(uid: String) {
-        firebaseDao.fetchUserDate(uid).observeOnce {
+    fun fetchUserData() {
+        firebaseDao.fetchUserDate(currentUser.value!!.uid).observeOnce {
             if (it.status == Resource.Status.SUCCESS) {
                 currentUser.postValue(it.data!!)
+                addUser(it.data!!)
             } else if (it.status == Resource.Status.ERROR) {
 
             }
         }
     }
-    fun fetchUserDateFromLocale(uid: String) {
+    fun fetchUserDataFromLocale(uid: String) {
         userRepository.getUser(uid).observeOnce {
             if (it.status == Resource.Status.SUCCESS) {
                 currentUser.postValue(it.data!!)
@@ -45,7 +46,7 @@ class UserProfileViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun addUser(user: User){
+    private fun addUser(user: User){
         userRepository.addUser(user)
     }
 
