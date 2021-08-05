@@ -62,7 +62,6 @@ class ConversationListViewModel(application: Application) : AndroidViewModel(app
                 userRepository.getUser(chat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
                         conversationsWithUser[it.data as User] = chat
-                        Log.i(TAG, "getConversationList: postValue data")
                         result.postValue(conversationsWithUser)
                     }
                 }

@@ -1,6 +1,7 @@
 package com.haksoy.soip.ui.conversationDetail
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.haksoy.soip.data.FirebaseDao
@@ -12,6 +13,8 @@ import com.haksoy.soip.data.user.User
 import com.haksoy.soip.messaging.MessageRepository
 import java.util.*
 import java.util.concurrent.Executors
+
+private const val TAG = "SoIP:ConversationDetailViewModel"
 
 class ConversationDetailViewModel(application: Application) : AndroidViewModel(application) {
     private val firebaseDao = FirebaseDao.getInstance()
@@ -30,7 +33,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     }
 
     fun sendChat(message: String) {
-
+        Log.i(TAG, "sendChat -> $message")
         val localChat = Chat(
                 UUID.randomUUID().toString(),
                 user.uid,
