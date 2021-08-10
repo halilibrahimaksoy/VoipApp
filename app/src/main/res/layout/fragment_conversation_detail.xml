@@ -66,4 +66,11 @@
 
     <include layout="@layout/conversation_input_layout"
         android:id="@+id/input_layout"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_width="match_parent"
+        android:id="@+id/galleryFragment"
+        anim:layout_constraintStart_toStartOf="parent"
+        anim:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

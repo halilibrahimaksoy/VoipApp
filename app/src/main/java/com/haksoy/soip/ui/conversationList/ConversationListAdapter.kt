@@ -57,7 +57,7 @@ class ConversationListViewHolder(
         this.user = user
         itemBinding.txtFullName.text = user.name
         if (!ChatType.isMedia(chat.type))
-            itemBinding.txtMessage.text = chat.text.toString()
+            itemBinding.txtMessage.text = chat.text?:""
         else {
             itemBinding.txtMessage.setText(ChatType.getMessageId(chat.type))
             itemBinding.imgIconMsg.setImageResource(ChatType.getDrawableId(chat.type))

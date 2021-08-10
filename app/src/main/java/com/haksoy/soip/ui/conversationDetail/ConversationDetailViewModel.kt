@@ -19,11 +19,11 @@ private const val TAG = "SoIP:ConversationDetailViewModel"
 class ConversationDetailViewModel(application: Application) : AndroidViewModel(application) {
     private val firebaseDao = FirebaseDao.getInstance()
     private val chatRepository = ChatRepository.getInstance(
-            application.applicationContext,
-            Executors.newSingleThreadExecutor()
+        application.applicationContext,
+        Executors.newSingleThreadExecutor()
     )
     private val messageRepository = MessageRepository.getInstance(
-            Executors.newSingleThreadExecutor()
+        Executors.newSingleThreadExecutor()
     )
 
     lateinit var user: User
@@ -35,41 +35,41 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
     fun sendChat(message: String) {
         Log.i(TAG, "sendChat -> $message")
         val localChat = Chat(
-                UUID.randomUUID().toString(),
-                user.uid,
-                ChatDirection.OutGoing,
-                true,
-                ChatType.SEND_TEXT,
-                message,
-                null,
-                Date().time,
-                null
+            UUID.randomUUID().toString(),
+            user.uid,
+            ChatDirection.OutGoing,
+            true,
+            ChatType.SEND_TEXT,
+            message,
+            null,
+            Date().time,
+            null
         )
         chatRepository.addChat(localChat)
 
         val remoteChat = Chat(
-                localChat.uid,
-                firebaseDao.getCurrentUserUid(),
-                ChatDirection.InComing,
-                false,
-                ChatType.RECEIVED_TEXT,
-                message,
-                null,
-                localChat.createDate,
-                null
+            localChat.uid,
+            firebaseDao.getCurrentUserUid(),
+            ChatDirection.InComing,
+            false,
+            ChatType.RECEIVED_TEXT,
+            message,
+            null,
+            localChat.createDate,
+            null
         )
 
         if (!user.token.isNullOrEmpty())
             messageRepository.sendChat(user.token.toString(), remoteChat)
     }
 
-    fun sendImage(fileName: String, messageUri: String) {
+    fun sendImage(fileName: String, messageUri: String, chatType: ChatType) {
         val localChat = Chat(
             UUID.randomUUID().toString(),
             user.uid,
             ChatDirection.OutGoing,
             true,
-            ChatType.SEND_IMAGE,
+                chatType,
             getFileNameWithUserUid(fileName),
             messageUri,
             Date().time,
@@ -82,7 +82,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             firebaseDao.getCurrentUserUid(),
             ChatDirection.InComing,
             false,
-            ChatType.RECEIVED_IMAGE,
+            getRemoteMediaType(chatType),
             localChat.text,
             messageUri,
             localChat.createDate,
@@ -93,17 +93,24 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             messageRepository.sendChat(user.token.toString(), remoteChat)
     }
 
+    fun getRemoteMediaType(chatType: ChatType): ChatType {
+        return when (chatType) {
+            ChatType.SEND_IMAGE -> ChatType.RECEIVED_IMAGE
+            else -> ChatType.RECEIVED_VIDEO
+        }
+    }
+
     fun removeChatAtPosition(position: Int) {
         chatRepository.removeChat(conversationDetailList.value!![position])
     }
 
     fun getChatDirection(position: Int): ChatDirection =
-            conversationDetailList.value!![position].direction
+        conversationDetailList.value!![position].direction
 
     fun sendRemoveRequestAtPosition(position: Int) {
         messageRepository.removeChat(
-                user.token.toString(),
-                conversationDetailList.value!![position]
+            user.token.toString(),
+            conversationDetailList.value!![position]
         )
     }
 

@@ -5,14 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatType
-import com.haksoy.soip.databinding.ReceivedImageItemBinding
-import com.haksoy.soip.databinding.ReceivedTextItemBinding
-import com.haksoy.soip.databinding.SendImageItemBinding
-import com.haksoy.soip.databinding.SendTextItemBinding
-import com.haksoy.soip.ui.holdes.ReceivedImageViewHolder
-import com.haksoy.soip.ui.holdes.ReceivedTextViewHolder
-import com.haksoy.soip.ui.holdes.SendImageViewHolder
-import com.haksoy.soip.ui.holdes.SendTextViewHolder
+import com.haksoy.soip.databinding.*
+import com.haksoy.soip.ui.holdes.*
 import java.util.*
 
 class ConversationDetailAdapter(private val listener: ConversationDetailItemClickListener) :
@@ -40,6 +34,9 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
             ChatType.RECEIVED_TEXT.ordinal -> return ReceivedTextViewHolder(ReceivedTextItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
             ChatType.SEND_IMAGE.ordinal -> return SendImageViewHolder(SendImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
             ChatType.RECEIVED_IMAGE.ordinal -> return ReceivedImageViewHolder(ReceivedImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+            ChatType.SEND_VIDEO.ordinal -> return SendVideoViewHolder(SendVideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+            ChatType.RECEIVED_VIDEO.ordinal -> return ReceivedVideoViewHolder(ReceivedVideoItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
+
         }
         return SendTextViewHolder(SendTextItemBinding.inflate(LayoutInflater.from(parent.context), parent, false), listener)
     }
@@ -56,6 +53,8 @@ class ConversationDetailAdapter(private val listener: ConversationDetailItemClic
             ChatType.RECEIVED_TEXT -> (holder as ReceivedTextViewHolder).bind(items[position])
             ChatType.SEND_IMAGE -> (holder as SendImageViewHolder).bind(items[position])
             ChatType.RECEIVED_IMAGE -> (holder as ReceivedImageViewHolder).bind(items[position])
+            ChatType.SEND_VIDEO -> (holder as SendVideoViewHolder).bind(items[position])
+            ChatType.RECEIVED_VIDEO -> (holder as ReceivedVideoViewHolder).bind(items[position])
         }
     }
 }

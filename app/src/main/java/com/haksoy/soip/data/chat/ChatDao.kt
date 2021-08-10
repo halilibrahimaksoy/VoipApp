@@ -11,6 +11,9 @@ interface ChatDao {
     @Query("SELECT * FROM chat_table WHERE userUid=(:uid) ORDER BY createDate DESC")
     fun getConversationDetails(uid: String): LiveData<List<Chat>>
 
+    @Query("SELECT * FROM chat_table WHERE userUid=(:uid) and (type ='SEND_IMAGE' or type='RECEIVED_IMAGE'or type ='SEND_VIDEO' or type='RECEIVED_VIDEO') ORDER BY createDate DESC")
+    fun getConversationMedia(uid: String): LiveData<List<Chat>>
+
     @Insert
     fun addChat(chatItem: Chat)
 

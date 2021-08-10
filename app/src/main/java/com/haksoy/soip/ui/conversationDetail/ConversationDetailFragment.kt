@@ -20,10 +20,12 @@ import com.github.florent37.inlineactivityresult.kotlin.startForResult
 import com.haksoy.soip.R
 import com.haksoy.soip.data.chat.Chat
 import com.haksoy.soip.data.chat.ChatDirection
+import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationDeteleMenuBinding
 import com.haksoy.soip.databinding.FragmentConversationDetailBinding
 import com.haksoy.soip.ui.CameraActivity
+import com.haksoy.soip.ui.gallery.MediaGalleryFragment
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.utlis.*
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -217,8 +219,8 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         intent.putExtra(IntentUtils.CAMERA_VIEW_SHOW_PICK_IMAGE_BUTTON, true)
 
         startForResult(Intent(intent)) { result ->
-            val resultsIntent=result.data
-            viewModel.sendImage(resultsIntent!!.getStringExtra(IntentUtils.EXTRA_FILE_NAME_RESULT)!!, resultsIntent.getStringExtra(IntentUtils.EXTRA_PATH_RESULT)!!)
+            val resultsIntent = result.data
+            viewModel.sendImage(resultsIntent!!.getStringExtra(IntentUtils.EXTRA_FILE_NAME_RESULT)!!, resultsIntent.getStringExtra(IntentUtils.EXTRA_PATH_RESULT)!!, (resultsIntent.getSerializableExtra(IntentUtils.EXTRA_TYPE_RESULT) as ChatType?)!!)
         }.onFailed { result ->
             println("asdf")
         }
@@ -226,7 +228,18 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     }
 
     override fun onClickChat(chat: Chat) {
-
+        if (ChatType.isMedia(chat.type)) {
+            val mediaGalleryFragment =
+                    MediaGalleryFragment.newInstance(sharedViewModel.conversationDetailWithUser.value!!.uid, chat.uid)
+            childFragmentManager.beginTransaction()
+                    .replace(
+                            R.id.galleryFragment,
+                            mediaGalleryFragment,
+                            Constants.MediaGalleryFragmentTag
+                    )
+                    .addToBackStack(Constants.MediaGalleryFragmentTag)
+                    .commit()
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -243,22 +256,4 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
             }
         }
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.conversation_list_menu,menu)
-//        val searchItem = menu.findItem(R.id.action_search)
-//        val searchView = searchItem.actionView as SearchView
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-////                viewModel.filterNameForCLF.postValue(newText)
-//                return true
-//            }
-//        })
-//
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
 }

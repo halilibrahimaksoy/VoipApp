@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.haksoy.soip.R
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         sharedViewModel.selectedUser.observe(this, Observer {
             Log.i(TAG, "sharedViewModel  :  selectedUser observed")
 
-            showUserDetailFragment(it)
+            showUserProfileFragment(it)
         })
         intent.getStringExtra(Constants.ConversationDetailFragmentSelectedUser)?.let {
             viewModel.getUser(it).observeOnce {
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                 .commit()
     }
 
-    private fun showUserDetailFragment(user: User) {
+    private fun showUserProfileFragment(user: User) {
         val userProfileFragment =
                 UserProfileFragment.newInstance(UserProfileFragment.Status.OTHER_USER, user)
         supportFragmentManager.beginTransaction()
@@ -146,9 +147,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+
+        for (fragment in supportFragmentManager.fragments) {
+            if (fragment.isVisible && hasBackStack(fragment)) {
+                if (popFragment(fragment)) return
+            }
+        }
         super.onBackPressed()
         if (supportFragmentManager.backStackEntryCount == 0)
             setClickable(false)
+    }
+
+    private fun hasBackStack(fragment: Fragment): Boolean {
+        return fragment.childFragmentManager.backStackEntryCount > 0
+    }
+
+    private fun popFragment(fragment: Fragment): Boolean {
+        val fragmentManager = fragment.childFragmentManager
+        for (childFragment in fragment.childFragmentManager.fragments) {
+            if (childFragment.isVisible) {
+                return if (hasBackStack(childFragment)) {
+                    popFragment(childFragment)
+                } else {
+                    fragmentManager.popBackStack()
+                    true
+                }
+            }
+        }
+        return false
     }
 
 }
