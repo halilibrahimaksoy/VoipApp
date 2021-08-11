@@ -2,7 +2,6 @@ package com.haksoy.soip.ui
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.SystemClock
@@ -10,6 +9,7 @@ import android.util.Log
 import android.widget.Chronometer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toFile
 import com.cjt2325.cameralibrary.JCameraView
 import com.cjt2325.cameralibrary.ResultCodes
 import com.cjt2325.cameralibrary.listener.ClickListener
@@ -17,13 +17,11 @@ import com.cjt2325.cameralibrary.listener.ErrorListener
 import com.cjt2325.cameralibrary.listener.JCameraListener
 import com.cjt2325.cameralibrary.listener.RecordStartListener
 import com.cjt2325.cameralibrary.util.DeviceUtil
+import com.github.drjacky.imagepicker.ImagePicker
 import com.haksoy.soip.R
 import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.utlis.FileUtils
 import com.haksoy.soip.utlis.IntentUtils
-import com.zhihu.matisse.Matisse
-import com.zhihu.matisse.MimeType
-import com.zhihu.matisse.engine.impl.GlideEngine
 import me.zhanghai.android.systemuihelper.SystemUiHelper
 import java.io.File
 
@@ -123,19 +121,26 @@ class CameraActivity : AppCompatActivity() {
 
 
     private fun pickImages() {
-        Matisse.from(this@CameraActivity)
-            .choose(
-                MimeType.of(
-                    MimeType.MP4, MimeType.THREEGPP, MimeType.THREEGPP2
-                    , MimeType.JPEG, MimeType.BMP, MimeType.PNG
-                )
-            )
-            .countable(false)
-            .maxSelectablePerMediaType(MAX_IMAGE_SELECTABLE, MAX_VIDEO_SELECTABLE)
-            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-            .thumbnailScale(0.85f)
-            .imageEngine(GlideEngine())
-            .forResult(REQUEST_CODE_PICK_FROM_GALLERY)
+        ImagePicker.with(this).galleryOnly()
+            .compress(1024)
+            .crop()//Final image size will be less than 1 MB(Optional)
+            .maxResultSize(
+                1080,
+                1080
+            ) //Final image resolution will be less than 1080 x 1080(Optional)
+            .start { resultCode, data ->
+                if (resultCode == Activity.RESULT_OK) {
+                    val intent = Intent()
+                    intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, data!!.data!!.path)
+                    intent.putExtra(IntentUtils.EXTRA_FILE_NAME_RESULT, data.data!!.toFile().name)
+                    intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                    Toast.makeText(applicationContext, ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
     }
 
     override fun onStart() {
@@ -155,21 +160,4 @@ class CameraActivity : AppCompatActivity() {
         jCameraView!!.onPause()
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_PICK_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
-//            setResult(ResultCodes.PICK_IMAGE_FROM_CAMERA, data)
-            val intent = Intent()
-            val fileUri = Matisse.obtainPathResult(data)[0]
-            intent.putExtra(IntentUtils.EXTRA_PATH_RESULT, fileUri)
-            intent.putExtra(IntentUtils.EXTRA_FILE_NAME_RESULT, File(fileUri).name)
-            intent.putExtra(IntentUtils.EXTRA_TYPE_RESULT, ChatType.SEND_IMAGE)
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-    }
 }
