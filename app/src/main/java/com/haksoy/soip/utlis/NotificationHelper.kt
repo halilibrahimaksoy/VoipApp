@@ -15,6 +15,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.haksoy.soip.MainApplication
 import com.haksoy.soip.R
+import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.database.ChatRepository
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.ui.main.MainActivity
@@ -62,7 +63,6 @@ class NotificationHelper(private val context: Context) {
 
         val channelId = Constants.NotificationChannelID
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val inboxStyle = NotificationCompat.InboxStyle()
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setAutoCancel(true)
@@ -72,13 +72,32 @@ class NotificationHelper(private val context: Context) {
 
 
         chatRepository.getUnreadConversation(user.uid).observeOnce {
-            for (chat in it) {
-                inboxStyle.addLine(chat.getText())
+            if (it.size > 1) {
+                val inboxStyle = NotificationCompat.InboxStyle()
+                for (chat in it) {
+                    inboxStyle.addLine(chat.getText())
+                }
+                notificationBuilder.setStyle(inboxStyle)
+
+            } else {
+                val chat = it[0]
+                if (ChatType.isMedia(chat.type)) {
+                    val bigPictureStyle = NotificationCompat.BigPictureStyle()
+                    bigPictureStyle.bigPicture(FileUtils.convertFileImageToBitmap(chat.contentUrl!!))
+                    notificationBuilder.setStyle(bigPictureStyle)
+
+                } else {
+                    val bigTextStyle = NotificationCompat.BigTextStyle()
+                    bigTextStyle.bigText(chat.getText())
+                    notificationBuilder.setStyle(bigTextStyle)
+                }
             }
-
-            notificationBuilder.setContentTitle(getUserNameWithNumOfMessages(it.size, user.name!!))
-            notificationBuilder.setStyle(inboxStyle)
-
+            notificationBuilder.setContentTitle(
+                getUserNameWithNumOfMessages(
+                    it.size,
+                    user.name!!
+                )
+            )
             // Since android Oreo notification channel is needed.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -98,7 +117,6 @@ class NotificationHelper(private val context: Context) {
                         resource: Bitmap,
                         transition: Transition<in Bitmap?>?
                     ) {
-
                         notificationBuilder.setLargeIcon(resource)
                         manager!!.notify(
                             user.uid.hashCode()/* ID of notification */,

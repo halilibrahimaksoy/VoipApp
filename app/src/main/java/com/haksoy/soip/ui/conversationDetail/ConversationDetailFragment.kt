@@ -66,6 +66,7 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
         binding.txtFullName.setOnClickListener(this)
         setupViewPager()
         fillUserData()
+        focusToInput()
         return binding.root
     }
 
@@ -211,7 +212,12 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
                     binding.inputLayout.txtMessage.text.toString()
             )
             binding.inputLayout.txtMessage.setText("")
+            focusToInput()
         }
+    }
+
+    private fun focusToInput() {
+        binding.inputLayout.txtMessage.requestFocus()
     }
 
     private fun startCamera() {

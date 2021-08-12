@@ -1,6 +1,7 @@
 package com.haksoy.soip.utlis
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
 import com.haksoy.soip.MainApplication
@@ -89,4 +90,19 @@ object FileUtils {
             e.printStackTrace()
         }
     }
+    private val options: BitmapFactory.Options
+        get() {
+            val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = false
+            options.inPreferredConfig = Bitmap.Config.RGB_565
+            options.inDither = true
+            return options
+        }
+    private fun decodeFile(path: String?): Bitmap {
+        return BitmapFactory.decodeFile(path, options)
+    }
+    fun convertFileImageToBitmap(filePath: String): Bitmap {
+        return decodeFile(filePath)
+    }
+
 }

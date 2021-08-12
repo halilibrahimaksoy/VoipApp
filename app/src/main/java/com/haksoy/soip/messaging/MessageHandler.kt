@@ -3,6 +3,8 @@ package com.haksoy.soip.messaging
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.haksoy.soip.MainApplication
 import com.haksoy.soip.data.FirebaseDao
 import com.haksoy.soip.data.chat.Chat
@@ -45,24 +47,14 @@ class MessageHandler(val context: Context) {
     }
 
     private fun handleNewChat(chat: Chat) {
-        if (ChatType.isMedia(chat.type)) {
-            val desFile = FileUtils.generateFile(ChatType.SEND_IMAGE)
-            GlobalScope.launch(Dispatchers.Main) {
-                FirebaseDao.getInstance().getImage(chat.getText(), desFile!!.absolutePath)
-                    .observeOnce {
-                        if (it.status == Resource.Status.SUCCESS) {
-                            chat.contentUrl = desFile.absolutePath
-                            chatRepository.addChat(chat)
-                        } else if (it.status == Resource.Status.ERROR) {
-//todo handle donwload error
-                            chatRepository.addChat(chat)
-                        }
-                    }
+        GlobalScope.launch(Dispatchers.Main) {
+            saveNewChat(chat).observeOnce {
+                sendNotification(chat)
             }
-        } else {
-            chatRepository.addChat(chat)
         }
+    }
 
+    private fun sendNotification(chat: Chat) {
         GlobalScope.launch(Dispatchers.Main) {
             if (!context.isAppInForeground()) {
                 userRepository.getUser(chat.userUid).observeOnce {
@@ -87,5 +79,30 @@ class MessageHandler(val context: Context) {
                 }
             }
         }
+    }
+
+    private fun saveNewChat(chat: Chat): LiveData<Resource<Boolean>> {
+        val result = MutableLiveData<Resource<Boolean>>()
+        if (ChatType.isMedia(chat.type)) {
+            val desFile = FileUtils.generateFile(ChatType.SEND_IMAGE)
+            GlobalScope.launch(Dispatchers.Main) {
+                FirebaseDao.getInstance().getImage(chat.getText(), desFile!!.absolutePath)
+                        .observeOnce {
+                            if (it.status == Resource.Status.SUCCESS) {
+                                chat.contentUrl = desFile.absolutePath
+                                chatRepository.addChat(chat)
+                                result.value = it
+                            } else if (it.status == Resource.Status.ERROR) {
+                                //todo handle donwload error
+                                chatRepository.addChat(chat)
+                                result.value = it
+                            }
+                        }
+            }
+        } else {
+            chatRepository.addChat(chat)
+            result.value = Resource.success(null)
+        }
+        return result
     }
 }

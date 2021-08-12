@@ -1,7 +1,10 @@
 package com.haksoy.soip.ui.main
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -17,6 +20,7 @@ import com.haksoy.soip.ui.userlist.UserListFragment
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
+
 
 private const val TAG = "SoIP:MainActivity"
 
@@ -147,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
+        hideKeyboard()
         for (fragment in supportFragmentManager.fragments) {
             if (fragment.isVisible && hasBackStack(fragment)) {
                 if (popFragment(fragment)) return
@@ -158,6 +162,15 @@ class MainActivity : AppCompatActivity() {
             setClickable(false)
     }
 
+    private fun hideKeyboard(){
+        val imm: InputMethodManager =
+            this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        var view: View? = this.currentFocus
+        if (view == null) {
+            view = View(this)
+        }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
     private fun hasBackStack(fragment: Fragment): Boolean {
         return fragment.childFragmentManager.backStackEntryCount > 0
     }
