@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.haksoy.soip.data.chat.ChatType
 import com.haksoy.soip.data.chat.Conversation
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.ConversationListItemBinding
@@ -53,25 +52,19 @@ class ConversationListViewHolder(
         itemBinding.root.setOnClickListener(this)
     }
 
-    fun bind(user: User, chat: Conversation) {
+    fun bind(user: User, conversation: Conversation) {
         this.user = user
         itemBinding.txtFullName.text = user.name
-        if (!ChatType.isMedia(chat.type))
-            itemBinding.txtMessage.text = chat.text?:""
-        else {
-            itemBinding.txtMessage.setText(ChatType.getMessageId(chat.type))
-            itemBinding.imgIconMsg.setImageResource(ChatType.getDrawableId(chat.type))
-            itemBinding.imgIconMsg.visibility = View.VISIBLE
-        }
+        itemBinding.txtMessage.text = conversation.text
 
 
-        if (!chat.is_seen && chat.unread_message_count > 0) {
+        if (!conversation.is_seen && conversation.unread_message_count > 0) {
             itemBinding.txtUnreadMessageCount.visibility = View.VISIBLE
-            itemBinding.txtUnreadMessageCount.text = chat.unread_message_count.toString()
+            itemBinding.txtUnreadMessageCount.text = conversation.unread_message_count.toString()
         }
         val cal = Calendar.getInstance()
-        cal.time = Date(chat.createDate)
-        itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)
+        cal.time = Date(conversation.createDate)
+        itemBinding.txtDate.text = SimpleDateFormat("HH:mm").format(conversation.createDate)
         Glide.with(itemBinding.root /* context */)
                 .load(user.profileImage)
                 .circleCrop()

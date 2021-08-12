@@ -5,12 +5,18 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.haksoy.soip.MainApplication
 import com.haksoy.soip.R
 import com.haksoy.soip.data.database.ChatRepository
+import com.haksoy.soip.data.user.User
 import com.haksoy.soip.ui.main.MainActivity
 import java.util.concurrent.Executors
 
@@ -45,10 +51,10 @@ class NotificationHelper(private val context: Context) {
             return field
         }
 
-    fun sendNotification(userUid: String, userName: String, messageText: String) {
+    fun sendNotification(user: User) {
         val intent = Intent(context, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        intent.putExtra(Constants.ConversationDetailFragmentSelectedUser, userUid)
+        intent.putExtra(Constants.ConversationDetailFragmentSelectedUser, user.uid)
         val pendingIntent = PendingIntent.getActivity(
             context, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT
@@ -64,12 +70,13 @@ class NotificationHelper(private val context: Context) {
             .setVibrate(longArrayOf(300, 300))
             .setContentIntent(pendingIntent)
 
-        chatRepository.getUnreadConversation(userUid).observeOnce {
+
+        chatRepository.getUnreadConversation(user.uid).observeOnce {
             for (chat in it) {
-                inboxStyle.addLine(chat.text)
+                inboxStyle.addLine(chat.getText())
             }
 
-            notificationBuilder.setContentTitle(getUserNameWithNumOfMessages(it.size, userName))
+            notificationBuilder.setContentTitle(getUserNameWithNumOfMessages(it.size, user.name!!))
             notificationBuilder.setStyle(inboxStyle)
 
             // Since android Oreo notification channel is needed.
@@ -82,10 +89,32 @@ class NotificationHelper(private val context: Context) {
                 manager!!.createNotificationChannel(channel)
             }
 
-            manager!!.notify(
-                userUid.hashCode()/* ID of notification */,
-                notificationBuilder.build()
-            )
+            Glide.with(MainApplication.instance.applicationContext)
+                .asBitmap()
+                .circleCrop()
+                .load(user.profileImage)
+                .into(object : CustomTarget<Bitmap?>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap?>?
+                    ) {
+
+                        notificationBuilder.setLargeIcon(resource)
+                        manager!!.notify(
+                            user.uid.hashCode()/* ID of notification */,
+                            notificationBuilder.build()
+                        )
+                    }
+
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        super.onLoadFailed(errorDrawable)
+
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                        TODO("Not yet implemented")
+                    }
+                })
         }
     }
 

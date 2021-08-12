@@ -48,7 +48,7 @@ class MessageHandler(val context: Context) {
         if (ChatType.isMedia(chat.type)) {
             val desFile = FileUtils.generateFile(ChatType.SEND_IMAGE)
             GlobalScope.launch(Dispatchers.Main) {
-                FirebaseDao.getInstance().getImage(chat.text!!, desFile!!.absolutePath)
+                FirebaseDao.getInstance().getImage(chat.getText(), desFile!!.absolutePath)
                     .observeOnce {
                         if (it.status == Resource.Status.SUCCESS) {
                             chat.contentUrl = desFile.absolutePath
@@ -68,11 +68,7 @@ class MessageHandler(val context: Context) {
                 userRepository.getUser(chat.userUid).observeOnce {
                     if (it.status == Resource.Status.SUCCESS) {
                         NotificationHelper.getInstance(context)
-                                .sendNotification(
-                                        it.data!!.uid,
-                                        it.data.name!!,
-                                        chat.text!!
-                                )
+                                .sendNotification(it.data!!)
                     }
                 }
 

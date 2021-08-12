@@ -21,7 +21,7 @@ class ReceivedTextViewHolder(
     private lateinit var chat: Chat
     fun bind(chat: Chat) {
         this.chat = chat
-        leftBinding.txtMessage.text = chat.text.toString()
+        leftBinding.txtMessage.text = chat.getText()
         val cal = Calendar.getInstance()
         cal.time = Date(chat.createDate)
         leftBinding.txtDate.text = SimpleDateFormat("HH:mm").format(chat.createDate)

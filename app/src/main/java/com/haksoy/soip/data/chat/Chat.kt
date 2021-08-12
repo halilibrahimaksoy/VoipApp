@@ -12,7 +12,7 @@ data class Chat(
         val direction: ChatDirection,
         val is_seen: Boolean,
         val type: ChatType,
-        val text: String? = null,
+       private val text: String? = null,
         var contentUrl: String? = null,
         val createDate: Long,
         val updateDate: Long? = null
@@ -20,6 +20,14 @@ data class Chat(
 
     override fun toString(): String {
         return if (direction == ChatDirection.InComing) "$text$contentUrl from  $userUid" else "$text$contentUrl to  $userUid"
+    }
+
+    fun getText(): String {
+        return when (type) {
+            ChatType.SEND_TEXT, ChatType.RECEIVED_TEXT -> text ?: ""
+            else -> StringBuilder().append(ChatType.getChatEmoji(type)).append(" ")
+                .append(ChatType.getMediaText(type)).toString()
+        }
     }
 
 }

@@ -20,6 +20,4 @@ data class Conversation(
     override fun toString(): String {
         return if (direction == ChatDirection.InComing) "$text from  $userUid" else "$text to  $userUid"
     }
-
-
 }

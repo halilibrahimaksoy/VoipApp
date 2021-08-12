@@ -35,7 +35,7 @@ class MessageRepository(private val executor: ExecutorService) {
 
     fun sendChat(to: String, remoteChat: Chat) {
         if (ChatType.isMedia(remoteChat.type)) {
-            firebaseDao.uploadMedia(remoteChat.text!!, remoteChat.contentUrl!!).observeOnce {
+            firebaseDao.uploadMedia(remoteChat.getText(), remoteChat.contentUrl!!).observeOnce {
                 if (it.status == Resource.Status.SUCCESS) {
                     Log.i(TAG, "uploadMedia SUCCESS")
                     remoteChat.contentUrl = it.data

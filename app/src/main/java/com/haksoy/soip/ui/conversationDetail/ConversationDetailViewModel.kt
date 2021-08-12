@@ -83,7 +83,7 @@ class ConversationDetailViewModel(application: Application) : AndroidViewModel(a
             ChatDirection.InComing,
             false,
             getRemoteMediaType(chatType),
-            localChat.text,
+            localChat.getText(),
             messageUri,
             localChat.createDate,
             null

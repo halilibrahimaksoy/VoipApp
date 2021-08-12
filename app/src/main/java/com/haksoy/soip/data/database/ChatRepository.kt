@@ -61,7 +61,7 @@ class ChatRepository private constructor(
                     chatItem.is_seen,
                     0,
                     chatItem.type,
-                    chatItem.text,
+                    chatItem.getText(),
                     chatItem.createDate
                 )
             )
