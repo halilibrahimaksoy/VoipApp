@@ -60,4 +60,8 @@
     <string name="search">Search</string>
 
     <string name="chats">Chats</string>
+    <string name="enter_phone_message">Please enter your Country Code \n and Phone number for verification</string>
+    <string name="your_phone_number">Your Phone Number</string>
+    <string name="generate_otp">Generate OTP</string>
+    <string name="verify_your_number">Verify Your Number</string>
 </resources>

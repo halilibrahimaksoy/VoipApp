@@ -6,8 +6,8 @@
     <color name="color_text2">#444</color>
     <color name="unread_message_count">#06d755</color>
     <color name="border_shadow">#CABBBBBB</color>
-    <color name="colorPrimary">#FFF</color>
-    <color name="colorPrimaryDark">#c1c1c1</color>
+<!--    <color name="colorPrimary">#FFF</color>-->
+<!--    <color name="colorPrimaryDark">#c1c1c1</color>-->
     <color name="colorAccent">#FFF</color>
     <color name="black_overlay">#66000000</color>
     <color name="conversation_detail_background">#e5ddd5</color>
@@ -18,6 +18,9 @@
     <color name="conversation_detail_item_left_message">#303030</color>
     <color name="conversation_detail_item_left_date">@color/color_text2</color>
     <color name="delete_menu_background">#80FFFFFF</color>
+    <color name="lightGray">#F2F2F2</color>
 
-
+    <color name="disabledBtnBg">#999999</color>
+    <color name="colorPrimary">#6177FC</color>
+    <color name="colorPrimaryDark">#6177FC</color>
 </resources>

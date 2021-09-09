@@ -15,9 +15,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
-import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
 import com.haksoy.soip.R
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentUserProfileBinding
@@ -289,7 +290,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         viewModel.fetchUserData()
 
         if (reasonStatus == Status.REGISTRATION) {
-            activity?.startActivity(Intent(context, MainActivity::class.java))
+//            activity?.startActivity(Intent(context, MainActivity::class.java))
+            findNavController().navigate(R.id.action_userProfileFragment_to_mainActivity)
             activity?.finish()
         }
     }
@@ -301,7 +303,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
         _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
         _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN,
-                FirebaseInstanceId.getInstance().token!!
+            FirebaseMessaging.getInstance().token.toString()
         )
     }
 }

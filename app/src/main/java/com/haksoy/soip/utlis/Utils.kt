@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -18,6 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
+import com.haksoy.soip.R
 
 
 /**
@@ -92,8 +94,8 @@ fun <T> LiveData<T>.observeOnce(observer: (T) -> Unit) {
     observeForever(object : Observer<T> {
         override fun onChanged(value: T) {
             Log.i(TAG, "observeOnce  : onChanged")
-                observer(value)
-                removeObserver(this)
+            observer(value)
+            removeObserver(this)
         }
     })
 }
@@ -199,3 +201,18 @@ fun Fragment.requestPermissionsWithRationale(
     }
 }
 
+fun Context.getCountryDialCode(): String? {
+    var contryId: String? = null
+    var contryDialCode: String? = null
+    val telephonyMngr = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    contryId = telephonyMngr.simCountryIso.toUpperCase()
+    val arrContryCode = resources.getStringArray(R.array.DialingCountryCode)
+    for (i in arrContryCode.indices) {
+        val arrDial = arrContryCode[i].split(",").toTypedArray()
+        if (arrDial[1].trim { it <= ' ' } == contryId.trim()) {
+            contryDialCode = arrDial[0]
+            break
+        }
+    }
+    return contryDialCode
+}
