@@ -32,7 +32,7 @@
             android:background="@color/colorPrimary">
 
             <EditText
-                android:id="@+id/txtEmail"
+                android:id="@+id/txt_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autofillHints="@string/email"

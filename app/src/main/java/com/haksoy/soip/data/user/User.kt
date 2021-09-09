@@ -10,7 +10,7 @@ import java.util.*
 @Entity(tableName = Constants.USER_TABLE)
 data class User(
         @PrimaryKey var uid: String,
-        var email: String? = null,
+        var phoneNumber: String? = null,
         var name: String? = null,
         var info: String? = null,
         var profileImage: String? = null,

@@ -5,28 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import com.haksoy.soip.R
 import com.haksoy.soip.databinding.FragmentEnterPhoneNumberBinding
 import com.haksoy.soip.ui.auth.AuthenticationViewModel
-import com.haksoy.soip.utlis.getCountryDialCode
+import com.haksoy.soip.utlis.Constants
 
 
 class EnterPhoneNumberFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
     lateinit var binding: FragmentEnterPhoneNumberBinding
 
     private val viewModel by lazy {
         ViewModelProviders.of(this).get(AuthenticationViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -37,20 +29,26 @@ class EnterPhoneNumberFragment : Fragment() {
         binding = FragmentEnterPhoneNumberBinding.inflate(inflater, container, false)
 
 
-        binding.countryCodeText.setText(context!!.getCountryDialCode())
-        binding.countryCodeText.hint = context!!.getCountryDialCode()
+//        binding.countryCodeText.setText(context!!.getCountryDialCode())
+//        binding.countryCodeText.hint = context!!.getCountryDialCode()
+
+        binding.generateBtn.setOnClickListener {
+            val country_code: String = binding.countryCodeText.text.toString()
+            val phone_number: String = binding.phoneNumberText.text.toString()
+            val complete_phone_number =
+                "$country_code$phone_number"
+
+            viewModel.verifyPhoneNumber(requireActivity(), complete_phone_number)
+        }
+
+
+        viewModel.verificationId.observe(viewLifecycleOwner, Observer {
+            findNavController().navigate(R.id.action_enterPhoneNumberFragment_to_otpValidationFragment,Bundle().apply {
+                putString(Constants.VerificationId, it)
+            })
+        })
+
         return binding.root
     }
 
-
-    companion object {
-
-        fun newInstance(param1: String, param2: String) =
-            EnterPhoneNumberFragment().apply {
-                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

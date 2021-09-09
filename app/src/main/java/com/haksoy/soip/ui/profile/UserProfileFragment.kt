@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.google.firebase.messaging.FirebaseMessaging
@@ -100,12 +99,13 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         super.onActivityCreated(savedInstanceState)
         when (reasonStatus) {
             Status.AUTH_USER -> {
-                binding.txtEmail.text = viewModel.getEmail()
+                binding.txtPhoneNumber.text = viewModel.getPhoneNumber()
                 viewModel.fetchUserDataFromLocale(viewModel.getUid())
             }
             Status.REGISTRATION -> {
-                binding.txtEmail.text = viewModel.getEmail()
-                viewModel.currentUser.value = User(viewModel.getUid(), viewModel.getEmail())
+                binding.txtPhoneNumber.text = viewModel.getPhoneNumber()
+                viewModel.currentUser.value = User(viewModel.getUid(), viewModel.getPhoneNumber())
+                _user = User(viewModel.getUid(), viewModel.getPhoneNumber())
             }
             Status.OTHER_USER -> {
                 viewModel.fetchUserData()
@@ -123,8 +123,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillUserData(user: User) {
         if (user.profileImage != null)
             showProfileImage(user.profileImage!!)
-        if (reasonStatus != Status.OTHER_USER && user.email != null)
-            binding.txtEmail.text = user.email
+        if (reasonStatus != Status.OTHER_USER && user.phoneNumber != null)
+            binding.txtPhoneNumber.text = user.phoneNumber
         binding.txtFullName.text = user.name
         binding.txtInfo.text = user.info
         if (!user.socialMedia.instagram.isNullOrEmpty())
@@ -160,8 +160,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = binding.txtFullName2.text.toString()
-        if (TextUtils.isEmpty(email)) {
+        val fullName2 = binding.txtFullName2.text.toString()
+        if (TextUtils.isEmpty(fullName2)) {
             binding.txtFullName2.error = "Required."
             valid = false
         } else {
@@ -237,6 +237,7 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun fillEditFields() {
         binding.txtFullName2.setText(binding.txtFullName.text)
         binding.txtInfo2.setText(binding.txtInfo.text)
+
         _user.let {
             binding.txtInstagram2.setText(it.socialMedia.instagram)
             binding.txtFacebook2.setText(it.socialMedia.facebook)
@@ -290,8 +291,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         viewModel.fetchUserData()
 
         if (reasonStatus == Status.REGISTRATION) {
-//            activity?.startActivity(Intent(context, MainActivity::class.java))
-            findNavController().navigate(R.id.action_userProfileFragment_to_mainActivity)
+            activity?.startActivity(Intent(context, MainActivity::class.java))
+//            findNavController().navigate(R.id.action_userProfileFragment_to_mainActivity)
             activity?.finish()
         }
     }

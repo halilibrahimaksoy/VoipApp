@@ -20,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import com.google.android.material.snackbar.Snackbar
 import com.haksoy.soip.R
+import java.util.*
 
 
 /**
@@ -202,17 +203,17 @@ fun Fragment.requestPermissionsWithRationale(
 }
 
 fun Context.getCountryDialCode(): String? {
-    var contryId: String? = null
-    var contryDialCode: String? = null
+    var countryId: String? = null
+    var countryDialCode: String? = null
     val telephonyMngr = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-    contryId = telephonyMngr.simCountryIso.toUpperCase()
+    countryId = telephonyMngr.simCountryIso.uppercase(Locale.getDefault())
     val arrContryCode = resources.getStringArray(R.array.DialingCountryCode)
     for (i in arrContryCode.indices) {
         val arrDial = arrContryCode[i].split(",").toTypedArray()
-        if (arrDial[1].trim { it <= ' ' } == contryId.trim()) {
-            contryDialCode = arrDial[0]
+        if (arrDial[1].trim { it <= ' ' } == countryId.trim()) {
+            countryDialCode = arrDial[0]
             break
         }
     }
-    return contryDialCode
+    return countryDialCode
 }

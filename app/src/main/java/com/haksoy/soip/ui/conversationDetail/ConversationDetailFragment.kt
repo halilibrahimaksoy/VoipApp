@@ -164,8 +164,8 @@ class ConversationDetailFragment : Fragment(), View.OnClickListener,
     private fun validateForm(): Boolean {
         var valid = true
 
-        val email = binding.inputLayout.txtMessage.text.toString()
-        if (TextUtils.isEmpty(email)) {
+        val message = binding.inputLayout.txtMessage.text.toString()
+        if (TextUtils.isEmpty(message)) {
             binding.inputLayout.txtMessage.error = "Required."
             valid = false
         } else {

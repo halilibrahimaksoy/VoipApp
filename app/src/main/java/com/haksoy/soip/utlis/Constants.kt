@@ -17,6 +17,7 @@ object Constants {
     const val ConversationMediaFragmentSelectedChat = "ConversationMediaFragmentSelectedMedia"
 
     const val FIREBASE_MESSAGING_TOKEN = "FIREBASE_MESSAGING_TOKEN"
+
     //    val randomImageUrl = "https://firebasestorage.googleapis.com/v0/b/voipapp-dbc05.appspot.com/o/USER_PROFILE_IMAGE%2Fw5VU6dSV4Jc56oiyb7LSH2vzwX92?alt=media&token=a0c50e33-2175-4d5e-badd-e7a58eac0446"
     const val UserListFragmentTag = "UserListFragment"
     const val UserProfileFragmentTag = "UserProfileFragmentTag"
@@ -24,7 +25,8 @@ object Constants {
     const val MediaGalleryFragmentTag = "MediaGalleryFragmentTag"
     const val NearlyUserList = "NearlyUserList"
     const val SelectedUserUid = "SelectedUserUid"
-    const val NotificationChannelID="Soip App Notification Channel"
+    const val NotificationChannelID = "Soip App Notification Channel"
+    const val VerificationId = "verificationId"
 
 
     const val REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 34
@@ -35,7 +37,6 @@ object Constants {
     //User Fileds
     const val User = "USER"
     const val uid = "uid"
-    const val email = "email"
     const val name = "name"
     const val info = "info"
     const val profileImage = "profileImage"
@@ -43,15 +44,6 @@ object Constants {
     const val location = "location"
     const val nat = "nat"
 
-    val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile(
-        "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                "\\@" +
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                "(" +
-                "\\." +
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                ")+"
-    )
 
     //Location
     const val nearlyLimit: Double = 10.0//Kilometer
@@ -60,11 +52,9 @@ object Constants {
     //Database
     const val CHAT_DATABASE = "chat-database"
     const val USER_DATABASE = "user-database"
-    const val CHAT_TABLE="chat_table"
-    const val CONVERSATION_TABLE="conversation_table"
-    const val USER_TABLE="user_table"
-
-
+    const val CHAT_TABLE = "chat_table"
+    const val CONVERSATION_TABLE = "conversation_table"
+    const val USER_TABLE = "user_table"
 
 
     //DB_CONSTANTS

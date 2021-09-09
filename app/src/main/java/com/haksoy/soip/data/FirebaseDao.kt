@@ -1,5 +1,6 @@
 package com.haksoy.soip.data
 
+import android.app.Activity
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,6 +8,9 @@ import androidx.lifecycle.MutableLiveData
 import com.firebase.geofire.GeoFire
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryEventListener
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +27,7 @@ import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeOnce
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 private const val TAG = "SoIP:FirebaseDao"
 
@@ -44,38 +49,27 @@ class FirebaseDao {
     private val realtimeDB = FirebaseDatabase.getInstance().getReference("Location")
     private val geoFire = GeoFire(realtimeDB)
 
-    fun createAccount(email: String, password: String): LiveData<Resource<Exception>> {
-        val result = MutableLiveData<Resource<Exception>>()
 
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                result.value = Resource.success(null)
-            }
-            .addOnFailureListener {
-                result.value = Resource.error(it.localizedMessage, it)
-            }
-        return result
+    fun verifyPhoneNumber(activity:Activity,
+        phoneNumber: String,
+        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    ) {
+
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber)       // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(activity)// Activity (for callback binding)
+            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
     }
-
-    fun signIn(email: String, password: String): LiveData<Resource<Exception>> {
+    fun signInWithPhoneAuthCredential(credentials: PhoneAuthCredential): LiveData<Resource<Exception>> {
         val result = MutableLiveData<Resource<Exception>>()
 
-        auth.signInWithEmailAndPassword(email, password)
+        auth.signInWithCredential(credentials)
             .addOnSuccessListener {
                 result.value = Resource.success(null)
                 updateToken()
-            }
-            .addOnFailureListener {
-                result.value = Resource.error(it.localizedMessage, it)
-            }
-        return result
-    }
-
-    fun forgetPassword(email: String): LiveData<Resource<Exception>> {
-        val result = MutableLiveData<Resource<Exception>>()
-        auth.sendPasswordResetEmail(email)
-            .addOnSuccessListener {
-                result.value = Resource.success(null)
             }
             .addOnFailureListener {
                 result.value = Resource.error(it.localizedMessage, it)
@@ -87,8 +81,8 @@ class FirebaseDao {
         return auth.currentUser!!.uid
     }
 
-    fun getCurrentUserEmail(): String {
-        return auth.currentUser!!.email.toString()
+    fun getCurrentUserPhoneNumber(): String {
+        return auth.currentUser!!.phoneNumber.toString()
     }
 
     fun addLocation(location: Location) {

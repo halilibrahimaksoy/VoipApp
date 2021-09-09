@@ -21,6 +21,6 @@
     <color name="lightGray">#F2F2F2</color>
 
     <color name="disabledBtnBg">#999999</color>
-    <color name="colorPrimary">#6177FC</color>
-    <color name="colorPrimaryDark">#6177FC</color>
+    <color name="colorPrimary">#555</color>
+    <color name="colorPrimaryDark">#444</color>
 </resources>

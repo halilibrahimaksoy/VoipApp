@@ -22,8 +22,8 @@ class UserProfileViewModel(application: Application) : AndroidViewModel(applicat
         return firebaseDao.getCurrentUserUid()
     }
 
-    fun getEmail(): String {
-        return firebaseDao.getCurrentUserEmail()
+    fun getPhoneNumber(): String {
+        return firebaseDao.getCurrentUserPhoneNumber()
     }
 
     fun fetchUserData() {
