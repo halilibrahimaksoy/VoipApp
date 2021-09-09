@@ -1,6 +1,5 @@
 package com.haksoy.soip.ui.auth.otpValidation
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
+import com.haksoy.soip.R
 import com.haksoy.soip.databinding.FragmentOtpValidationBinding
 import com.haksoy.soip.ui.auth.AuthenticationViewModel
-import com.haksoy.soip.ui.main.MainActivity
 import com.haksoy.soip.utlis.Constants
 import com.haksoy.soip.utlis.Resource
 import com.haksoy.soip.utlis.observeWithProgress
@@ -44,7 +44,8 @@ class OtpValidationFragment : Fragment() {
                     requireContext(), viewLifecycleOwner,
                     Observer {
                         if (it.status == Resource.Status.SUCCESS) {
-                            startActivity(Intent(activity, MainActivity::class.java))
+//                            startActivity(Intent(activity, MainActivity::class.java))
+                            findNavController().navigate(R.id.action_otpValidationFragment_to_mainActivity)
                             activity?.finish()
                         } else if (it.status == Resource.Status.ERROR) {
                             it.data?.let {

@@ -15,13 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.github.drjacky.imagepicker.ImagePicker
 import com.google.firebase.messaging.FirebaseMessaging
 import com.haksoy.soip.R
 import com.haksoy.soip.data.user.User
 import com.haksoy.soip.databinding.FragmentUserProfileBinding
-import com.haksoy.soip.ui.main.MainActivity
 import com.haksoy.soip.ui.main.SharedViewModel
 import com.haksoy.soip.ui.settings.SettingsActivity
 import com.haksoy.soip.utlis.*
@@ -32,8 +32,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     companion object {
         fun newInstance(status: Status, selectedUser: User? = null) = UserProfileFragment().apply {
             arguments = bundleOf(
-                    Constants.UserProfileFragmentReason to status,
-                    Constants.UserProfileFragmentSelectedUser to selectedUser
+                Constants.UserProfileFragmentReason to status,
+                Constants.UserProfileFragmentSelectedUser to selectedUser
             )
         }
     }
@@ -55,8 +55,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private var newImageUri: Uri? = null
     private lateinit var reasonStatus: Status
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding = FragmentUserProfileBinding.inflate(layoutInflater, container, false)
 
@@ -139,22 +139,22 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
 
     private fun pickImage() {
         ImagePicker.with(this)
-                .compress(1024)
-                .crop()//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(
-                        1080,
-                        1080
-                ) //Final image resolution will be less than 1080 x 1080(Optional)
-                .start { resultCode, data ->
-                    if (resultCode == Activity.RESULT_OK) {
-                        newImageUri = data?.data!!
-                        showProfileImage(newImageUri.toString())
-                        _user.profileImage = newImageUri.toString()
-                    } else if (resultCode == ImagePicker.RESULT_ERROR) {
-                        Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
-                                .show()
-                    }
+            .compress(1024)
+            .crop()//Final image size will be less than 1 MB(Optional)
+            .maxResultSize(
+                1080,
+                1080
+            ) //Final image resolution will be less than 1080 x 1080(Optional)
+            .start { resultCode, data ->
+                if (resultCode == Activity.RESULT_OK) {
+                    newImageUri = data?.data!!
+                    showProfileImage(newImageUri.toString())
+                    _user.profileImage = newImageUri.toString()
+                } else if (resultCode == ImagePicker.RESULT_ERROR) {
+                    Toast.makeText(context, ImagePicker.getError(data), Toast.LENGTH_SHORT)
+                        .show()
                 }
+            }
     }
 
     private fun validateForm(): Boolean {
@@ -175,22 +175,23 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
     private fun updateUserProfile() {
         if (validateForm()) {
             context?.let {
-                viewModel.updateUserProfile(_user).observeWithProgress(it, viewLifecycleOwner, Observer {
-                    if (it.status == Resource.Status.SUCCESS) {
-                        updateUserProfileCompleted()
-                    } else if (it.status == Resource.Status.ERROR) {
-                        Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
-                    }
-                })
+                viewModel.updateUserProfile(_user)
+                    .observeWithProgress(it, viewLifecycleOwner, Observer {
+                        if (it.status == Resource.Status.SUCCESS) {
+                            updateUserProfileCompleted()
+                        } else if (it.status == Resource.Status.ERROR) {
+                            Toast.makeText(activity, it.message, Toast.LENGTH_SHORT).show()
+                        }
+                    })
             }
         }
     }
 
     private fun showProfileImage(currentImageReferance: String) {
         Glide.with(binding.root /* context */)
-                .load(currentImageReferance)
-                .circleCrop()
-                .into(binding.imageView)
+            .load(currentImageReferance)
+            .circleCrop()
+            .into(binding.imageView)
 
     }
 
@@ -291,8 +292,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         viewModel.fetchUserData()
 
         if (reasonStatus == Status.REGISTRATION) {
-            activity?.startActivity(Intent(context, MainActivity::class.java))
-//            findNavController().navigate(R.id.action_userProfileFragment_to_mainActivity)
+//            activity?.startActivity(Intent(context, MainActivity::class.java))
+            findNavController().navigate(R.id.action_userProfileFragment_to_mainActivity)
             activity?.finish()
         }
     }
@@ -303,7 +304,8 @@ class UserProfileFragment() : Fragment(), View.OnClickListener {
         _user.socialMedia.instagram = binding.txtInstagram2.text.toString()
         _user.socialMedia.twitter = binding.txtTwitter2.text.toString()
         _user.socialMedia.facebook = binding.txtFacebook2.text.toString()
-        _user.token = context?.getPreferencesString(Constants.FIREBASE_MESSAGING_TOKEN,
+        _user.token = context?.getPreferencesString(
+            Constants.FIREBASE_MESSAGING_TOKEN,
             FirebaseMessaging.getInstance().token.toString()
         )
     }

@@ -13,18 +13,12 @@
         <action
             android:id="@+id/action_enterPhoneNumberFragment_to_otpValidationFragment"
             app:destination="@id/otpValidationFragment" />
-        <action
-            android:id="@+id/action_enterPhoneNumberFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/otpValidationFragment"
         android:name="com.haksoy.soip.ui.auth.otpValidation.OtpValidationFragment"
         android:label="fragment_otp_validation"
         tools:layout="@layout/fragment_otp_validation">
-        <action
-            android:id="@+id/action_otpValidationFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_otpValidationFragment_to_mainActivity"
             app:destination="@id/mainActivity" />

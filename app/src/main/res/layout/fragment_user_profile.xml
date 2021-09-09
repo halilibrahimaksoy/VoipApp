@@ -91,9 +91,9 @@
             android:layout_height="300dp"
             android:layout_below="@id/toolbar"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
             android:background="@drawable/image_circle"
             android:padding="@dimen/border_size"
-            android:layout_marginTop="10dp"
             android:src="@mipmap/ic_photo" />
 
 
