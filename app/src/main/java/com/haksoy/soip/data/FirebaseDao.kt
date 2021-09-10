@@ -50,7 +50,8 @@ class FirebaseDao {
     private val geoFire = GeoFire(realtimeDB)
 
 
-    fun verifyPhoneNumber(activity:Activity,
+    fun verifyPhoneNumber(
+        activity: Activity,
         phoneNumber: String,
         callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     ) {
@@ -63,6 +64,7 @@ class FirebaseDao {
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
+
     fun signInWithPhoneAuthCredential(credentials: PhoneAuthCredential): LiveData<Resource<Exception>> {
         val result = MutableLiveData<Resource<Exception>>()
 
@@ -211,15 +213,16 @@ class FirebaseDao {
     }
 
     fun updateToken() {
-        val token = FirebaseMessaging.getInstance().token
-        cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
-            .update("token", token).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.i(TAG, "updateToken: Successful  -> $token")
-                } else {
-                    Log.i(TAG, "updateToken: failed")
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            cloudFirestoreDB.collection(Constants.User).document(getCurrentUserUid())
+                .update("token", it.result).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.i(TAG, "updateToken: Successful  -> ${it.result}")
+                    } else {
+                        Log.i(TAG, "updateToken: failed")
+                    }
                 }
-            }
+        }
     }
 
     fun isAuthUserExist() = auth.currentUser != null

@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_enter_phone_number">
         <action
             android:id="@+id/action_enterPhoneNumberFragment_to_otpValidationFragment"
-            app:destination="@id/otpValidationFragment" />
+            app:destination="@id/otpValidationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/otpValidationFragment"
@@ -21,7 +25,11 @@
         tools:layout="@layout/fragment_otp_validation">
         <action
             android:id="@+id/action_otpValidationFragment_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            app:destination="@id/mainActivity"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/userProfileFragment"

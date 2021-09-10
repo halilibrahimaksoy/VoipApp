@@ -24,7 +24,7 @@ class AuthenticationViewModel : ViewModel() {
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 Log.d(TAG, "onVerificationCompleted:$credential")
-                firebaseDao.signInWithPhoneAuthCredential(credential)
+//                firebaseDao.signInWithPhoneAuthCredential(credential)
             }
 
             override fun onVerificationFailed(e: FirebaseException) {

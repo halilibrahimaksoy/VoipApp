@@ -37,15 +37,16 @@ class EnterPhoneNumberFragment : Fragment() {
             val phone_number: String = binding.phoneNumberText.text.toString()
             val complete_phone_number =
                 "$country_code$phone_number"
-
             viewModel.verifyPhoneNumber(requireActivity(), complete_phone_number)
         }
 
 
         viewModel.verificationId.observe(viewLifecycleOwner, Observer {
-            findNavController().navigate(R.id.action_enterPhoneNumberFragment_to_otpValidationFragment,Bundle().apply {
-                putString(Constants.VerificationId, it)
-            })
+            findNavController().navigate(
+                R.id.action_enterPhoneNumberFragment_to_otpValidationFragment,
+                Bundle().apply {
+                    putString(Constants.VerificationId, it)
+                })
         })
 
         return binding.root
